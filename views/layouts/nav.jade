@@ -1,0 +1,28 @@
+header
+  #head-nav.container.clearfix
+    h1#logo
+      a(href="/") #{title}
+    #description  一个服务于老年人的社区
+
+  nav
+    .nav-wrap.container.clearfix
+      if(user)
+        ul.nav-list
+          - var menus = [{text:'首页',href:'/',cur:'index'},{text:'我的主页',href:'/people/'+user.username,cur:'people'},{text:'订餐',href:'/meal',cur:'meal'},{text:'问题咨询',href:'/question',cur:'question'}]      
+          each menu in menus
+            - var active = ''
+              if menu.cur == cur
+                - active = 'cur'
+              li(class='#{active}')
+                a(href='#{menu.href}') #{menu.text}
+        ul.login
+          li.user
+            a(href="#") #{user.username}
+          li.logout
+            a(href="/logout") 退出
+      else
+        ul.no-login
+          li
+            a 生命总是需要点什么...或许#{title}就是我实现梦想的地方呢..
+         
+

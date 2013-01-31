@@ -1,0 +1,23 @@
+aside.read-style.category
+  section.events
+    .hd
+      h3 我的订单
+    //订单
+    #orderlist.bd-top
+
+  section.nav
+    .hd.hd-bottom
+      h3 餐品分类
+    ul.admin-nav-list
+      - var menus = [{text:'热门'},{text:'早餐'},{text:'午餐'},{text:'下午茶'},{text:'晚餐'}]
+        each menu,i in menus
+          - var active = ''
+          if cat != ''
+            if menu.text == cat
+              - active = 'cur'
+          li
+            if i == 0
+              a(href="/meal/category",class="#{active}") #{menu.text}
+            else
+              a(href="/meal/category/"+i,class="#{active}") #{menu.text}
+      

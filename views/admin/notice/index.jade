@@ -1,0 +1,51 @@
+extends ../layouts/header
+block content
+  #container.container.clearfix
+    //侧边导航
+    include ../layouts/aside
+    article.read-style
+      section.admin-title.line.clearfix
+        h1.fl-l 公告管理
+        a.common-btn.grey-btn.m20 发布公告
+        a.common-btn.pink-btn.fl-r(href="/admin/notice/history") 历史公告
+
+      if notice.length
+        //已发布的公告
+        form.issue-form(action="/admin/notice",method="post")
+          fieldset
+            .issue-hd.clearfix
+              .issue-date
+                label(for="issue-date") 发布日期
+                  input#issue-date(type="text",name="issueDate",value="#{notice[0].publish_date}",readonly)
+              .issue-date
+                label 最后修改日期
+                  input(type="text",value="#{notice[0].update_date}",readonly)
+              .issue-author
+                label(for="issue-author") 发布者
+                  input#issue-author(type="text",name="issueAuthor",value="#{notice[0].author}",readonly)
+            .issue-bd
+              label(for="issue-content") 发布内容
+              .issue-content
+                textarea#issue-content(name="issueContent",cols="105",rows="10",style="resize:none") #{notice[0].content}
+            .issue-ft
+              a.common-btn.edit(href="/admin/notice/#{notice[0].id}") 修改公告
+              a.common-btn.history.fl-r(href="/admin/notice/history/#{notice[0].id}") 置入为历史公告
+      else
+        form.issue-form(action="/admin/notice",method="post")
+          .issue-hd.clearfix
+            .issue-date
+              label(for="issue-date") 公告日期
+                -var date = new Date()
+                -var now = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()
+                input#issue-date(type="text",name="issueDate",value="#{now}",readonly)
+            .issue-author
+              label(for="issue-author") 发布者：
+                input#issue-author(type="text",name="issueAuthor",value="#{user.username}",readonly)
+          .issue-bd
+            label(for="issue-content") 发布内容
+            .issue-content
+              textarea#issue-content(name="issueContent",cols="105",rows="10",style="resize:none")
+          .issue-ft
+            a.common-btn.edit(href="/admin/notice/") 发布公告
+block script
+  script(src="/js/admin/notice.js")

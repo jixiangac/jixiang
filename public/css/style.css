@@ -1,0 +1,283 @@
+/**
+ * @Description     吉祥社区样式
+ * @Author          jixiangac
+ * @Email           jixiangac@gmail.com
+ */
+/*= 首页
+---------*/
+#container .welcome{
+  font-size: 25px;
+  font-weight: bold;
+  word-wrap: break-word;
+  padding: 0 0 15px 0;
+  color: #494949;
+}
+/*= 个人页面
+--------------*/
+.content{
+	width:100%;
+	float:left;
+}
+.sidebar{
+	width:300px;
+	float:left;
+	margin-left:-300px;
+}
+.main{
+  padding:10px;
+  margin-right:310px;
+}
+/*未登入*/
+.not-login{
+  width: 696px;
+  margin:0 auto;
+}
+.not-login p{
+  color: #6E3939;
+  font-size: 14px;
+  padding: 5px;
+}
+/*信息流记录*/
+.flow-mod:after,.flow-hd:after,.flow-bd:after{
+  clear:both;
+  display: block;
+  content:" ";
+  height:0;
+}
+.flow-mod{
+  	padding: 10px;
+  	border: 1px solid #F2EEE4;
+  	border-radius: 3px;
+  	background:#F7F7F7;
+  	margin-bottom:10px;
+ }
+ .flow-hd{}
+ .flow-bd{}
+/*标题类*/
+.title{
+  background:url(/images/title.png) 0 0 no-repeat;
+  text-indent:-999em;
+  margin-bottom:10px;
+  margin-left:20px;
+}
+.title.my-info{
+  height:25px;
+  background-position: -42px -96px;
+}
+.title.login-info{
+  height:22px;
+  background-position: -46px -199px;
+  margin-top:45px;
+}
+.title.reg-info{
+  height:23px;
+  background-position: -47px -148px;
+  margin-top:45px;
+}
+/*公告*/
+.notice h2{
+  background:url(/images/notice.png) 0 0 no-repeat;
+  padding-left:30px;
+  line-height: 21px;
+}
+.notice-hd{
+  background: #EDF6ED;
+  border-top-right-radius: 5px;
+  border-top-left-radius:  5px;
+  border-bottom:1px solid #ddd;
+}
+/*= 订餐
+----------*/
+.meal section{
+  margin-left: 20px;
+  margin-top: 10px;
+  overflow:hidden;
+  padding-bottom: 10px;
+}
+.meal section .bd{
+  padding:0;
+}
+/*我的订单*/
+.meal-order li,#my-meal-order .action{
+  padding:10px;
+  background: #F8F8F2;
+  border-bottom: 1px dashed #ccc;
+}
+.order-all,.order-all .label{
+  color:#cb8081;
+}
+.action-center{
+  text-align: center;
+}
+.meal-del-btn{
+  float: right;
+  padding: 2px 10px;
+  margin: -2px;
+  color: #888;
+  background: #ddd;
+  border-radius: 3px;
+  cursor: pointer;
+  display: none;
+}
+.show a{
+  display: block;
+}
+/*菜品列表*/
+.meal-recommend li{
+  float: left;
+  margin-right: 20px;
+  margin-top: 20px;
+  position: relative;
+  width: 160px;
+  height: 160px;
+  overflow: hidden;
+}
+
+.meal-info{
+  position: absolute;
+  bottom: 0;
+  left:0;
+  padding:10px;
+  width:140px;
+  background:url(/images/white-bg.png) 0 0 repeat;
+}
+.meal-title{
+  float:right;
+}
+.like-red,.like-gray{
+  display: block;
+  float: left;
+  padding-left: 15px;
+  background:url(/images/meal_sprite.png) 0 0 no-repeat;
+}
+.like-red{
+  background-position: 0 -181px;
+}
+.like-gray{
+  background-position: 0 -162px;
+}
+/*菜品详情页*/
+.detail h2{
+  font-size: 18px;
+  font-weight: bold;
+  color: #666;
+}
+aside.detail{
+  float: right;
+}
+article.detail{
+  float:left;
+}
+.detail-wrap{
+  background:url(/images/empty.gif) 520px 15px no-repeat;
+}
+.detail-img,.detail-info,.cat-img,.cat-info{
+  float:left;
+}
+.detail-img{
+  width: 160px;
+  height: 160px;
+  overflow: hidden;
+}
+.detail-info{
+  margin-left: 20px;
+}
+.detail-info h1{
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+/*菜品分类*/
+.cat-list{
+  width: 740px;
+  margin-left:12px;
+}
+.cat-list li{
+  float: left;
+  margin: 15px 0 15px 9px;
+  padding-right: 10px;
+  box-shadow: 1px 1px 5px #ddd;
+}
+.cat-img{
+  height: 160px;
+  width: 160px;
+  overflow: hidden;
+}
+.cat-info{
+  margin-top: 15px;
+  margin-left:15px;
+}
+.cat-info h3{
+  font-size: 14px;
+  margin-bottom:10px;
+}
+
+/* = 问题咨询
+--------------*/
+section.question{
+  padding-bottom: 10px;
+}
+#question-wrap{
+  margin: 15px 0;
+  padding-left: 7px;
+}
+#question-wrap input{
+  border:1px solid #ccc;  
+  height:20px;
+  line-height:20px;
+  vertical-align: middle;
+  padding: 4px 6px;
+  font-size:14px;
+  margin: 0 7px;
+  width:478px;
+}
+#question-wrap .common-btn{
+  padding: 6px 31px;
+  font-size: 13px;
+  border: none;
+  vertical-align: top;
+}
+#question-wrap input:focus{
+  border-color: #CA8687;
+  outline: 0;
+  outline: thin dotted \9;/* IE6-9 */
+}
+#answer{
+  margin-top: 20px;
+}
+.review span{
+  float:right;
+}
+.review em{
+  margin: 0 12px;
+  color: #666;
+}
+/*豆瓣类回复的样式*/
+.douban h2{
+  font-size: 24px;
+  margin-bottom:5px;
+  font-weight: bold;
+  color: #888;
+}
+.douban ul li{
+  border: 1px dashed #ccc;
+  padding: 10px 70px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 1px 1px 12px #ccc;
+}
+.douban li .douban-img,.douban li .douban-info{
+  float:left;
+}
+.douban li .douban-summary{
+  clear:both;
+  overflow: hidden;
+}
+.douban-info p{
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.douban li .douban-summary h4{
+  color: #072;
+  margin: 8px 0;
+}

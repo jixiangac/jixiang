@@ -1,0 +1,64 @@
+/**
+ * @Description  管理后台样式
+ * @Author       jixiangac
+ * @E-mail       jixiangac@gmail.com
+ */
+/*= 发布公告
+------------*/
+.issue-notice{
+	margin-top: 40px;
+}
+.issue-notice legend{
+	font-size:18px;
+	font-weight:bold;
+	color:#666;
+	border-left:3px solid #ddd;
+	padding-left:5px;
+}
+.issue-date{
+	float:left;
+}
+.issue-author{
+	float:right;
+}
+/*= 订餐管理
+-------------*/
+section.add-meal{
+  margin-top: 20px;
+  overflow: hidden;
+}
+.detail-img-bg,.detail-info{
+	float:left;
+}
+.detail-img-bg{
+	height: 160px;
+	width: 160px;
+	overflow: hidden;
+	background: url(/images/white-bg.png) 0 0 repeat;
+}
+.detail-img{
+	height:160px;
+	width: 160px;
+	background: url(/images/meal/empty.gif) center center no-repeat;
+}
+.add-meal .label{
+	display: block;
+	float: left;
+	width: 100px;
+}
+/*= 问题管理i
+-------------*/
+.text-left td,.text-left th{
+  text-align: left;
+}
+.text-left tbody tr{
+  line-height: 28px;
+  height: 28px;
+}
+table td.q-name{
+	width: 190px;
+}
+table td.q-handler{
+	width: 100px;
+	text-align: center;
+}

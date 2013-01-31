@@ -1,0 +1,28 @@
+extends ../layouts/header
+block content
+  #container.container.clearfix
+    //侧边栏导航
+    include ../layouts/aside
+    article.read-style
+      section.admin-title.line.clearfix
+        h1.fl-l 问题管理
+        a.common-btn.grey-btn.m20 问题列表
+        a.common-btn.pink-btn.fl-r(href="/admin/question/add") 添加新问题
+
+      table.table.table-top.text-left
+        thead
+          tr
+            th 问题
+            th 解答
+            th 操作
+        tbody
+          if !!answers.length
+            each answer in answers
+              tr
+                td.q-name #{answer.title}
+                td #{answer.content}
+                td.q-handler
+                  a.delete.common-btn.sub(href="/admin/question/delete/#{answer.id}") 删除
+          else
+            tr
+              td 没有数据

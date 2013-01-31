@@ -1,0 +1,39 @@
+extends ../layouts/header
+block content
+  #container.container.clearfix
+    //侧边栏导航
+    include aside
+    article.read-style.meal.detail
+      p
+        a(href="/meal") 订餐首页
+        &nbsp;»&nbsp;菜品详情&nbsp;»&nbsp;#{meals.name}
+      section.detail-wrap.line
+        .detail-img
+          img(src="/images/meal/#{meals.pic}",alt="#{meals.name}")
+        .detail-info.non-indent
+          h1 #{meals.name}
+          p
+            span.label 分类：
+            span.label-text
+              a(href="/meal/category/#{meals.cat}") #{meals.cat_name}
+          p
+            span.label.fl-l 喜欢：
+            -var flag=false
+             each item in meals.like
+               if item == user.uid
+                 -flag = true
+                 -break
+            if flag
+              a.like-red &nbsp;
+            else
+              a.like-gray(href="/meal/like/#{meals.id}",title="喜欢")&nbsp;
+            span #{meals.like.length}
+          p
+            span.label 供应商：
+            span.label-text #{meals.supplier}
+          p
+            span.label ￥：#{meals.price}&nbsp;元
+            a.common-btn.red-btn.meal-add-order(name="#{meals.id};#{meals.name};#{meals.price}") 加入到订单
+      section
+        h2 营养价值
+        .nutrition-info #{meals.description}

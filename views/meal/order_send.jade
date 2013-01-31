@@ -1,0 +1,35 @@
+extends ../layouts/header
+block content
+  #container.container.clearfix
+    //侧边导航
+    include order_aside
+    article.read-style
+      section.admin-title.line.clearfix
+        h1.fl-l #{title}
+
+      table.table.table-top
+        thead
+          tr
+            th 订单号
+            th 提交时间
+            th 订单列表
+            th 总价
+            th 操作
+        tbody
+          if !!orders.length
+            each order in orders
+              tr
+                td= order.id
+                td= order.subtime
+                td
+                  ul
+                    -var total=0
+                     each item in order.orderlist
+                       -total+=parseInt(item.mealprice,10)
+                       li !{item.mealname}：!{item.mealprice}&nbsp;元
+                td !{total}&nbsp;元
+                td
+                  a.common-btn.red-btn.orderdone(name="#{order.id}") 已收菜
+          else
+            tr
+              td 没有订单

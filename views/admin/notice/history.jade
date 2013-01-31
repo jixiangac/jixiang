@@ -1,0 +1,29 @@
+extends ../layouts/header
+block content
+  #container.container.clearfix
+    //侧边导航
+    include ../layouts/aside
+    article.read-style
+      section.admin-title.line.clearfix
+        h1.fl-l 公告管理
+        a.common-btn.grey-btn.m20 历史公告
+        a.common-btn.pink-btn.fl-r(href="/admin/notice") 返回公告首页
+
+      table.table.table-top
+        thead
+          tr
+            th 公告日期
+            th 发布者
+            th 公告内容
+        tbody
+          if notice.length
+            each item in notice
+              tr(data-id="#{item.id}")
+                td= item.publish_date
+                td= item.author
+                td
+                  a(title="#{item.content}") #{item.content}
+          else
+            tr
+              td 暂无公告
+      include ../layouts/pagenav

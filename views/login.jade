@@ -1,0 +1,18 @@
+extends layouts/header
+block content
+  #container.container
+    .title.login-info 登入社区
+    .content
+      .main
+        form(class="form form-inline",method="post",action="/login")
+          fieldset
+            .form-item
+              label(for="username") 用户名
+              input(type="text",id="username", name="username")
+
+            .form-item
+              label(for="password") 密码
+              input(type="password",id="password",name="password")
+            .form-item.form-actions
+              button(class="btn",type="submit") 登入
+    .sidebar

@@ -1,0 +1,36 @@
+extends ../layouts/header
+block content
+  #container.container.clearfix
+    //侧边导航
+    include ../layouts/aside
+    article.read-style
+      section.admin-title.line.clearfix
+        h1.fl-l 社区居民
+        a.common-btn.grey-btn.m20 用户列表
+      table.table.table-top
+        thead
+          tr
+            th UID
+            th 用户名
+            th 性别
+            th 出生年月
+            th 注册时间
+            th 最近登入
+            th 操作
+        tbody
+          if people.length
+            each user in people
+              tr
+                td= user.uid
+                td= user.username
+                td= user.sex
+                td= user.birthday
+                td= user.regdate
+                td= user.logindate
+                td
+                  a.edit.common-btn.sub(href="/admin/people/delete/#{user.uid}") 删除
+          else
+            tr
+              td 还没有居民入住
+      include ../layouts/pagenav
+

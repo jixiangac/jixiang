@@ -1,0 +1,23 @@
+extends ../layouts/header
+block content
+  #container.container.clearfix
+    //侧边导航
+    include ../layouts/aside
+    article.read-style
+      section.admin-title.line.clearfix
+        h1.fl-l 问题管理
+        a.common-btn.grey-btn.m20 添加新问题
+        a.common-btn.pink-btn.fl-r(href="/admin/question") 问题列表
+
+      section.add-meal
+        form(action="/admin/question/add",method="post")
+          .detail-info.non-indent.m20
+            p
+              span.label 问题标题：
+              input.q_text(type="text",name="q_name",style="width:370px")
+            p
+              span.label 解答：
+              textarea.q_text(name="q_answer",cols="50",rows="10")
+            p
+              span.label &nbsp;
+              button(type="submit") 增加

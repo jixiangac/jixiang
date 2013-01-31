@@ -1,0 +1,41 @@
+extends ../layouts/header
+block content
+  #container.container.clearfix
+    //侧边导航
+    include ../layouts/aside
+    article.read-style
+      section.admin-title.line.clearfix
+        h1.fl-l 订餐管理
+        a.common-btn.grey-btn.m20 订单管理
+        a.common-btn.pink-btn.fl-r(href="/admin/meal/control") 菜品管理
+      table.table.table-top
+        thead
+          tr
+            th 订单号
+            th 提交时间
+            th 提交人
+            th 订单列表
+            th 总价
+            th 操作
+        tbody
+          if !!orders.length
+            each order in orders
+              tr
+                td= order.id
+                td= order.subtime
+                td= order.username
+                td
+                  -var total=0
+                  if order.orderlist.length
+                    ul
+                      each item in order.orderlist
+                        -total+=parseInt(item.mealprice,10)
+                        li #{item.mealprice}元
+                td !{total}元
+                td
+                  if !order.sendstatus
+                    a.edit.common-btn.sub.send(href="/admin/order/send/#{order.id}") 发单
+                    a.delete.common-btn.sub(href="/admin/order/delete/#{order.id}") 删除
+                  else
+                    a.delete.common-btn 订单已发
+            
