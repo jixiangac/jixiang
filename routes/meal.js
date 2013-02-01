@@ -1,8 +1,7 @@
 /**
  *  订餐 Routes
  */
-var Meal = require('../models/meal.js');
-var Order = require('../models/meal_order.js');
+var jixiang = require('../models/base');
 //订餐首页
 var index = function(req,res){
      var condition = {
@@ -15,7 +14,7 @@ var index = function(req,res){
       limit: 4
      }
 
-     Meal.get(condition, function(err, meals) {
+     jixiang.get(condition,'meals',function(err, meals) {
       if(err) {
         meals = [];
       }
@@ -32,19 +31,29 @@ var index = function(req,res){
 var detail = function(req,res){
     var condition = {};
     condition.query = {
-      id: parseInt(req.params[0], 10)
+      _id: parseInt(req.params[0], 10)
     };
-    Meal.get(condition, function(err, meals) {
-      if(err) {
-        meals = [];
-      }
-      if(!meals[0]) {
-        return res.redirect('/meal')
-      }
+    jixiang.getOne(condition,'meals',function(err, meal) {
+       switch(meal.cat){
+         case '1':
+           meal.cat_name = '早餐';
+           break;
+         case '2':
+           meal.cat_name = '午餐';
+           break;
+         case '3' :
+           meal.cat_name ='下午茶';
+           break;
+         case '4' :
+           meal.cat_name ='晚餐';
+           break;
+         default :
+           meal.cat_name ='早餐';
+       }
       res.render('./meal/detail', {
-        title: meals[0].name + '的详情',
+        title: meal.name + '的详情',
         user: req.session.user,
-        meals: meals[0],
+        meals: meal,
         cur: 'meal',
         cat:''
       });
@@ -81,7 +90,7 @@ var category = function(req,res){
         default:
           cat_title="热门";
      }
-     Meal.get(condition,function(err,meals){
+     jixiang.get(condition,'meals',function(err,meals){
       if(err){
         meals=[];
       }
@@ -98,10 +107,11 @@ var category = function(req,res){
 var orderlist = function(req,res){
    var condition={};
    condition.query={
-       uid : parseInt(req.session.user.uid,10)
+       _id : parseInt(req.session.user._id,10)
       ,donestatus : false
    };
-   Order.get(condition,function(err,orders){
+   
+   jixiang.get(condition,'orders',function(err,orders){
       if(err){
         orders=[];
       }
@@ -109,6 +119,7 @@ var orderlist = function(req,res){
          ,subLen = 0
          ,sendLen = 0
          ,curOrder={};
+
       orders.forEach(function(item,index){
         if(item.substatus){
            if(item.sendstatus){
@@ -117,10 +128,11 @@ var orderlist = function(req,res){
              subLen++;
            }
         }else{
-           curOrder.mealid=item.id;
+           curOrder.mealid=item._id;
            curOrder.orderlist = item.orderlist;
         }
       });
+
       res.render('./meal/list',{
          orders : curOrder
         ,subLen : subLen
@@ -131,42 +143,52 @@ var orderlist = function(req,res){
 }
 //增加新订单
 var newlist = function(req,res){
-     var order = new Order({
-        uid : req.session.user.uid
-       ,username : req.session.user.username
-       ,subtime : 0
-       ,donetime : 0
-       ,substatus : false
-       ,donestatus : false
-       ,sendstatus : false
-       ,orderlist :[]
-     });
      var item = {
         mealname : req.body.meal_name
        ,mealprice : req.body.meal_price
      };
-     order.orderlist.push(item);
+     
      if(!!parseInt(req.body.mealid)){//增加同个订单的一条记录
+
        var id=parseInt(req.body.mealid);
-       var condition={
-           handle : '1'
-          ,update :{
-            orderlist : item
-          }
+       var condition={};
+       condition.query = {
+         _id : id
        };
-       Order.update(id,condition,function(err){
+       condition.modify = {
+         '$push' : {
+            orderlist : item
+         }
+       }
+
+       jixiang.update(condition,'orders',function(err){
          if(err){
           return res.json({flg:0,msg:err});
          }
          return res.json({flg:1,msg:'加入订单成功！'});
        });
+
      }else{//增加新订单
-       order.save(function(err,id){
+
+       var order = {
+          uid : req.session.user._id
+         ,username : req.session.user.username
+         ,subtime : 0
+         ,donetime : 0
+         ,substatus : false
+         ,donestatus : false
+         ,sendstatus : false
+         ,orderlist :[]
+       };
+       order.orderlist.push(item);
+
+       jixiang.save(order,'orders',function(err,doc){
          if(err){
            return res.json({flg:0,msg:err});
          }
-         return res.json({flg:1,meal:id,msg:'加入成功！'});
-       });  
+         return res.json({flg:1,meal:doc._id,msg:'加入成功！'});
+       }); 
+
      }
 }
 //删除订单
@@ -191,7 +213,16 @@ var deleteOne = function(req,res){
 }
 //菜品的喜欢按钮
 var like = function(req,res){
-  Meal.like(parseInt(req.body.id),req.session.user.uid,function(err){
+  var condition = {};
+  condition.query = {
+    _id : parseInt(req.body.id,10)
+  };
+  condition.modify={
+    '$push' : {
+      'like' : req.session.user._id
+    }
+  };
+  jixiang.update(condition,'meals',function(err){
     if(err){
       return res.json({flg:0,msg:err});
     }
@@ -370,17 +401,75 @@ var sendStatus = function(req,res){
 }
 //菜品管理
 var mealManager = function(req,res){
-  Meal.get({},function(err,meals){
+  jixiang.count({},'meals',function(err,count){
+    console.log(count)
     if(err){
-      meals=[];
+      return res.json({flg:0,msg:err});
     }
-    res.render('./admin/meal/control',{
-       title : '订餐管理-菜品管理'
-      ,user : req.session.admin
-      ,meals : meals
-      ,cur : 'meal'
+
+    var pages = isNaN(parseInt(req.params[0],10))? 1:parseInt(req.params[0],10);
+    if(pages<=0){pages=1;}
+
+    if(count > 0){
+      var pageNum ={
+         max : Math.ceil(count / 7)
+        ,cur : pages
+        ,next : pages+1
+        ,prev : pages-1
+      }
+      if(pageNum.cur > pageNum.max){
+        return;
+      }
+    }
+
+    var condition = { 
+       skip : (pages-1)*7
+      ,limit : 7
+    };
+
+    jixiang.get(condition,'meals',function(err,meals){
+      if(err){
+        meals=[];
+      }
+      if(!!meals){
+         meals.forEach(function(item){
+           switch(item.cat){
+             case '1':
+               item.cat_name = '早餐';
+               break;
+             case '2':
+               item.cat_name = '午餐';
+               break;
+             case '3' :
+               item.cat_name ='下午茶';
+               break;
+             case '4' :
+               item.cat_name ='晚餐';
+               break;
+             default :
+               item.cat_name ='早餐';
+           }
+           switch(item.handpick){
+             case '1':
+               item.handpick = '是';
+               break;
+             default:
+               item.handpick = '否';
+           }
+         });
+      }
+
+      res.render('./admin/meal/control',{
+         title : '订餐管理-菜品管理'
+        ,user : req.session.admin
+        ,meals : meals
+        ,cur : 'meal'
+        ,pages : pageNum
+        ,pagenav : 'meal/control'
+      });
     });
   });
+
 }
 //添加新菜品
 var addMeal = function(req,res){
@@ -392,38 +481,40 @@ var addMeal = function(req,res){
     });    
   }else if(req.method == 'POST'){
     var pic = req.files.upload;
-    var meal = new Meal({
+    var meal = {
        name : req.body.meal_name
       ,cat : req.body.meal_cat
+      ,like : []
       ,supplier : req.body.meal_supplier
       ,price : req.body.meal_price
       ,description : req.body.meal_description
       ,pic : pic.name
       ,handpick : req.body.meal_handpick
-    });
+    };
     var tempPath = pic.path;
     var targetPath='public/images/meal/'+pic.name;
-    meal.save(function(err){
+
+    jixiang.save(meal,'meals',function(err){
       if(err){
         return res.json({flg:0,msg:err});
       }
       //存储图片
-        fs.rename(tempPath,targetPath,function(err){
-           if(err){
-             res.json({flg:0,msg:err});
-           }
-        }); 
-        res.redirect('/admin/meal/control');
+      fs.rename(tempPath,targetPath,function(err){
+         if(err){
+           res.json({flg:0,msg:err});
+         }
+      }); 
+      res.redirect('/admin/meal/control');
      });    
   }
 }
 //删除菜品
 var delMeal = function(req,res){
-  Meal.del(parseInt(req.body.id,10),function(err){
-  if(err){
-    return res.json({flg:0,msg:err});       
-  }
-  return res.json({flg:1,msg:'删除成功！'});
+  jixiang.delById(parseInt(req.body.id,10),'meals',function(err){
+    if(err){
+      return res.json({flg:0,msg:err});       
+    }
+    return res.json({flg:1,msg:'删除成功！'});
  });
 }
 //修改菜品
@@ -431,11 +522,11 @@ var modifyMeal = function(req,res){
   if(req.method == 'GET'){
     var condition = {
       query :{
-        id: parseInt(req.params[0],10)
+        _id: parseInt(req.params[0],10)
       }
       ,limit : 1
     }
-    Meal.get(condition,function(err,meals){
+    jixiang.get(condition,'meals',function(err,meals){
       if(err){
         meals=[];
       }
@@ -448,8 +539,17 @@ var modifyMeal = function(req,res){
     });    
   }else if(req.method == 'POST'){
      var like =req.body.meal_like.split(',');
-     var pic = req.files.upload;
-     var meal = new Meal({
+     var picUpload = !!req.files.upload.size;
+     if(picUpload){
+        var pic = req.files.upload;
+        var tempPath = pic.path;
+        var targetPath = 'public/images/meal/'+pic.name;
+     }else{
+        var pic ={
+          name : req.body.originpic
+        }
+     }
+     var meal = {
         id : parseInt(req.body.id,10)
        ,name : req.body.meal_name
        ,cat : req.body.meal_cat
@@ -459,18 +559,25 @@ var modifyMeal = function(req,res){
        ,pic : pic.name
        ,description : req.body.meal_description
        ,handpick : req.body.meal_handpick
-     });
-     var tempPath = pic.path;
-     var targetPath = 'public/images/meal/'+pic.name;
-     meal.modify(meal,function(err){
+     };
+
+     var condition = {};
+     condition.query = {
+       _id : meal.id
+     };
+     condition.modify = meal;
+
+     jixiang.update(condition,'meals',function(err){
        if(err){
         return res.json({flg:0,msg:err});
        }
-       fs.rename(tempPath,targetPath,function(err){
-         if(err){
-          return res.json({flg:0,msg:err});
-         }
-       });
+       if(picUpload){
+         fs.rename(tempPath,targetPath,function(err){
+           if(err){
+            return res.json({flg:0,msg:err});
+           }
+         });        
+       }
        res.redirect('/admin/meal/control');
      });    
    }

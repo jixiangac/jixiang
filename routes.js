@@ -126,7 +126,7 @@ module.exports = function(app){
   //订单的已发单状态
   app.post('/admin/order/send',meal.sendStatus);
   //菜品管理
-  app.get('/admin/meal/control',meal.mealManager);
+  app.get(/^\/admin\/meal\/control\/?(\d*)$/,meal.mealManager);
   //添加新菜品
   app.get('/admin/meal/add',meal.addMeal);
   app.post('/admin/meal/add',meal.addMeal);

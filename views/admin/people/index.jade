@@ -21,14 +21,14 @@ block content
           if people.length
             each user in people
               tr
-                td= user.uid
+                td= user._id
                 td= user.username
                 td= user.sex
                 td= user.birthday
                 td= user.regdate
                 td= user.logindate
                 td
-                  a.edit.common-btn.sub(href="/admin/people/delete/#{user.uid}") 删除
+                  a.edit.common-btn.sub(href="/admin/people/delete/#{user._id}") 删除
           else
             tr
               td 还没有居民入住

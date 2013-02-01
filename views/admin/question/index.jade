@@ -22,7 +22,7 @@ block content
                 td.q-name #{answer.title}
                 td #{answer.content}
                 td.q-handler
-                  a.delete.common-btn.sub(href="/admin/question/delete/#{answer.id}") 删除
+                  a.delete.common-btn.sub(href="/admin/question/delete/#{answer._id}") 删除
           else
             tr
               td 没有数据

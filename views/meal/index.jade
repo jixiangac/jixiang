@@ -18,13 +18,13 @@ block content
                 a.meal-title= meal.name
                  -var flag=false
                   each item in meal.like
-                    if item == user.uid
+                    if item == user._id
                       -flag=true
                       -break
                 if flag
                   a.like-red &nbsp;
                 else
-                  a.like-gray(href="/meal/like/#{meal.id}",title="喜欢")&nbsp;
+                  a.like-gray(href="/meal/like/#{meal._id}",title="喜欢")&nbsp;
                 span #{meal.like.length}
-              a(href="/meal/detail/#{meal.id}")
+              a(href="/meal/detail/#{meal._id}")
                 img(src="/images/meal/#{meal.pic}",alt="#{meal.name}")

@@ -331,11 +331,11 @@ if(!!qForm){
           var a_title = '<h3>'+data.title+'</h3>';
           var a_content = '<p>'+data.content+'</p>';
           var btn = '<div class="review"><span class="useless">'
-                           +'<a name="'+data.id+'" class="useless-btn" id="useless-btn">没用</a>'
+                           +'<a name="'+data._id+'" class="useless-btn" id="useless-btn">没用</a>'
                            +'<em>'+data.useless+'</em>'
                       +'</span>'
                       +'<span class="useful">'
-                        +'<a name="'+data.id+'" class="useful-btn" id="useful-btn">有用</a>'
+                        +'<a name="'+data._id+'" class="useful-btn" id="useful-btn">有用</a>'
                         +'<em>'+data.useful+'</em>'
                     +'</div>';
           answer.innerHTML = a_title+a_content+btn;

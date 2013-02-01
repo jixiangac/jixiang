@@ -1,8 +1,9 @@
 /**
  * 注册Routes
  */
+
+var jixiang = require('../models/base');
 var crypto = require('crypto');
-var User = require('../models/user.js');
 
 var index = function(req,res){
   if(req.method == 'GET'){
@@ -18,28 +19,29 @@ var index = function(req,res){
     //生成口令散列
     var md5 = crypto.createHash('md5');
     var password = md5.update(req.body.password).digest('base64');
-    var newUser = new User({
+    var userdata = {
        username : req.body.username
       ,password : password
       ,sex : req.body.sex
       ,birthday : req.body.birthYear+'-'+req.body.birthMonth+'-'+req.body.birthDay
       ,regdate : Date.now()
       ,logindate : Date.now()
-    });
-    User.get(newUser.username,'users',function(err,user){
-      if(user){
+    };
+    jixiang.getOne({
+      username:userdata.username
+    },'users',function(err,doc){
+      if(doc){
         err = '用户名已经存在!';
       }
       if(err){
         return res.json({flg:0,msg:err});
       }
-      newUser.save('users',function(err,users){
+      jixiang.save(userdata,'users',function(err,doc){
         if(err){
           return res.json({flg:0,msg:err});
         }
-        req.session.user = users[0];
+        req.session.user = doc[0];
         res.json({flg:1,msg:'注册成功！',redirect:'/'});
-        //return res.redirect('/');
       });
       
     });

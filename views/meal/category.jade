@@ -20,7 +20,7 @@ block content
                     span.label.fl-l 喜欢：
                     -var flag=false
                      each item in meal.like
-                       if item == user.uid
+                       if item == user._id
                          -flag=true
                          -break
                     if flag

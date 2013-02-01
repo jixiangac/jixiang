@@ -12,12 +12,13 @@ block content
 
       section.add-meal
         form(action="/admin/meal/edit",method="post",enctype="multipart/form-data")
-          input(type="hidden",name="id",value="#{meals.id}")
-          input(type="hidden",name="meal_like",value="#{meals.id}")
+          input(type="hidden",name="id",value="#{meals._id}")
+          input(type="hidden",name="meal_like",value="#{meals._id}")
           .detail-img-bg
             .detail-img
               img(src="/images/meal/#{meals.pic}",alt="#{meals.name}")
-          input(type="file",name="upload",value="#{meals.pic}")
+              input(type="hidden",name="originpic",value="#{meals.pic}")
+          input(type="file",name="upload")
           .detail-info.non-indent.m20
             p
               span.label 菜品名称：
@@ -49,7 +50,7 @@ block content
               input(type="text",name="meal_supplier",value="#{meals.supplier}")
             p
               span.label 菜品价格：
-              input(type="text",name="meal_[rice",value="#{meals.price}")
+              input(type="text",name="meal_price",value="#{meals.price}")
             p
               span.label 描述：
               textarea(name="meal_description",cols="50",rows="10") #{meals.description}

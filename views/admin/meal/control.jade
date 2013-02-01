@@ -26,7 +26,7 @@ block content
           if meals.length
             each meal in meals
               tr
-                td= meal.id
+                td= meal._id
                 td= meal.name
                 td= meal.cat_name
                 td= meal.like.length
@@ -35,8 +35,9 @@ block content
                 td= meal.description
                 td= meal.handpick
                 td
-                  a.edit.common-btn(href="/admin/meal/edit/#{meal.id}") 编辑
-                  a.delete.common-btn.sub(href="/admin/meal/delete/#{meal.id}") 删除
+                  a.edit.common-btn(href="/admin/meal/edit/#{meal._id}") 编辑
+                  a.delete.common-btn.sub(href="/admin/meal/delete/#{meal._id}") 删除
           else
             tr
               td 暂无菜品信息，点击添加新菜品
+      include ../layouts/pagenav

@@ -2,7 +2,7 @@
  * 问题页面routes
  */
 var Utils = require('../models/utils');
-var Question = require('../models/question.js');
+var jixiang = require('../models/base');
 var https = require('https');
 
 var index = function(req,res){
@@ -172,7 +172,7 @@ var answer = function(req,res){
    condition.query = {
       title : new RegExp(question,'gi')
    }
-   Question.get(condition,function(err,answers){
+   jixiang.get(condition,'question',function(err,answers){
      if(err){
        answers = [];
      }
@@ -199,7 +199,7 @@ var review = function(req,res){
       useful : 1
     }
   }
-  Question.review(id,condition,function(err){
+  jixiang.selfplus(id,condition,'question',function(err){
     if(err){
       return res.json({flg:0,msg:err});
     }
@@ -220,7 +220,7 @@ var　admin = function(req,res){
   condition.query = {
     cat : 0
   };
-  Question.get(condition,function(err,answers){
+  jixiang.get(condition,'question',function(err,answers){
     if(err){
       answers=[];
     }
@@ -241,14 +241,14 @@ var newQ = function(req,res){
       ,cur : 'question'
     });      
   }else if(req.method == 'POST'){
-     var q = new Question({
+     var q = {
         cat :　0
        ,useful : 0
        ,useless : 0
        ,title : req.body.q_name
        ,content : req.body.q_answer
-     });
-     q.save(q,function(err){
+     };
+     jixiang.save(q,'question',function(err){
        if(err){
          return res.json({flg:0,msg:err});
        }
@@ -259,7 +259,7 @@ var newQ = function(req,res){
 }
 var del = function(req,res){
   var id = parseInt(req.body.id);
-  Question.del(id,function(err){
+  jixiang.delById(id,'question',function(err){
     if(err){
       return res.json({flg:0,msg:err});
     }

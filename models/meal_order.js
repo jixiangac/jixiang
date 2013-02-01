@@ -20,41 +20,41 @@ function Order(order){
 module.exports = Order;
 
 //保存订单
-Order.prototype.save = function(callback){
-  var order = {
-  	 uid : this.uid
-  	,username : this.username
-  	,subtime : this.subtime
-  	,donetime : this.donetime
-  	,substatus : this.substatus
-  	,donestatus : this.donestatus
-    ,sendstatus : this.sendstatus
-  	,orderlist : this.orderlist
-  }
-  Ids.getId('orders',function(err,id){
-    if(err){
-      callback(err);
-    }
-    order.id = id;
-     mongodb.open(function(err,db){
-       if(err){
-       	mongodb.close();
-       	callback(err);
-       }
-       db.collection('order',function(err,collection){
-         if(err){
-         	mongodb.close();
-         	callback(err);
-         }
-         collection.ensureIndex('id',{unique:true});
-         collection.insert(order,{safe:true},function(err){
-            mongodb.close();
-            callback(err,id);
-         });
-      });
-     });
-  })
-}
+// Order.prototype.save = function(callback){
+//   var order = {
+//   	 uid : this.uid
+//   	,username : this.username
+//   	,subtime : this.subtime
+//   	,donetime : this.donetime
+//   	,substatus : this.substatus
+//   	,donestatus : this.donestatus
+//     ,sendstatus : this.sendstatus
+//   	,orderlist : this.orderlist
+//   }
+//   Ids.getId('orders',function(err,id){
+//     if(err){
+//       callback(err);
+//     }
+//     order.id = id;
+//      mongodb.open(function(err,db){
+//        if(err){
+//        	mongodb.close();
+//        	callback(err);
+//        }
+//        db.collection('order',function(err,collection){
+//          if(err){
+//          	mongodb.close();
+//          	callback(err);
+//          }
+//          collection.ensureIndex('id',{unique:true});
+//          collection.insert(order,{safe:true},function(err){
+//             mongodb.close();
+//             callback(err,id);
+//          });
+//       });
+//      });
+//   })
+// }
 
 //同个订单增加{$push:{orderlist:orderlist}}/删除$pull一条记录
 //更新提交状态{$set:{'subtime':Date.now(),'substatus':xx}}

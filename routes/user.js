@@ -1,12 +1,13 @@
 /**
  * 用户Routes
  */
-var crypto = require('crypto');
-var User = require('../models/user.js');
 
+var jixiang = require('../models/base');
+var crypto = require('crypto');
+var Utils = require('../models/utils');
 //社区居民
 var index = function(req,res){
-  User.count(function(err,count){
+  jixiang.count({},'users',function(err,count){
     if(err){
       return res.json({flg:0,msg:err});
     }
@@ -15,7 +16,7 @@ var index = function(req,res){
        skip : (pages-1)*7
       ,limit : 7
     }
-     User.people(condition,'users',function(err,people){
+     jixiang.get(condition,'users',function(err,people){
       if(err){
         people=[];
       }else{
@@ -29,7 +30,9 @@ var index = function(req,res){
               break;
             default : 
               item.sex = '其他';
-          }          
+          }
+          item.regdate = Utils.format_date(new Date(item.regdate),true);
+          item.logindate = Utils.format_date(new Date(item.logindate),true);         
         })
       }
       var pageNum = {
@@ -55,7 +58,7 @@ var index = function(req,res){
 }
 //居民编辑&删除
 var delUser = function(req,res){
-  User.delByUid(parseInt(req.body.id),'users',function(err,doc){
+  jixiang.delById(parseInt(req.body.id,10),'users',function(err,doc){
     if(err){
       return res.json({flg:0,msg:err});
     }
@@ -69,33 +72,53 @@ exports.delUser = delUser;
     admin
   ---------*/
 var admin = function(req,res){
-  var condition = {
-     skip : 0
-    ,limit : 0
-  }
-  User.people(condition,'admin',function(err,people){
+
+  jixiang.count({},'admin',function(err,count){
     if(err){
-      people=[];
+      return res.json({flg:0,msg:err});
     }
-    people.forEach(function(item,index){
-      switch(item.sex){
-        case '1' : 
-          item.sex = '男';
-          break;
-        case '2' : 
-          item.sex = '女';
-          break;
-        default : 
-          item.sex = '其他';
+    var pages = isNaN(parseInt(req.params[0],10))?1:parseInt(req.params[0],10);
+    var condition = {
+       skip : (pages-1)*7
+      ,limit : 7
+    }
+    jixiang.get(condition,'admin',function(err,people){
+      if(err){
+        people=[];
       }
-    })
-    res.render('./admin/index',
-      {
-       title : '管理首页'
-        ,user : req.session.admin
-        ,people : people
-        ,cur : 'index'
-      });
-    });
+      people.forEach(function(item,index){
+        switch(item.sex){
+          case '1' : 
+            item.sex = '男';
+            break;
+          case '2' : 
+            item.sex = '女';
+            break;
+          default : 
+            item.sex = '其他';
+        }
+        item.logindate = Utils.format_date(new Date(item.logindate),true);
+      })
+      var pageNum = {
+         max : Math.ceil(count/7)
+        ,cur : pages
+        ,next : pages+1
+        ,prev : pages-1
+      }
+      if(pageNum.cur > pageNum.max){
+        return;
+      }
+      res.render('./admin/index',
+        {
+           title : '管理首页'
+          ,user : req.session.admin
+          ,people : people
+          ,cur : 'index'
+          ,pages : pageNum
+          ,pagenav : '/'
+        });
+      });  
+  });
+
 }
 exports.admin = admin;

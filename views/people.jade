@@ -17,8 +17,8 @@ block content
           .notice-hd.hd
             h2 社区公告
           .bd
-            if(notice.length)
-              p #{notice[0].content}
+            if(notice)
+              p #{notice.content}
             else
               p 暂无公告
         //健康趋势
