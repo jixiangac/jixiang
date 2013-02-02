@@ -12,7 +12,7 @@ block content
             each meal in meals
               li
                 .cat-img
-                  a(href="/meal/detail/#{meal.id}")
+                  a(href="/meal/detail/#{meal._id}")
                     img(src="/images/meal/#{meal.pic}")
                 .cat-info.non-indent
                   h3 #{meal.name}
@@ -26,13 +26,13 @@ block content
                     if flag
                       a.like-red &nbsp;
                     else
-                      a.like-gray(href="/meal/like/#{meal.id}") &nbsp;
+                      a.like-gray(href="/meal/like/#{meal._id}") &nbsp;
                     span #{meal.like.length}
                   p
                     span.label 供应商：
                     span.label-text #{meal.supplier}
                   p
                     span.label.label-block ￥：#{meal.price}&nbsp;元
-                    a.common-btn.red-btn.meal-add-order(name="#{meal.id};#{meal.name};#{meal.price}") 加入到订单
+                    a.common-btn.red-btn.meal-add-order(name="#{meal._id};#{meal.name};#{meal.price}") 加入到订单
           else
             p 没有相关菜品        

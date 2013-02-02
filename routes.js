@@ -51,13 +51,13 @@ module.exports = function(app){
    //菜品的喜欢
    app.post('/meal/like',meal.like);
    //订单清单
-   app.get('/meal/orderlist',meal.orderlist);
+   //app.get('/meal/orderlist',meal.orderlist);
    //增加新订单
    app.post('/meal/add',meal.newlist);
    //删除订单的某条记录
-   app.post('/meal/delete',meal.deleteOne);
+   //app.post('/meal/delete',meal.deleteOne);
    //提交订单，更改成提交状态
-   app.post('/meal/suborder',meal.suborder);
+   //app.post('/meal/suborder',meal.suborder);
    //历史订单 1:已提交的订单
    app.get('/meal/order/sub',meal.subed);
    //历史订单 2:已经配送的订单

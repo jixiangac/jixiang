@@ -93,8 +93,11 @@ p{
 .fl-l{
   float: left;
 }
+.m10{
+  margin-left: 10px;
+}
 .m20{
-  margin-left:20px;
+  margin-left: 20px;
 }
 .hide{
   display: none;
@@ -355,6 +358,7 @@ section.admin-title h1{
 }
 .table{
   width:100%;
+  border-collapse: collapse;
   border-spacing: 0;
 }
 .table tr{
@@ -373,6 +377,27 @@ section.admin-title h1{
 }
 .table th,.table td{
   text-align: center;
+}
+/*订单类表格*/
+.order-table{
+  margin-top: 15px;
+}
+.order-table td,.order-table caption{
+  border: 1px solid #ddd;
+}
+.order-table caption{
+  padding : 10px 0;
+  border-bottom: 0;
+  background:  #F6F6F6;
+  color: #52946F;
+  text-align: center;
+}
+.order-table td{
+  text-align: left;
+  padding-left: 12px;
+}
+.order-table tbody tr:hover{
+  background:#EAF9E6;
 }
 /*分页*/
 .pagenav{

@@ -252,14 +252,14 @@ function ajax(url,type,data,callback,errorCallback) {
 //我的订单
 var orderlist =jixiang.$('orderlist');
 if(!!orderlist){//获取订单
-  var callback = function(res){
-     orderlist.innerHTML=res;
+  // var callback = function(res){
+  //    orderlist.innerHTML=res;
      var script = document.createElement('script');
      script.type='text/javascript';
      script.src='/js/orderlist.js';
      document.body.appendChild(script);
-  }
-  ajax('/meal/orderlist','get',null,callback);
+  // }
+  // ajax('/meal/orderlist','get',null,callback);
 }
 //点击收菜，完成订单交易
 var orderDone = jixiang.getByClass('orderdone');

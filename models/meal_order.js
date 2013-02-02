@@ -60,86 +60,86 @@ module.exports = Order;
 //更新提交状态{$set:{'subtime':Date.now(),'substatus':xx}}
 //更新交易状态{$set:{'donetime':Date.now(),'donestatus':xx}}
 //更新已发单状体{$set:{'sendstatus':boolean}}
-Order.update = function(id,condition,callback){
-	mongodb.open(function(err,db){
-      if(err){
-      	mongodb.close();
-      	callback(err);
-      }
-      db.collection('order',function(err,collection){
-        if(err){
-        	mongodb.close();
-        	callback(err);
-        }
-        var modify = {};
-        switch(condition.handle){
-           case '1' ://增加
-           modify['$push'] = condition.update;
-           break;
-           case '2' ://删除
-           modify['$pull'] = condition.update;
-           break;
-           default ://提交|交易状态
-           modify['$set'] = condition.update;
-        }
-        collection.update({id:id},modify,function(err){
-           mongodb.close();
-           callback(err);
-        });
-      })
-	});
-}
+// Order.update = function(id,condition,callback){
+// 	mongodb.open(function(err,db){
+//       if(err){
+//       	mongodb.close();
+//       	callback(err);
+//       }
+//       db.collection('order',function(err,collection){
+//         if(err){
+//         	mongodb.close();
+//         	callback(err);
+//         }
+//         var modify = {};
+//         switch(condition.handle){
+//            case '1' ://增加
+//            modify['$push'] = condition.update;
+//            break;
+//            case '2' ://删除
+//            modify['$pull'] = condition.update;
+//            break;
+//            default ://提交|交易状态
+//            modify['$set'] = condition.update;
+//         }
+//         collection.update({id:id},modify,function(err){
+//            mongodb.close();
+//            callback(err);
+//         });
+//       })
+// 	});
+// }
 //订单的获取
 //query={id:id,uid:uid,donestatus:false}获取id:id,uid:uid交易未完成的数据
-Order.get = function(condition,callback){ 
-  mongodb.open(function(err,db){
-      if(err){
-      	mongodb.close();
-      	callback(err);
-      }
-      db.collection('order',function(err,collection){
-        if(err){
-        	mongodb.close();
-        	callback(err);
-        }
-     var query = !!condition.query ? condition.query : null
-        ,sort = !!condition.sort ? condition.sort:{_id:1}
-        ,skip = !!condition.skip ? condition.skip : 0
-        ,limit = !!condition.limit ? condition.limit :0
-        ;
-        collection.find(query).sort(sort).skip(skip).limit(limit).toArray(function(err,doc){
-          mongodb.close();
-          if(err){
-          	callback(err,null);
-          }
-          var orders=[];
-          doc.forEach(function(doc,index){
-             var o = new Order(doc);
-             o.subtime = Utils.format_date(new Date(o.subtime),true);
-             o.donetime = Utils.format_date(new Date(o.donetime),true);
-             orders.push(o);
-          });
-          callback(err,orders);
-        });
-      })
-  });
-}
+// Order.get = function(condition,callback){ 
+//   mongodb.open(function(err,db){
+//       if(err){
+//       	mongodb.close();
+//       	callback(err);
+//       }
+//       db.collection('order',function(err,collection){
+//         if(err){
+//         	mongodb.close();
+//         	callback(err);
+//         }
+//      var query = !!condition.query ? condition.query : null
+//         ,sort = !!condition.sort ? condition.sort:{_id:1}
+//         ,skip = !!condition.skip ? condition.skip : 0
+//         ,limit = !!condition.limit ? condition.limit :0
+//         ;
+//         collection.find(query).sort(sort).skip(skip).limit(limit).toArray(function(err,doc){
+//           mongodb.close();
+//           if(err){
+//           	callback(err,null);
+//           }
+//           var orders=[];
+//           doc.forEach(function(doc,index){
+//              var o = new Order(doc);
+//              o.subtime = Utils.format_date(new Date(o.subtime),true);
+//              o.donetime = Utils.format_date(new Date(o.donetime),true);
+//              orders.push(o);
+//           });
+//           callback(err,orders);
+//         });
+//       })
+//   });
+// }
 //订单的删除
-Order.del = function(id,callback){
-  mongodb.open(function(err,db){
-     if(err){
-     	mongodb.close();
-     	callback(err);
-     }
-     db.collection('order',function(err,collection){
-       if(err){
-       	mongodb.close();
-       	callback(err);
-       }
-       collection.remove({id:id},function(err){
-         mongodb.close();
-         callback(err);
-       });
-     })
-  });
-}
+// Order.del = function(id,callback){
+//   mongodb.open(function(err,db){
+//      if(err){
+//      	mongodb.close();
+//      	callback(err);
+//      }
+//      db.collection('order',function(err,collection){
+//        if(err){
+//        	mongodb.close();
+//        	callback(err);
+//        }
+//        collection.remove({id:id},function(err){
+//          mongodb.close();
+//          callback(err);
+//        });
+//      })
+//   });
+// }

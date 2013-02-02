@@ -26,14 +26,14 @@ block content
             if flag
               a.like-red &nbsp;
             else
-              a.like-gray(href="/meal/like/#{meals.id}",title="喜欢")&nbsp;
+              a.like-gray(href="/meal/like/#{meals._id}",title="喜欢")&nbsp;
             span #{meals.like.length}
           p
             span.label 供应商：
             span.label-text #{meals.supplier}
           p
             span.label ￥：#{meals.price}&nbsp;元
-            a.common-btn.red-btn.meal-add-order(name="#{meals.id};#{meals.name};#{meals.price}") 加入到订单
+            a.common-btn.red-btn.meal-add-order(name="#{meals._id};#{meals.name};#{meals.price}") 加入到订单
       section
         h2 营养价值
         .nutrition-info #{meals.description}

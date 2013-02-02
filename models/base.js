@@ -85,10 +85,10 @@ jixiang.prototype.get = function(condition,collection,callback){
   this.getCollection(collection,function(err,db){
     if(err)callback(err);
     else{
-      var query = condition.query ? condition.query : null
-         ,sort = condition.sort ? condition.sort:{_id:1}
-         ,skip = condition.skip ? condition.skip : 0
-         ,limit = condition.limit ? condition.limit :0
+      var query = condition.query || null
+         ,sort = condition.sort || {_id:1}
+         ,skip = condition.skip || 0
+         ,limit = condition.limit || 0
          ;
       db.find(query).sort(sort).skip(skip).limit(limit).toArray(function(err,doc){
         if(err) callback(err);

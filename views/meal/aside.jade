@@ -1,10 +1,28 @@
 aside.read-style.category
   section.events
     .hd
-      h3 我的订单
+      h3 我的订餐
     //订单
     #orderlist.bd-top
-
+      form#my-meal-order(action="/meal/order",method="post")
+        .action.meal-order.meal-control.hide
+          span.label.name 名称
+          span.label.m10 份数
+          span.label.m10 单价
+        #no-order.action
+          a 您还没有订餐哦，点几样吧～
+        ul.meal-order
+          //- li
+          //-   span.label.name 张君雅小妹妹
+          //-   span.label.num 2
+          //-   span.label.price 12&nbsp;元
+          //-   a.meal-del-btn(name="12;12",title="删除") X
+        #order-all.action.order-all.meal-control.hide
+          span.label 汇总
+          span.label ￥：
+          span.label-text 0&nbsp;元
+        #sub-meal.action.action-center.meal-control.hide
+          a#sub-meal-order.common-btn.pink-btn 提交订单
   section.nav
     .hd.hd-bottom
       h3 餐品分类

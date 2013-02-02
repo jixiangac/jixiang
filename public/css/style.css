@@ -98,10 +98,26 @@
   padding:0;
 }
 /*我的订单*/
+.meal-order span.label{
+  display:block;
+  float:left;
+}
+.meal-order span.name{
+  width: 74px;
+}
+.meal-order span.num{
+  width: 43px;
+  text-align : center;
+}
+.meal-order span.price{
+  width: 23px;
+  text-align: center;
+}
 .meal-order li,#my-meal-order .action{
   padding:10px;
   background: #F8F8F2;
   border-bottom: 1px dashed #ccc;
+  overflow:hidden;
 }
 .order-all,.order-all .label{
   color:#cb8081;
@@ -111,13 +127,15 @@
 }
 .meal-del-btn{
   float: right;
-  padding: 2px 10px;
+  padding: 0 5px;
   margin: -2px;
-  color: #888;
+  color: #6E3939;
   background: #ddd;
-  border-radius: 3px;
+  border-radius: 10px;
   cursor: pointer;
   display: none;
+  font-weight: bold;
+  font-size: 14px;
 }
 .show a{
   display: block;

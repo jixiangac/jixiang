@@ -2,6 +2,7 @@
  *  订餐 Routes
  */
 var jixiang = require('../models/base');
+var Utils = require('../models/utils');
 //订餐首页
 var index = function(req,res){
      var condition = {
@@ -104,113 +105,84 @@ var category = function(req,res){
      });
 }
 //订餐清单
-var orderlist = function(req,res){
-   var condition={};
-   condition.query={
-       _id : parseInt(req.session.user._id,10)
-      ,donestatus : false
-   };
+// var orderlist = function(req,res){
+//    var condition={};
+//    condition.query={
+//        _id : parseInt(req.session.user._id,10)
+//       ,donestatus : false
+//    };
    
-   jixiang.get(condition,'orders',function(err,orders){
-      if(err){
-        orders=[];
-      }
-      var orderLen = orders.length
-         ,subLen = 0
-         ,sendLen = 0
-         ,curOrder={};
+//    jixiang.get(condition,'orders',function(err,orders){
+//       if(err){
+//         orders=[];
+//       }
+//       var orderLen = orders.length
+//          ,subLen = 0
+//          ,sendLen = 0
+//          ,curOrder={};
 
-      orders.forEach(function(item,index){
-        if(item.substatus){
-           if(item.sendstatus){
-             sendLen++;
-           }else{
-             subLen++;
-           }
-        }else{
-           curOrder.mealid=item._id;
-           curOrder.orderlist = item.orderlist;
-        }
-      });
+//       orders.forEach(function(item,index){
+//         if(item.substatus){
+//            if(item.sendstatus){
+//              sendLen++;
+//            }else{
+//              subLen++;
+//            }
+//         }else{
+//            curOrder.mealid=item._id;
+//            curOrder.orderlist = item.orderlist;
+//         }
+//       });
 
-      res.render('./meal/list',{
-         orders : curOrder
-        ,subLen : subLen
-        ,sendLen : sendLen
-        ,orderLen : orderLen 
-      }); 
-   });
-}
+//       res.render('./meal/list',{
+//          orders : curOrder
+//         ,subLen : subLen
+//         ,sendLen : sendLen
+//         ,orderLen : orderLen 
+//       }); 
+//    });
+// }
 //增加新订单
 var newlist = function(req,res){
-     var item = {
-        mealname : req.body.meal_name
-       ,mealprice : req.body.meal_price
-     };
-     
-     if(!!parseInt(req.body.mealid)){//增加同个订单的一条记录
 
-       var id=parseInt(req.body.mealid);
-       var condition={};
-       condition.query = {
-         _id : id
-       };
-       condition.modify = {
-         '$push' : {
-            orderlist : item
-         }
-       }
-
-       jixiang.update(condition,'orders',function(err){
-         if(err){
-          return res.json({flg:0,msg:err});
-         }
-         return res.json({flg:1,msg:'加入订单成功！'});
-       });
-
-     }else{//增加新订单
-
-       var order = {
-          uid : req.session.user._id
-         ,username : req.session.user.username
-         ,subtime : 0
-         ,donetime : 0
-         ,substatus : false
-         ,donestatus : false
-         ,sendstatus : false
-         ,orderlist :[]
-       };
-       order.orderlist.push(item);
-
-       jixiang.save(order,'orders',function(err,doc){
-         if(err){
-           return res.json({flg:0,msg:err});
-         }
-         return res.json({flg:1,meal:doc._id,msg:'加入成功！'});
-       }); 
-
-     }
-}
-//删除订单
-var deleteOne = function(req,res){
-   var id = parseInt(req.body.mealid);
-   var item = {
-      mealname : req.body.meal_name
-     ,mealprice : req.body.meal_price
+   var order = {
+      uid : req.session.user._id
+     ,username : req.session.user.username
+     ,subtime : Date.now()
+     ,donetime : 0
+     ,donestatus : false
+     ,sendstatus : false
+     ,orderlist :req.body.list
    };
-   var condition = {
-      handle : '2'
-     ,update : {
-       orderlist : item
-     }
-   };
-   Order.update(id,condition,function(err){
+
+   jixiang.save(order,'orders',function(err,doc){
      if(err){
        return res.json({flg:0,msg:err});
      }
-     return res.json({flg:1,msg:'删除成功！'});
-   });
+     return res.json({flg:1,msg:'加入成功！'});
+   }); 
+
 }
+//删除订单
+// var deleteOne = function(req,res){
+//    var id = parseInt(req.body.mealid);
+//    var item = {
+//       mealname : req.body.meal_name
+//      ,mealprice : req.body.meal_price
+//    };
+//    var condition = {
+//       handle : '2'
+//      ,update : {
+//        orderlist : item
+//      }
+//    };
+//    Order.update(id,condition,function(err){
+//      if(err){
+//        return res.json({flg:0,msg:err});
+//      }
+//      return res.json({flg:1,msg:'删除成功！'});
+//    });
+// }
 //菜品的喜欢按钮
 var like = function(req,res){
   var condition = {};
@@ -230,36 +202,42 @@ var like = function(req,res){
   });
 }
 //提交订单，更改成提交状态
-var suborder = function(req,res){
-   var id = parseInt(req.body.mealid,10);
-   var condition={};
-   condition.update={
-      subtime : Date.now()
-     ,substatus : true
-   };
-   Order.update(id,condition,function(err){
-     if(err){
-      return res.json({flg:0,msg:err});
-     }
-     return res.json({flg:1,msg:'提交成功！'});
-   });
-}
+// var suborder = function(req,res){
+//    var id = parseInt(req.body.mealid,10);
+//    var condition={};
+//    condition.update={
+//       subtime : Date.now()
+//      ,substatus : true
+//    };
+//    Order.update(id,condition,function(err){
+//      if(err){
+//       return res.json({flg:0,msg:err});
+//      }
+//      return res.json({flg:1,msg:'提交成功！'});
+//    });
+// }
 //历史订单 1:已提交的订单
 var subed = function(req,res){
-   var uid = parseInt(req.session.user.uid,10);
+   var uid = parseInt(req.session.user._id,10);
    var condition={};
    condition.query={
       uid : uid
-     ,substatus : true
      ,sendstatus : false
    };
    condition.sort={
      subtime:-1
    };
-   Order.get(condition,function(err,orders){
+   jixiang.get(condition,'orders',function(err,orders){
      if(err){
        orders=[];
      }
+     if(!!orders){
+       orders.forEach(function(item){
+         item.subtime = Utils.format_date(new Date(item.subtime),true);
+         item.orderlist = JSON.parse(item.orderlist);
+       });
+     }
+     console.log(orders)
      res.render('./meal/order_sub',{
        title :'等待配送的订单'
       ,user : req.session.user
@@ -271,7 +249,7 @@ var subed = function(req,res){
 }
 //历史订单 2:已经配送的订单
 var sended = function(req,res){
-   var uid = parseInt(req.session.user.uid,10);
+   var uid = parseInt(req.session.user._id,10);
    var condition={};
    condition.query={
       uid : uid
@@ -281,11 +259,17 @@ var sended = function(req,res){
    condition.sort={
      subtime:-1
    };
-   Order.get(condition,function(err,orders){
+   jixiang.get(condition,'orders',function(err,orders){
      if(err){
        orders=[];
      }
-     res.render('./meal/order_send',{
+     if(!!orders){
+       orders.forEach(function(item){
+         item.subtime = Utils.format_date(new Date(item.subtime),true);
+         item.orderlist = JSON.parse(item.orderlist);
+       });
+     }
+     res.render('./meal/order_sub',{
        title :'已配送的订单'
       ,user : req.session.user
       ,orders : orders
@@ -296,7 +280,7 @@ var sended = function(req,res){
 }
 //历史订单 3：已经完成的订单
 var done = function(req,res){
-   var uid = parseInt(req.session.user.uid,10);
+   var uid = parseInt(req.session.user._id,10);
    var condition={};
    condition.query={
       uid : uid
@@ -306,11 +290,17 @@ var done = function(req,res){
    condition.sort={
      subtime:-1
    };
-   Order.get(condition,function(err,orders){
+   jixiang.get(condition,'orders',function(err,orders){
      if(err){
        orders=[];
      }
-     res.render('./meal/order_done',{
+     if(!!orders){
+       orders.forEach(function(item){
+         item.subtime = Utils.format_date(new Date(item.subtime),true);
+         item.orderlist = JSON.parse(item.orderlist);
+       });
+     }
+     res.render('./meal/order_sub',{
        title :'已完成的订单'
       ,user : req.session.user
       ,orders : orders
@@ -323,11 +313,16 @@ var done = function(req,res){
 var doneconfirm = function(req,res){
    var id = parseInt(req.body.mealid);
    var condition={};
-   condition.update = {
+   condition.query = {
+     _id : id
+   }
+   condition.modify = {
+    '$set' : {
       donetime : Date.now()
-     ,donestatus : true
+     ,donestatus : true      
+    }
    };
-   Order.update(id,condition,function(err){
+   jixiang.update(condition,'orders',function(err){
       if(err){
         return res.json({flg:0,msg:err});
       }
@@ -338,11 +333,11 @@ var doneconfirm = function(req,res){
 exports.index = index;
 exports.detail = detail;
 exports.category = category;
-exports.orderlist = orderlist;
+// exports.orderlist = orderlist;
 exports.newlist = newlist;
-exports.deleteOne = deleteOne;
+// exports.deleteOne = deleteOne;
 exports.like = like;
-exports.suborder = suborder;
+// exports.suborder = suborder;
 exports.subed = subed;
 exports.sended = sended;
 exports.done = done;
@@ -355,17 +350,23 @@ var fs = require('fs');
 //订单管理
 var admin = function(req,res){
   var condition = {};
-  condition.query = {//所有提交而未完成状态的订单
-     substatus : true
-    ,donestatus : false
+  condition.query = {//未完成状态的订单
+     donestatus : false
   };
   condition.sort = {//按提交时间逆序
     subtime : -1
   }
-  Order.get(condition,function(err,orders){
+  jixiang.get(condition,'orders',function(err,orders){
     if(err){
       orders=[];
     }
+    if(!!orders){
+     orders.forEach(function(item){
+       item.subtime = Utils.format_date(new Date(item.subtime),true);
+       item.orderlist = JSON.parse(item.orderlist);
+     });
+    }
+    console.log(orders)
     res.render('./admin/meal/index',{
        title : '订餐管理-订单管理'
       ,user : req.session.admin
@@ -377,7 +378,7 @@ var admin = function(req,res){
 //订单删除
 var delOrderlist = function(req,res){
   var id = parseInt(req.body.id);
-  Order.del(id,function(err){
+  jixiang.delById(id,'orders',function(err){
     if(err){
       return res.json({flg:0,msg:err});
     }
@@ -385,14 +386,19 @@ var delOrderlist = function(req,res){
   });
 }
 
-//订单的已发单状态
+//订单的发单
 var sendStatus = function(req,res){
   var id = parseInt(req.body.id);
   var condition = {};
-  condition.update={
-    sendstatus : true
+  condition.query={
+    _id : id
+  };
+  condition.modify={
+    '$set' : {
+      'sendstatus' : true
+    }
   }
-  Order.update(id,condition,function(err){
+  jixiang.update(condition,'orders',function(err){
     if(err){
       return res.json({flg:0,msg:err});
     }
@@ -402,7 +408,6 @@ var sendStatus = function(req,res){
 //菜品管理
 var mealManager = function(req,res){
   jixiang.count({},'meals',function(err,count){
-    console.log(count)
     if(err){
       return res.json({flg:0,msg:err});
     }
