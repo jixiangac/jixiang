@@ -19,12 +19,15 @@ var index = function(req,res){
       if(err) {
         meals = [];
       }
-      res.render('./meal/index', {
-        title: '订餐',
-        user: req.session.user,
-        meals: meals,
-        cur: 'meal',
-        cat: ''
+      jixiang.count({sendstatus:true,donestatus:false},'orders',function(err,count){
+        res.render('./meal/index', {
+          title: '订餐',
+          user: req.session.user,
+          meals: meals,
+          sendLen : count,
+          cur: 'meal',
+          cat: ''
+        });
       });
      });
 }
@@ -51,13 +54,19 @@ var detail = function(req,res){
          default :
            meal.cat_name ='早餐';
        }
-      res.render('./meal/detail', {
-        title: meal.name + '的详情',
-        user: req.session.user,
-        meals: meal,
-        cur: 'meal',
-        cat:''
-      });
+      jixiang.count({sendstatus:true,donestatus:false},'orders',function(err,count){
+
+        res.render('./meal/detail', {
+          title: meal.name + '的详情',
+          user: req.session.user,
+          meals: meal,
+          sendLen : count,
+          cur: 'meal',
+          cat:''
+        });
+
+      })
+
     });
 }
 
@@ -95,53 +104,21 @@ var category = function(req,res){
       if(err){
         meals=[];
       }
-       res.render('./meal/category',{
-           title : '菜品分类'
-          ,user : req.session.user
-          ,cat : cat_title
-          ,meals : meals
-          ,cur : 'meal'
-       });
+      jixiang.count({sendstatus:true,donestatus:false},'orders',function(err,count){
+
+         res.render('./meal/category',{
+             title : '菜品分类'
+            ,user : req.session.user
+            ,cat : cat_title
+            ,meals : meals
+            ,sendLen : count
+            ,cur : 'meal'
+         });
+
+      });
+
      });
 }
-//订餐清单
-// var orderlist = function(req,res){
-//    var condition={};
-//    condition.query={
-//        _id : parseInt(req.session.user._id,10)
-//       ,donestatus : false
-//    };
-   
-//    jixiang.get(condition,'orders',function(err,orders){
-//       if(err){
-//         orders=[];
-//       }
-//       var orderLen = orders.length
-//          ,subLen = 0
-//          ,sendLen = 0
-//          ,curOrder={};
-
-//       orders.forEach(function(item,index){
-//         if(item.substatus){
-//            if(item.sendstatus){
-//              sendLen++;
-//            }else{
-//              subLen++;
-//            }
-//         }else{
-//            curOrder.mealid=item._id;
-//            curOrder.orderlist = item.orderlist;
-//         }
-//       });
-
-//       res.render('./meal/list',{
-//          orders : curOrder
-//         ,subLen : subLen
-//         ,sendLen : sendLen
-//         ,orderLen : orderLen 
-//       }); 
-//    });
-// }
 //增加新订单
 var newlist = function(req,res){
 
@@ -163,26 +140,6 @@ var newlist = function(req,res){
    }); 
 
 }
-//删除订单
-// var deleteOne = function(req,res){
-//    var id = parseInt(req.body.mealid);
-//    var item = {
-//       mealname : req.body.meal_name
-//      ,mealprice : req.body.meal_price
-//    };
-//    var condition = {
-//       handle : '2'
-//      ,update : {
-//        orderlist : item
-//      }
-//    };
-//    Order.update(id,condition,function(err){
-//      if(err){
-//        return res.json({flg:0,msg:err});
-//      }
-//      return res.json({flg:1,msg:'删除成功！'});
-//    });
-// }
 //菜品的喜欢按钮
 var like = function(req,res){
   var condition = {};
@@ -201,21 +158,6 @@ var like = function(req,res){
     return res.json({flg:1,msg:'喜欢成功！'});
   });
 }
-//提交订单，更改成提交状态
-// var suborder = function(req,res){
-//    var id = parseInt(req.body.mealid,10);
-//    var condition={};
-//    condition.update={
-//       subtime : Date.now()
-//      ,substatus : true
-//    };
-//    Order.update(id,condition,function(err){
-//      if(err){
-//       return res.json({flg:0,msg:err});
-//      }
-//      return res.json({flg:1,msg:'提交成功！'});
-//    });
-// }
 //历史订单 1:已提交的订单
 var subed = function(req,res){
    var uid = parseInt(req.session.user._id,10);
@@ -231,13 +173,12 @@ var subed = function(req,res){
      if(err){
        orders=[];
      }
-     if(!!orders){
+     if(!!orders.length){
        orders.forEach(function(item){
          item.subtime = Utils.format_date(new Date(item.subtime),true);
          item.orderlist = JSON.parse(item.orderlist);
        });
      }
-     console.log(orders)
      res.render('./meal/order_sub',{
        title :'等待配送的订单'
       ,user : req.session.user
@@ -263,7 +204,7 @@ var sended = function(req,res){
      if(err){
        orders=[];
      }
-     if(!!orders){
+     if(!!orders.length){
        orders.forEach(function(item){
          item.subtime = Utils.format_date(new Date(item.subtime),true);
          item.orderlist = JSON.parse(item.orderlist);
@@ -294,7 +235,7 @@ var done = function(req,res){
      if(err){
        orders=[];
      }
-     if(!!orders){
+     if(!!orders.length){
        orders.forEach(function(item){
          item.subtime = Utils.format_date(new Date(item.subtime),true);
          item.orderlist = JSON.parse(item.orderlist);
@@ -333,11 +274,8 @@ var doneconfirm = function(req,res){
 exports.index = index;
 exports.detail = detail;
 exports.category = category;
-// exports.orderlist = orderlist;
 exports.newlist = newlist;
-// exports.deleteOne = deleteOne;
 exports.like = like;
-// exports.suborder = suborder;
 exports.subed = subed;
 exports.sended = sended;
 exports.done = done;
@@ -360,13 +298,12 @@ var admin = function(req,res){
     if(err){
       orders=[];
     }
-    if(!!orders){
+    if(!!orders.length){
      orders.forEach(function(item){
        item.subtime = Utils.format_date(new Date(item.subtime),true);
        item.orderlist = JSON.parse(item.orderlist);
      });
     }
-    console.log(orders)
     res.render('./admin/meal/index',{
        title : '订餐管理-订单管理'
       ,user : req.session.admin

@@ -9,7 +9,7 @@ block content
         a.common-btn.grey-btn.m20 订单管理
         a.common-btn.pink-btn.fl-r(href="/admin/meal/control") 菜品管理
 
-      if !!orders
+      if !!orders.length
         each order in orders
           table.table.table-top.order-table
             tbody

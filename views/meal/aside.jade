@@ -23,6 +23,9 @@ aside.read-style.category
           span.label-text 0&nbsp;元
         #sub-meal.action.action-center.meal-control.hide
           a#sub-meal-order.common-btn.pink-btn 提交订单
+        if !!sendLen
+          .action
+            a(href="/meal/order/send") #{sendLen}条订单已经配送
   section.nav
     .hd.hd-bottom
       h3 餐品分类
