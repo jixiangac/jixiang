@@ -129,8 +129,8 @@ function ajax(url,type,data,callback,errorCallback) {
       if(xhr.readyState == 4) {
         if(xhr.status >= 200 && xhr.status < 300 || xhr.status == 304) {
           if(type=='post'){
-            var result = JSON.parse(xhr.responseText);
-            callback(result);//成功后的回调
+             var result = JSON.parse(xhr.responseText);
+             callback(result);//成功后的回调
            }else{
              callback(xhr.responseText);
            }
@@ -138,7 +138,7 @@ function ajax(url,type,data,callback,errorCallback) {
           if(errorCallback){
              errorCallback();
           }else{
-          alert(xhr.status+'错误');
+            alert(xhr.status+'错误');
           }
         }
       }
@@ -146,4 +146,9 @@ function ajax(url,type,data,callback,errorCallback) {
     xhr.open(type, url, true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.send(data);
+}
+//阻止默认行为
+function defaultEvent(event){
+  var e = event || window.event;
+  e.preventDefault();
 }

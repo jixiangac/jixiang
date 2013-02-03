@@ -16,7 +16,8 @@ block content
         #doctor-main.doctor-main
           //问诊预约
           .doctor-list
-            form(class="form form-inline",method="post",action="/login")
+            form(class="form form-inline",method="post",action="/doctor")
+              input(type="hidden",name="docType",value="1")
               fieldset
                 .form-item
                   label 预约时间
@@ -34,17 +35,18 @@ block content
                   //- span 填写预约时间
                 .form-item
                   label(for="doctors") 预约医师
-                  input(type="text",id="doctors",name="doctors")
+                  input#doctors(type="text",name="doctors")
                   //- span 如果没有就不用填写
                 .form-item
                   label.fl-l 病情简述
-                  textarea.bootstrap(rows="5",cols="37")
+                  textarea.bootstrap(rows="5",cols="37",name="patient")
                   //- span 简单描述一下你的病情，让医生更好对诊
                 .form-item.form-actions
                   button(class="btn",type="submit") 提交预约
           //药品托购
           .doctor-list
-            form(class="form form-inline",method="post",action="/login")
+            form(class="form form-inline",method="post",action="/doctor")
+              input(type="hidden",name="docType",value="2")
               fieldset
                 .form-item
                   label(for="medicine") 药品名称
@@ -59,7 +61,7 @@ block content
                   button(class="btn",type="submit") 提交购买
           //医学咨询
           .doctor-list
-            form(class="form form-inline",method="post",action="/login")
+            form(class="form form-inline",method="post",action="/question")
                 .form-item
                   label.fl-l(for="q-remark") 问题
                   textarea#qremark.bootstrap(rows="5",cols="37",name="qRemark")

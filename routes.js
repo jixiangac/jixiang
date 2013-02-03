@@ -71,6 +71,7 @@ module.exports = function(app){
       就医
      --------*/
    app.get('/doctor',doctor.index);
+   app.post('/doctor',doctor.index);
    /*--------
     问题咨询
     --------*/

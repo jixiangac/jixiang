@@ -1,7 +1,7 @@
 /**
  * 登陆&注册
  */
- if(jixiang.getByClass('form')[0]){
+ if(!!jixiang.getByClass('form')[0]){
   var formA = jixiang.getByClass('form')[0];
   var formSub = formA.getElementsByTagName('button')[0];
   formSub.onclick = function(event){
