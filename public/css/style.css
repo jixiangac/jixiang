@@ -119,6 +119,19 @@
   border-bottom: 1px dashed #ccc;
   overflow:hidden;
 }
+.express .item {/*订餐速递*/
+  margin-bottom: 5px;
+}
+.express .item a {
+  display: block;
+  line-height: 20px;
+  background: #F8F8F2;
+  padding: 10px;
+}
+.express .item a:hover{
+  background : #DBDBD4;
+  color : #825D5B;
+}
 .order-all,.order-all .label{
   color:#cb8081;
 }
@@ -298,4 +311,46 @@ section.question{
 .douban li .douban-summary h4{
   color: #072;
   margin: 8px 0;
+}
+/*= 就医
+-------------*/
+.doctor-nav li{
+  float: left;
+  margin-right: 30px;
+  width: 216px;
+  overflow: hidden;
+}
+.doctor-nav li a{
+  display: block;
+  padding: 26px;
+  cursor : pointer;
+  text-align: center;
+  background: #F6F6F6;
+  font-size: 20px;
+  font-weight: bold;
+  font-family: "Microsoft YaHei";
+}
+.doctor-nav li a span{
+  display:block;
+  font-size: 12px;
+  color: #888;
+}
+.doctor-nav li a:hover,.doctor-nav li a.cur{
+  background-color: #EAF9E6;
+  color: #888;
+}
+.doctor-wrap{
+  width: 707px;
+  position:relative;
+}
+.doctor-main{
+  width: 5000px;
+  position: relative;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+}
+.doctor-main .doctor-list{
+  float: left;
+  width: 707px;
 }

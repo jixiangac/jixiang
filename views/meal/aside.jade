@@ -10,7 +10,10 @@ aside.read-style.category
           span.label.m10 份数
           span.label.m10 单价
         #no-order.action
-          a 您还没有订餐哦，点几样吧～
+          if !!subLen
+            a(href="/meal/order/sub") 点击这里查看您提交的订单
+          else
+            a 您还没有订餐哦，点几样吧～
         ul.meal-order
           //- li
           //-   span.label.name 张君雅小妹妹
@@ -23,9 +26,13 @@ aside.read-style.category
           span.label-text 0&nbsp;元
         #sub-meal.action.action-center.meal-control.hide
           a#sub-meal-order.common-btn.pink-btn 提交订单
-        if !!sendLen
-          .action
-            a(href="/meal/order/send") #{sendLen}条订单已经配送
+  if !!sendLen
+    section.events
+      .hd
+        h3 订餐速递
+      ul.express
+        li.item
+          a(href="/meal/order/send") #{sendLen}条订单已经配送，点击查看，收到后请点击收菜哦！
   section.nav
     .hd.hd-bottom
       h3 餐品分类

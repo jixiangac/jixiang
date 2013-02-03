@@ -10,7 +10,7 @@ block content
       section.my-meal
         h3 社区精选
         .bd.meal-recommend
-          if(meals.lenght)
+          if meals.length
           ul
            each meal,i in meals
             li
@@ -28,3 +28,5 @@ block content
                 span #{meal.like.length}
               a(href="/meal/detail/#{meal._id}")
                 img(src="/images/meal/#{meal.pic}",alt="#{meal.name}")
+block script
+  script(src="/js/meal.js")

@@ -35,4 +35,6 @@ block content
                     span.label.label-block ￥：#{meal.price}&nbsp;元
                     a.common-btn.red-btn.meal-add-order(name="#{meal._id};#{meal.name};#{meal.price}") 加入到订单
           else
-            p 没有相关菜品        
+            p 没有相关菜品
+block script
+  script(src="/js/meal.js")

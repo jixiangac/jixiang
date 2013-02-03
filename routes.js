@@ -7,7 +7,8 @@ var meal = require('./routes/meal')
    ,notice = require('./routes/notice')
    ,login = require('./routes/login')
    ,register = require('./routes/register')
-   ,user = require('./routes/user');
+   ,user = require('./routes/user')
+   ,doctor = require('./routes/doctor')
    
 module.exports = function(app){
  /************************
@@ -69,6 +70,7 @@ module.exports = function(app){
    /*--------
       就医
      --------*/
+   app.get('/doctor',doctor.index);
    /*--------
     问题咨询
     --------*/

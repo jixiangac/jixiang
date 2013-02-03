@@ -6,9 +6,9 @@ header
 
   nav
     .nav-wrap.container.clearfix
-      if(user)
+      if user
         ul.nav-list
-          - var menus = [{text:'首页',href:'/',cur:'index'},{text:'我的主页',href:'/people/'+user.username,cur:'people'},{text:'订餐',href:'/meal',cur:'meal'},{text:'问题咨询',href:'/question',cur:'question'}]      
+          - var menus = [{text:'首页',href:'/',cur:'index'},{text:'我的主页',href:'/people/'+user.username,cur:'people'},{text:'订餐',href:'/meal',cur:'meal'},{text:'问医',href:'/doctor',cur:'doctor'},{text:'问题咨询',href:'/question',cur:'question'}]      
           each menu in menus
             - var active = ''
               if menu.cur == cur

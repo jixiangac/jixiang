@@ -19,15 +19,18 @@ var index = function(req,res){
       if(err) {
         meals = [];
       }
-      jixiang.count({sendstatus:true,donestatus:false},'orders',function(err,count){
-        res.render('./meal/index', {
-          title: '订餐',
-          user: req.session.user,
-          meals: meals,
-          sendLen : count,
-          cur: 'meal',
-          cat: ''
-        });
+      jixiang.count({sendstatus:false,donestatus:false},'orders',function(err,subLen){
+        jixiang.count({sendstatus:true,donestatus:false},'orders',function(err,sendLen){
+          res.render('./meal/index', {
+            title: '订餐',
+            user: req.session.user,
+            meals: meals,
+            subLen : subLen,
+            sendLen : sendLen,
+            cur: 'meal',
+            cat: ''
+          });
+        })
       });
      });
 }
@@ -54,17 +57,18 @@ var detail = function(req,res){
          default :
            meal.cat_name ='早餐';
        }
-      jixiang.count({sendstatus:true,donestatus:false},'orders',function(err,count){
-
-        res.render('./meal/detail', {
-          title: meal.name + '的详情',
-          user: req.session.user,
-          meals: meal,
-          sendLen : count,
-          cur: 'meal',
-          cat:''
-        });
-
+      jixiang.count({sendstatus:false,donestatus:false},'orders',function(err,subLen){
+        jixiang.count({sendstatus:true,donestatus:false},'orders',function(err,sendLen){
+          res.render('./meal/detail', {
+            title: meal.name + '的详情',
+            user: req.session.user,
+            meals: meal,
+            subLen : subLen,
+            sendLen : sendLen,
+            cur: 'meal',
+            cat:''
+          });
+        })
       })
 
     });
@@ -104,17 +108,18 @@ var category = function(req,res){
       if(err){
         meals=[];
       }
-      jixiang.count({sendstatus:true,donestatus:false},'orders',function(err,count){
-
+      jixiang.count({sendstatus:false,donestatus:false},'orders',function(err,subLen){
+        jixiang.count({sendstatus:true,donestatus:false},'orders',function(err,sendLen){
          res.render('./meal/category',{
              title : '菜品分类'
             ,user : req.session.user
             ,cat : cat_title
             ,meals : meals
-            ,sendLen : count
+            ,subLen : subLen
+            ,sendLen : sendLen
             ,cur : 'meal'
          });
-
+       });
       });
 
      });
@@ -179,7 +184,7 @@ var subed = function(req,res){
          item.orderlist = JSON.parse(item.orderlist);
        });
      }
-     res.render('./meal/order_sub',{
+     res.render('./meal/order',{
        title :'等待配送的订单'
       ,user : req.session.user
       ,orders : orders
@@ -210,7 +215,7 @@ var sended = function(req,res){
          item.orderlist = JSON.parse(item.orderlist);
        });
      }
-     res.render('./meal/order_sub',{
+     res.render('./meal/order',{
        title :'已配送的订单'
       ,user : req.session.user
       ,orders : orders
@@ -241,7 +246,7 @@ var done = function(req,res){
          item.orderlist = JSON.parse(item.orderlist);
        });
      }
-     res.render('./meal/order_sub',{
+     res.render('./meal/order',{
        title :'已完成的订单'
       ,user : req.session.user
       ,orders : orders
