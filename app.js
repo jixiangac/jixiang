@@ -11,7 +11,7 @@ var express = require('express')
 
 //数据库
 var MongoStore = require('connect-mongo')(express);
-var settings = require('./settings');
+var config = require('./config');
 var app = express();
 
 app.configure(function(){
@@ -26,9 +26,9 @@ app.configure(function(){
   app.use(express.methodOverride());
   app.use(express.cookieParser());
   app.use(express.session({
-    secret : settings.cookieSecret,
+    secret : config.cookieSecret,
     store : new MongoStore({
-      db : settings.db
+      db : config.db
     })
   }));
   app.use(app.router);

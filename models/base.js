@@ -3,7 +3,7 @@
  */
 
 //配置文件
-var settings = require('../settings');
+var config = require('../config');
 //工具
 var Utils = require('./utils.js');
 //数据库连接
@@ -13,7 +13,7 @@ var Server = require('mongodb').Server;
 
 //数据库初始化
 var jixiang = function(){
-  this.db = new Db(settings.db,new Server(settings.host,Connection.DEFAULT_PORT,{
+  this.db = new Db(config.db,new Server(config.host,Connection.DEFAULT_PORT,{
     auto_reconnect:true
   },
   {}));

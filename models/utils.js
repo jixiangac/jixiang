@@ -3,7 +3,7 @@
  * @param  {[type]} date [日期参数]
  * @return {[type]}      [返回值]
  */
-exports.format_date = function (date,flag) {
+exports.format_date = function (date,flag) {//flag 为true返回时分秒
   var year = date.getFullYear();
   var month = date.getMonth() + 1;
   var day = date.getDate();
