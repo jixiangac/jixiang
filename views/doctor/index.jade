@@ -7,42 +7,68 @@ block content
       section#doctor-nav.nav
         ul.doctor-nav
           - var doctors=[{text:'问诊预约',sub:'预约医生'},{text:'药品托购',sub:'帮忙买药'},{text:'医学咨询',sub:'提问问题'}]
-            each doctor in doctors
-              li
-                a #{doctor.text}
+            each doctor,i in doctors
+               - var cur = ''
+               if i == 0
+                 - cur = 'cur'
+               li
+                 a(class=cur) #{doctor.text}
                   span #{doctor.sub}
       section#doctor-wrap.doctor-wrap
         p#tips 您想干嘛点什么？点击上面吧
         #doctor-main.doctor-main
           //问诊预约
           .doctor-list
-            form(class="form form-inline",method="post",action="/doctor")
-              input(type="hidden",name="docType",value="1")
-              fieldset
-                .form-item
-                  label 预约时间
-                  select#yuMonth(name="yuMonth")
-                    -var month =new Date();
-                    -for(var i=month.getMonth()+1;i<=12;i++)
-                      option(value="#{i}")!{i}月
-                  select#yuDay(name="yuDay")
-                    -for(var i=1;i<=31;i++)
-                      option(value="#{i}")!{i}日
-                   select#yuTime(name="yuTime")
-                     option(value="1") 上午
-                     option(value="2") 下午
-                     option(value="3") 晚上
-                  //- span 填写预约时间
-                .form-item
-                  label(for="doctors") 预约医师
-                  input#doctors(type="text",name="doctors")
-                  //- span 如果没有就不用填写
-                .form-item
-                  label.fl-l 病情简述
-                  textarea.bootstrap(rows="5",cols="37",name="patient")
-                  //- span 简单描述一下你的病情，让医生更好对诊
-                .form-item.form-actions
-                  button(class="btn",type="submit") 提交预约
+            if !agree
+              form(class="form form-inline",method="post",action="/doctor")
+                input(type="hidden",name="docType",value="1")
+                fieldset
+                  .form-item
+                    label 预约时间
+                    select#yuMonth(name="yuMonth")
+                      -var month =new Date();
+                      -for(var i=month.getMonth()+1;i<=12;i++)
+                        option(value="#{i}")!{i}月
+                    select#yuDay(name="yuDay")
+                      -for(var i=month.getDate();i<=31;i++)
+                        option(value="#{i}")!{i}日
+                     select#yuTime(name="yuTime")
+                       option(value="1") 上午
+                       option(value="2") 下午
+                       option(value="3") 晚上
+                    //- span 填写预约时间
+                  .form-item
+                    label(for="doctors") 预约医师
+                    input#doctors(type="text",name="doctors")
+                    //- span 如果没有就不用填写
+                  .form-item
+                    label.fl-l 病情简述
+                    textarea.bootstrap(rows="5",cols="37",name="patient")
+                    //- span 简单描述一下你的病情，让医生更好对诊
+                  .form-item.form-actions
+                    button(class="btn",type="submit") 提交预约
+            else
+              table.table.table-top.order-table
+                caption #{agree.time} #{agree.timeB}的预约申请
+                  if !agree.reply
+                    span.fl-l(style="color:red")未答复
+                  else
+                    span.fl-l 已回复
+                tbody
+                  tr
+                    td.reply 概况
+                    td
+                      if !!agree.doctor.length
+                        p 预约医师：
+                          a #{agree.doctor}
+                      p 病情简述：
+                        a #{agree.paitent}
+                    tr
+                      td.reply 回复
+                      td
+                        p(style="color:green") #{agree.agreereply}
+                        if !!agree.replycontent
+                          p 备注：#{agree.replycontent} 
           //药品托购
           .doctor-list
             form(class="form form-inline",method="post",action="/doctor")

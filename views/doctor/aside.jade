@@ -11,12 +11,11 @@ aside.read-style.category
     .hd.hd-bottom
       h3 我的问医
     ul.admin-nav-list
-      - var menus = [{text:'我的病历'},{text:'我的问诊'},{text:'我的药品'},{text:'我的问题'}]
-        each menu,i in menus
+      - var menus = [{text:'我的病历',href:'history'},{text:'我的问诊',href:'ask'},{text:'我的药品',href:'medicine'},{text:'我的问题',href:'question'}]
+        each menu in menus
           - var active = ''
-          //- if cat != ''
-          //-   if menu.text == cat
-          //-     - active = 'cur'
+          if cat != ''
+            if menu.href == cat
+              - active = 'cur'
           li
-           a(href="/meal/category/"+i,class="#{active}") #{menu.text}
-      
+           a(href="/doctor/#{menu.href}",class="#{active}") #{menu.text}

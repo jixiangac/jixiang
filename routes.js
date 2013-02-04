@@ -68,10 +68,12 @@ module.exports = function(app){
    //确认收菜，交易完成
    app.post('/meal/order/done',meal.doneconfirm);
    /*--------
-      就医
+      问医
      --------*/
    app.get('/doctor',doctor.index);
    app.post('/doctor',doctor.index);
+   app.get('/doctor/ask',doctor.ask);
+   app.get('/doctor/medicine',doctor.medicine)
    /*--------
     问题咨询
     --------*/
@@ -138,6 +140,11 @@ module.exports = function(app){
   //修改菜品
   app.get(/^\/admin\/meal\/edit\/?(\d+)$/,meal.modifyMeal);
   app.post('/admin/meal/edit',meal.modifyMeal);
+  /*-----------
+     问医管理
+   -----------*/
+   app.get('/admin/doctor',doctor.admin);
+   app.post('/admin/doctor',doctor.admin);
   /*-----------
      问题管理
    ----------*/

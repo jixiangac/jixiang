@@ -399,6 +399,27 @@ section.admin-title h1{
 .order-table tbody tr:hover{
   background:#EAF9E6;
 }
+.order-table .line{
+  border-bottom: 1px solid #ddd;
+}
+.order-table td.reply{
+  width: 87px;
+}
+a.reply{
+  float:right;
+  margin-right: 5px;
+}
+a.btn-reply{
+  cursor: pointer;
+}
+a.btn-reply:hover{
+  background:#37A;
+  color: #fff;
+}
+a.btn-reply:active{
+  background:#F93;
+  color: #fff;
+}
 /*分页*/
 .pagenav{
   margin-top: 15px;
@@ -489,13 +510,13 @@ span.label-block{
  	font-size:14px;
  	width:270px;
  }
- textarea.bootstrap{
+.bootstrap{
   border:1px solid #ccc;  
   border-radius:4px;
   line-height:20px;
   font-size:14px;
  }
- .form-inline input:focus,textarea.bootstrap:focus{
+ .form-inline input:focus,.bootstrap:focus{
   border-color: rgba(82, 168, 236, 0.8);
   outline: 0;
   outline: thin dotted \9;

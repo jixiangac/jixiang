@@ -1,0 +1,43 @@
+extends ../layouts/header
+block content
+  #container.container.clearfix
+    //侧边导航
+    include aside
+    article.read-style
+      section.admin-title.line.clearfix
+        h1.fl-l #{title}
+      if doc.length
+        each app in doc
+          table.table.table-top.order-table
+            caption #{app.time} #{app.timeB}的预约申请
+              if !app.reply
+                span.fl-l(style="color:red")未答复
+              else
+                span.fl-l 已回复
+            tbody
+              tr
+                td.reply 概况
+                td
+                  if !!app.doctor.length
+                    p 预约医师：
+                      a #{app.doctor}
+                  p 病情简述：
+                    a #{app.paitent}
+              if !!app.reply
+                tr
+                  td.reply 回复
+                  td
+                    if !app.disagree
+                      p(style="color:green") #{app.agreereply}
+                      if !!app.replycontent
+                        p 备注：#{app.replycontent}
+                    else
+                      if !!app.replycontent
+                        p(style="color:#888") 【预约不成功】#{app.replycontent}
+                      else
+                        p(style="color:#888") 【预约不成功】这个医师很懒，什么也没有说             
+      else
+        table.table.table-top.order-table
+            caption.line 您现在没有问诊预约信息
+block script
+  script(src="/js/doctor.js")

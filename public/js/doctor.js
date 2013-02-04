@@ -1,18 +1,18 @@
 /**
- *  @Description 问医JS
+ *  @Description 闂尰JS
  *  @Author      jixiangac
  *  @E-mail      jixiangac@gmail.com
  *  @Date        2013/02/03 23:59
  */
 (function(){
   /*-----------
-     问医首页
+     闂尰棣栭〉
    -----------*/
   if(!!jixiang.$('doctor-wrap')){
     var doctor = jixiang.$('doctor-wrap');
     var navlist = jixiang.$('doctor-nav').getElementsByTagName('li');
     var content = jixiang.$('doctor-main')
-    //导航切换
+    //瀵艰埅鍒囨崲
     for(var i=0,len=navlist.length;i<len;i++){
       (function(i){
          Utils.addHandler(navlist[i],'click',function(){
@@ -24,7 +24,7 @@
          });
       })(i)
     }
-    //数据提交
+    //鏁版嵁鎻愪氦
     var form = document.getElementsByTagName('form');
     var handler = function(event){
       var e = event || window.event;

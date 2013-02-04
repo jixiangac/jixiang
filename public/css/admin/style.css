@@ -46,7 +46,7 @@ section.add-meal{
 	float: left;
 	width: 100px;
 }
-/*= 问题管理i
+/*= 问题管理
 -------------*/
 .text-left td,.text-left th{
   text-align: left;
@@ -61,4 +61,12 @@ table td.q-name{
 table td.q-handler{
 	width: 100px;
 	text-align: center;
+}
+/*= 问医管理
+  -----------*/
+input.reply{
+  width: 550px;
+  padding: 4px 10px;
+  margin-right: 10px;
+  vertical-align : middle;
 }
