@@ -354,3 +354,13 @@ section.question{
   float: left;
   width: 707px;
 }
+/*问药*/
+.medicine-form input,.medicine-form select{
+  border-radius: 0;
+}
+.medicine-form .med-name{
+  width: 123px;
+}
+.medicine-form .med-description{
+  width: 280px;
+}

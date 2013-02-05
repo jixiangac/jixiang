@@ -18,7 +18,13 @@
       var result = function(data){
         if(data.flg == 1){
           var tr =form.parentNode.parentNode;
-          var html = '<td class="reply">回复</td><td><p>'+data.msg+'</p></td>';
+          var html = '<td class="reply">回复</td>';
+          if(data.docCat == 2){
+            html += '<td colspan="3">';
+          }else{
+            html += '<td>';
+          }
+          html += '<p>'+data.msg+'</p></td>';
           tr.innerHTML= html;
         }
       }

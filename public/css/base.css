@@ -361,10 +361,10 @@ section.admin-title h1{
   border-collapse: collapse;
   border-spacing: 0;
 }
-.table tr{
+/*.table tr{
   height: 45px;
   line-height: 45px;
-}
+}*/
 .table tbody tr:hover{
   background: #f8f8f8;
 }
@@ -374,6 +374,7 @@ section.admin-title h1{
 }
 .table td{
     border-bottom: 1px dashed #ddd;
+    padding: 10px;
 }
 .table th,.table td{
   text-align: center;
@@ -382,10 +383,14 @@ section.admin-title h1{
 .order-table{
   margin-top: 15px;
 }
-.order-table td,.order-table caption{
+.order-table td,.order-table caption,thead.tab-title th{
   border: 1px solid #ddd;
 }
-.order-table caption{
+thead.tab-title tr{
+  height : 30px;
+  line-height: 30px;
+}
+.order-table caption,thead.tab-title{
   padding : 10px 0;
   border-bottom: 0;
   background:  #F6F6F6;
@@ -396,14 +401,17 @@ section.admin-title h1{
   text-align: left;
   padding-left: 12px;
 }
-.order-table tbody tr:hover{
+.order-table tbody tr:hover,.order-table tbody tr.cur{
   background:#EAF9E6;
 }
 .order-table .line{
   border-bottom: 1px solid #ddd;
 }
-.order-table td.reply{
+.order-table .reply{
   width: 87px;
+}
+td.btn-control a{
+  margin-left :14px;
 }
 a.reply{
   float:right;

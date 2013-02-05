@@ -6,8 +6,30 @@ block content
     article.read-style
       section.admin-title.line.clearfix
         h1.fl-l #{title}
-      if doc
-        fdf         
+      if !!doc.length
+        each med in doc
+          table#show-med.table.table-top.order-table.form-inline.medicine-form
+            if !med.reply
+              caption 这是您在 #{med.time} 提交的托购药品的信息，目前还没有回音
+            else
+              caption #{med.time} 的提交的托购药品信息
+            thead.tab-title
+              tr
+                th.reply 药品名称
+                th.reply 药品数量
+                th 描述
+            tbody
+              each item in med.medlist
+                tr
+                  td.med-name= item.name
+                  td.reply= item.num
+                  td= item.description
+            if !!med.reply
+              tfoot
+                tr
+                  td.reply 回复
+                  td(colspan="2")
+                    p #{med.replycontent}       
       else
         table.table.table-top.order-table
             caption.line 您现在没有药品信息

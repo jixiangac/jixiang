@@ -145,6 +145,8 @@ module.exports = function(app){
    -----------*/
    app.get('/admin/doctor',doctor.admin);
    app.post('/admin/doctor',doctor.admin);
+   app.get('/admin/doctor/medicine',doctor.reMedicine)
+   app.post('/admin/doctor/medicine',doctor.reMedicine);
   /*-----------
      问题管理
    ----------*/

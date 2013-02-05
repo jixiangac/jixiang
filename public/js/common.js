@@ -120,6 +120,10 @@ function serializeData(data){
 function isEmpty(obj){
 	return !!obj.value.replace(/\s+/,'').length === 0;
 }
+//去掉两边的空
+function trim(str){
+  return str.replace(/\s+/g,'');
+}
 /*--------------
     Ajax封装
  --------------*/

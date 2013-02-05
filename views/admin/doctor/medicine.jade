@@ -1,0 +1,47 @@
+extends ../layouts/header
+block content
+  #container.container.clearfix
+    //侧边导航
+    include ../layouts/aside
+    article.read-style
+      section.admin-title.line.clearfix
+        h1.fl-l 问医管理
+        a.common-btn.grey-btn.m20 药品托购
+        a.common-btn.pink-btn.fl-r(href="/admin/doctor") 问诊预约
+      if !!doc.length
+        each med in doc
+          table.table.table-top.order-table.form-inline.medicine-form
+            caption 【#{med.username}】的药品托购委托
+              if !med.reply
+                a.reply.btn-reply 删除
+                a.reply.btn-reply.doreply 点击答复
+              else
+                span.fl-l 已回复
+            thead.tab-title
+              tr
+                th.reply 药品名称
+                th.reply 药品数量
+                th 描述
+            tbody
+              each item in med.medlist
+                tr
+                  td.med-name= item.name
+                  td.reply= item.num
+                  td= item.description
+            if !med.reply
+              tfoot.hide
+                tr
+                  td(colspan='3')
+                    form.form.form-inline(action="/admin/doctor/medicine",method="post")
+                      input(type="hidden",value="#{med._id}",name="askid")              
+                      input(type="text",name="reply")
+                      button.btn(type="submit") 回复
+            else
+              tfoot
+                tr
+                  td.reply 回复
+                  td(colspan="2") #{med.replycontent}
+
+block script
+  script(src="/js/admin/doctor.js")     
+            

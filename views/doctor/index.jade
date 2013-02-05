@@ -15,7 +15,7 @@ block content
                  a(class=cur) #{doctor.text}
                   span #{doctor.sub}
       section#doctor-wrap.doctor-wrap
-        p#tips 您想干嘛点什么？点击上面吧
+        //- p#tips 您想干嘛点什么？点击上面吧
         #doctor-main.doctor-main
           //问诊预约
           .doctor-list
@@ -71,20 +71,57 @@ block content
                           p 备注：#{agree.replycontent} 
           //药品托购
           .doctor-list
-            form(class="form form-inline",method="post",action="/doctor")
-              input(type="hidden",name="docType",value="2")
-              fieldset
-                .form-item
-                  label(for="medicine") 药品名称
-                  input#medicine(type="text",name="medicine")
-                .form-item
-                  label(for="med-num") 数量
-                  input#med-num(type="text",name="medNum")
-                .form-item
-                  label.fl-l(for="med-remark") 备注
-                  textarea#medRemark.bootstrap(rows="5",cols="37",name="medRemark")
-                .form-item.form-actions
-                  button(class="btn",type="submit") 提交购买
+            if !med
+              a#add-med.btn-reply 增加一条
+              table#med-table.table.table-top.order-table.form-inline.medicine-form
+                thead.tab-title
+                  tr
+                    th.reply 药品名称
+                    th.reply 药品数量
+                    th 描述
+                    th.reply 操作
+                tbody
+                  tr#no-med
+                    td(colspan="4")
+                      a 还没有托购信息，点击【增加一条】进行添加，全部添加完成后请点击【提交】
+                tfoot
+                  tr#med-sub.hide
+                    td(colspan="4")
+                      a.btn 提交药品托购
+                  tr#med-model.hide
+                    td.med-name 
+                      input.med-name.med-item(type="text")
+                    td.reply
+                      select.med-item(name="mednum")
+                        -for(var i=1;i<=10;i++)
+                          option(value="#{i}") #{i}
+                    td 
+                      input.med-description.med-item(type="text")
+                    td.reply.btn-control
+                       a.btn-reply.med-save 保存
+                       a.btn-reply.med-cancel 取消
+            else
+             if !med.reply
+               a 这是您在 #{med.time} 提交的托购药品的信息，目前还没有回音
+             table#show-med.table.table-top.order-table.form-inline.medicine-form
+                thead.tab-title
+                  tr
+                    th.reply 药品名称
+                    th.reply 药品数量
+                    th 描述
+                tbody
+                  each item in med.medlist
+                    tr
+                      td.med-name= item.name
+                      td.reply= item.num
+                      td= item.description
+                if !!med.reply
+                  tfoot
+                    tr
+                      td.reply 回复
+                      td(colspan="2")
+                        p #{med.replycontent} 
+
           //医学咨询
           .doctor-list
             form(class="form form-inline",method="post",action="/question")
