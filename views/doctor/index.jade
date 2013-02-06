@@ -59,16 +59,16 @@ block content
                     td.reply 概况
                     td
                       if !!agree.doctor.length
-                        p 预约医师：
-                          a #{agree.doctor}
-                      p 病情简述：
-                        a #{agree.paitent}
+                        a 预约医师：#{agree.doctor}
+                        br
+                      a 病情简述：#{agree.paitent}
                     tr
                       td.reply 回复
                       td
-                        p(style="color:green") #{agree.agreereply}
+                        a(style="color:green") #{agree.agreereply}
                         if !!agree.replycontent
-                          p 备注：#{agree.replycontent} 
+                          br
+                          a 备注：#{agree.replycontent} 
           //药品托购
           .doctor-list
             if !med
@@ -103,6 +103,8 @@ block content
             else
              if !med.reply
                a 这是您在 #{med.time} 提交的托购药品的信息，目前还没有回音
+             else
+               a 当你领取了药品后，管理员确认后，你才可以发起新的申请，这里是你上次的药品清单
              table#show-med.table.table-top.order-table.form-inline.medicine-form
                 thead.tab-title
                   tr
@@ -120,15 +122,16 @@ block content
                     tr
                       td.reply 回复
                       td(colspan="2")
-                        p #{med.replycontent} 
+                        a #{med.replycontent} 
 
           //医学咨询
           .doctor-list
-            form(class="form form-inline",method="post",action="/question")
+            form#question(class="form form-inline",method="post",action="/question",name="1")
                 .form-item
-                  label.fl-l(for="q-remark") 问题
-                  textarea#qremark.bootstrap(rows="5",cols="37",name="qRemark")
-                .form-item.form-actions
-                  button(class="btn",type="submit") 提问
+                  label(for="q-remark") 提点问题
+                  input#q(type="text",name="q")
+                  button#qsub.btn 提交问题
+            #answer.flow-mod 你好，我是问医小机器人，有什么问题就问我吧！
 block script
   script(src="/js/doctor.js")
+  script(src="/js/question.js")

@@ -5,6 +5,7 @@ var qForm = jixiang.$('question');
 if(!!qForm){
   var q = jixiang.$('q');
   var sub = jixiang.$('qsub');
+  var cat = parseInt(qForm.name,10);
   var hadQ = '';
   var handler = function(event){
     var e = event || window.event;
@@ -21,6 +22,9 @@ if(!!qForm){
       q.value='';
       q.focus();
       return;
+    }
+    if(cat == 1){//问医类问题
+      question = '@问医：'+ question;
     }
     sub.className = 'common-btn grey-btn';
     sub.innerHTML = '提交中..';

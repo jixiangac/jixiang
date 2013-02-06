@@ -6,9 +6,9 @@ block content
     article.read-style
       section.admin-title.line.clearfix
         h1.fl-l 问题管理
-        a.common-btn.grey-btn.m20 问题列表
+        a.common-btn.grey-btn.m20 未回复的问题
         a.common-btn.pink-btn.fl-r(href="/admin/question/add") 添加新问题
-        a.common-btn.pink-btn.fl-r(href="/admin/question/noreply") 未回复的问题
+        a.common-btn.pink-btn.fl-r(href="/admin/question") 问题列表
       div.tab-nav.form-inline
         - var selMenus = [{text:'所有',cat:0},{text:'问医',cat:1},{text:'家政',cat:2},{text:'政策',cat:3},{text:'其他',cat:4}]
         select#sel-cat
@@ -29,21 +29,23 @@ block content
             tbody
               tr.cur
                 td.cat
-                  a #{answer.cat}
-                td 
-                  a 问：#{answer.title}
+                  a #{answer.subcat}
+                td #{answer.username}提问：
+                  a #{answer.title}
                 td.cat
-                  a.btn-reply(href="/admin/question/edit?id=#{answer._id}") 修改
+                  if !!answer.reply
+                    a.btn-reply(href="/admin/question/reply?id=#{answer._id}") 修改
               tr
                 td.cat 解答
-                td 答：#{answer.content}
-                  a.useinfo [
-                   span.useful 有用：#{answer.useful}
-                   span.useless 没用：#{answer.useless}  
-                   |]
+                if !!answer.reply
+                  td 答：#{answer.content}
+                else
+                  td 
+                    a(style="color:red")该问题还没有回答，
+                    a.btn-reply(href="/admin/question/reply?id=#{answer._id}") 【回复这个问题】
                 td.cat
                   a.btn-reply.delete.sub(href="/admin/question/delete/#{answer._id}") 删除
 
       else
         table.table.table-top.order-table
-            caption.line 没有问题，请点击添加问题进行添加
+            caption.line 没有这个系列的问题

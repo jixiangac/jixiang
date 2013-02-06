@@ -41,33 +41,37 @@ var FAQ = { //常见问题
 }
 var answer = function(req,res){
    var question = req.body.question;
-   //你好
-   if(/^(你好|hello|hi)/i.test(question)){
-   	 var answer = '';
-   	 var h = new Date().getHours();
-     switch(true){
-     	case h < 3 : 
-     	  answer = helloAnswer['time3'];break;
-     	case h < 5 :
-     	  answer = helloAnswer['time5'];break;
-     	case h < 7 :
-     	  answer = helloAnswer['time7'];break;
-     	case h < 9 :
-     	  answer = helloAnswer['time9'];break;
-     	case h < 12 :
-     	  answer = helloAnswer['time12'];break;
-     	case h < 15 :
-     	  answer = helloAnswer['time15'];break;
-     	case h < 18 :
-     	  answer = helloAnswer['time18'];break;
-     	case h < 22 :
-     	  answer = helloAnswer['time22'];break;
-     	case h >=22 :
-     	  answer = helloAnswer['time23'];break;
-     	default:
-     	  answer = '好呀，今天天气不错挺风和日丽的！';
-     }
-   	 return res.json({flg:1,answer:answer});
+   //问医类问题的回答
+   if(/^@问医：/.test(question)){
+     question = question.replace(/^@问医：/,'');
+     var condition = {};
+     condition.query = {
+         cat : 1
+        ,title : new RegExp(question,'gi')
+     };
+     // condition.limit = 5;
+     jixiang.get(condition,'question',function(err,doc){
+       if(err){
+        console.log(err)
+        doc = [];
+       }
+       if(!!doc.length){
+         // var num = parseInt(Math.random()*doc.length,10);
+          return res.json({flg:2,answers:doc[0]}); 
+       }else{
+         var item = {
+            cat : 0
+           ,subcat : 1
+           ,uid : req.session.user._id
+           ,username : req.session.user.username
+           ,title : question
+           ,reply : false
+         }
+         jixiang.save(item,'question',function(err,doc){});
+       }
+       return res.json({flg:1,answer:'这个问题我还不能回答你，但是我已经记录下来了，有了回复，你可以在【我的问题】中查看'});
+     });
+     return;
    }
    //豆瓣API，apikey=0dd9395b7b5b1212298bac1272113636
    if(/^@(图书|电影|音乐)：/.test(question)){
@@ -160,6 +164,34 @@ var answer = function(req,res){
       });
       return;
    }
+   //你好,没有分类的问题
+   if(/^(你好|hello|hi)/i.test(question)){
+     var answer = '';
+     var h = new Date().getHours();
+     switch(true){
+      case h < 3 : 
+        answer = helloAnswer['time3'];break;
+      case h < 5 :
+        answer = helloAnswer['time5'];break;
+      case h < 7 :
+        answer = helloAnswer['time7'];break;
+      case h < 9 :
+        answer = helloAnswer['time9'];break;
+      case h < 12 :
+        answer = helloAnswer['time12'];break;
+      case h < 15 :
+        answer = helloAnswer['time15'];break;
+      case h < 18 :
+        answer = helloAnswer['time18'];break;
+      case h < 22 :
+        answer = helloAnswer['time22'];break;
+      case h >=22 :
+        answer = helloAnswer['time23'];break;
+      default:
+        answer = '好呀，今天天气不错挺风和日丽的！';
+     }
+     return res.json({flg:1,answer:answer});
+   }
    //轮询是否在常见问题中
    for(var key in FAQ){
       var pat = new RegExp(key,'i');
@@ -217,18 +249,53 @@ exports.review = review;
 
 var　admin = function(req,res){
   var condition = {};
+  var cat;
+  switch(parseInt(req.query.cat,10)){
+    case 1 :
+      cat = 1;
+      break;
+    case 2 :
+      cat = 2;
+      break;
+    case 3 :
+      cat = 3;
+      break;
+    case 4 :
+      cat = 4;
+      break;
+    default :
+      cat = {'$nin':[0]}
+  }
   condition.query = {
-    cat : 0
+    cat : cat
   };
   jixiang.get(condition,'question',function(err,answers){
     if(err){
       answers=[];
+    }
+    if(!!answers.length){
+      answers.forEach(function(item){
+        switch(item.cat){
+          case 1 : 
+            item.cat = '问医';
+            break;
+          case 2 :
+            item.cat = '家政';
+            break;
+          case 3 :
+            item.cat = '政策';
+            break;
+          default :
+            item.cat = '其他';
+        }
+      });
     }
     res.render('./admin/question/index',{
        title : '问题管理'
       ,user : req.session.admin
       ,answers : answers
       ,cur : 'question'
+      ,pagecat : cat
     });
   });
 }
@@ -242,11 +309,12 @@ var newQ = function(req,res){
     });      
   }else if(req.method == 'POST'){
      var q = {
-        cat :　0
+        cat :　parseInt(req.body.q_cat,10)
        ,useful : 0
        ,useless : 0
        ,title : req.body.q_name
        ,content : req.body.q_answer
+       ,reply : true
      };
      jixiang.save(q,'question',function(err){
        if(err){
@@ -256,6 +324,140 @@ var newQ = function(req,res){
      });
   }
 
+}
+//修改问题
+var editQ = function(req,res){
+  var id = parseInt(req.query.id,10);
+  if(req.method == 'GET'){
+    jixiang.getOne({_id:id},'question',function(err,doc){
+      res.render('./admin/question/edit',{
+         title : '修改问题'
+        ,user : req.session.admin
+        ,cur : 'question'
+        ,doc : doc
+      });
+    });
+
+  }else if(req.method == 'POST'){
+    var condition ={};
+    condition.query = {
+      _id : id
+    }
+    condition.modify = {
+      '$set': {
+        title : req.body.q_name
+       ,cat : parseInt(req.body.q_cat,10)
+       ,content : req.body.q_answer
+      }
+    }
+    console.log(condition)
+    jixiang.update(condition,'question',function(err){
+      if(err){
+        return res.json({flg:0,msg:err});
+      }
+      // return res.json({flg:1,msg:'修改成功！'});
+      res.redirect('/admin/question');
+    });
+  }
+}
+var noreply = function(req,res){
+  if(req.method == 'GET'){
+
+    var condition = {};
+    var cat;
+    switch(parseInt(req.query.cat,10)){
+      case 1 :
+        cat = 1;
+        break;
+      case 2 :
+        cat = 2;
+        break;
+      case 3 :
+        cat = 3;
+        break;
+      case 4 :
+        cat = 4;
+        break;
+      default :
+        cat = {'$nin':[0]}
+    }
+    condition.query = {
+       cat : 0
+      ,subcat : cat
+    };
+    condition.sort = {
+      replytime : -1
+    }
+    jixiang.get(condition,'question',function(err,answers){
+      if(err){
+        answers=[];
+      }
+      if(!!answers.length){
+        answers.forEach(function(item){
+          switch(item.subcat){
+            case 1 : 
+              item.subcat = '问医';
+              break;
+            case 2 :
+              item.subcat = '家政';
+              break;
+            case 3 :
+              item.subcat = '政策';
+              break;
+            default :
+              item.subcat = '其他';
+          }
+        });
+      }
+
+      res.render('./admin/question/noreply',{
+         title : '未回复的问题'
+        ,user : req.session.admin
+        ,answers : answers
+        ,cur : 'question'
+        ,pagecat : cat
+      });
+    });
+
+  }
+}
+var reply = function(req,res){
+  var id = parseInt(req.query.id,10);
+  if(req.method == 'GET'){
+    jixiang.getOne({_id:id},'question',function(err,doc){
+      res.render('./admin/question/reply',{
+         title : '回复问题'
+        ,user : req.session.user
+        ,cur : 'question'
+        ,doc : doc
+      });
+    });
+  }else if(req.method == 'POST'){
+    var condition ={};
+    condition.query ={
+      _id : id
+    }
+    condition.modify = {
+      '$set' : {
+         title : req.body.q_name
+        ,content : req.body.q_answer
+        ,subcat : parseInt(req.body.q_cat,10)
+        ,reply : true
+        ,replyuser : req.session.admin.username
+      }
+    }
+    if(!!req.body.add){
+      condition.modify['$set'].cat = parseInt(req.body.q_cat,10);
+      condition.modify['$set'].useless = 0;
+      condition.modify['$set'].useful = 0;
+    }
+    jixiang.update(condition,'question',function(err){
+      if(err){
+        return res.json({flg:0,msg:err});
+      }
+      return res.redirect('/admin/question/noreply');
+    })
+  }
 }
 var del = function(req,res){
   var id = parseInt(req.body.id);
@@ -268,4 +470,7 @@ var del = function(req,res){
 }
 exports.admin = admin;
 exports.newQ = newQ;
+exports.editQ = editQ;
+exports.noreply = noreply;
+exports.reply = reply;
 exports.del = del;

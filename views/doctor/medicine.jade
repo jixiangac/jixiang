@@ -10,9 +10,10 @@ block content
         each med in doc
           table#show-med.table.table-top.order-table.form-inline.medicine-form
             if !med.reply
-              caption 这是您在 #{med.time} 提交的托购药品的信息，目前还没有回音
+              caption 
+                a(style="color:red") 这是您在 #{med.time} 提交的托购药品的信息，目前还没有回音
             else
-              caption #{med.time} 的提交的托购药品信息
+              caption #{med.time}  提交的托购药品信息
             thead.tab-title
               tr
                 th.reply 药品名称
@@ -29,7 +30,7 @@ block content
                 tr
                   td.reply 回复
                   td(colspan="2")
-                    p #{med.replycontent}       
+                    a #{med.replycontent}       
       else
         table.table.table-top.order-table
             caption.line 您现在没有药品信息

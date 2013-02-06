@@ -20,7 +20,7 @@
              navlist[j].getElementsByTagName('a')[0].className='';
            }
            this.getElementsByTagName('a')[0].className = 'cur';
-           content.style.left = '-'+707*i+'px';
+           content.style.left = '-'+722*i+'px';
          });
       })(i)
     }

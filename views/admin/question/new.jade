@@ -16,6 +16,13 @@ block content
               span.label 问题标题：
               input.q_text(type="text",name="q_name",style="width:370px")
             p
+              span.label 问题分类：
+              select(name="q_cat")
+                option(value="1") 问医
+                option(value="2") 家政
+                option(value="3") 政策
+                option(value="4") 其他
+            p
               span.label 解答：
               textarea.q_text(name="q_answer",cols="50",rows="10")
             p

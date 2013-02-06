@@ -19,23 +19,24 @@ block content
                 td.reply 概况
                 td
                   if !!app.doctor.length
-                    p 预约医师：
-                      a #{app.doctor}
-                  p 病情简述：
+                    a 预约医师：#{app.doctor}
+                    br
+                  a 病情简述：
                     a #{app.paitent}
               if !!app.reply
                 tr
                   td.reply 回复
                   td
                     if !app.disagree
-                      p(style="color:green") #{app.agreereply}
+                      a(style="color:green") #{app.agreereply}
                       if !!app.replycontent
-                        p 备注：#{app.replycontent}
+                        br 
+                        a 备注：#{app.replycontent}
                     else
                       if !!app.replycontent
-                        p(style="color:#888") 【预约不成功】#{app.replycontent}
+                        a(style="color:#888") 【预约不成功】#{app.replycontent}
                       else
-                        p(style="color:#888") 【预约不成功】这个医师很懒，什么也没有说             
+                        a(style="color:#888") 【预约不成功】这个医师很懒，什么也没有说             
       else
         table.table.table-top.order-table
             caption.line 您现在没有问诊预约信息

@@ -62,6 +62,18 @@ table td.q-handler{
 	width: 100px;
 	text-align: center;
 }
+span.useless,span.useful{
+  margin-left:5px;
+}
+a.useinfo{
+  float:right;
+}
+span.useless{
+  color: red;
+}
+span.useful{
+  color: green;
+}
 /*= 问医管理
   -----------*/
 input.reply{

@@ -73,7 +73,8 @@ module.exports = function(app){
    app.get('/doctor',doctor.index);
    app.post('/doctor',doctor.index);
    app.get('/doctor/ask',doctor.ask);
-   app.get('/doctor/medicine',doctor.medicine)
+   app.get('/doctor/medicine',doctor.medicine);
+   app.get('/doctor/question',doctor.myQ);
    /*--------
     问题咨询
     --------*/
@@ -151,8 +152,13 @@ module.exports = function(app){
      问题管理
    ----------*/
    app.get('/admin/question',question.admin);
+   app.get('/admin/question/noreply',question.noreply);
    app.get('/admin/question/add',question.newQ);
    app.post('/admin/question/add',question.newQ);
+   app.get('/admin/question/edit',question.editQ);
+   app.post('/admin/question/edit',question.editQ);
+   app.get('/admin/question/reply',question.reply);
+   app.post('/admin/question/reply',question.reply);
    app.post('/admin/question/delete',question.del);
   /*-----------
      后台登出

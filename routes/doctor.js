@@ -175,10 +175,34 @@ var medicine = function(req,res){
 
   }
 }
-
+//我的问题
+var myQ = function(req,res){
+  var condition = {};
+  condition.query = {
+    subcat : 1
+   ,uid : req.session.user._id
+  };
+  condition.sort = {
+    _id : -1
+  };
+  jixiang.get(condition,'question',function(err,doc){
+    if(err){
+      doc=[];
+    }
+    console.log(doc)
+    res.render('./doctor/question',{
+      title : '我的问题'
+     ,user : req.session.user
+     ,cur : 'doctor'
+     ,cat : '/question'
+     ,doc : doc
+    });
+  });
+}
 exports.index = index;
 exports.ask = ask;
 exports.medicine = medicine;
+exports.myQ = myQ;
 
 /*----------------
       admin
@@ -244,7 +268,7 @@ var admin = function(req,res){
       condition.modify['$set'].agreetime = new Date(reply).getTime();
       msg = '约在 '+reply+' 时间就诊。';
       if(!!req.body.reply.length){
-        msg+='<p>备注：'+req.body.reply+'</p>'
+        msg+='<br />备注：'+req.body.reply;
       }
     }else{
       condition.modify['$set'].disagree = true;
@@ -289,8 +313,28 @@ var reMedicine = function(req,res){
        });
      });
   }else if(req.method == 'POST'){
-
      var id = parseInt(req.body.askid,10);
+
+     if(!!req.body.done){
+       var condition = {};
+       condition.query = {
+         _id : id
+       }
+       condition.modify = {
+         '$set' : {
+            done : true
+         }
+       }
+       jixiang.update(condition,'doctors',function(err){
+         if(err){
+           return res.json({flg:0,msg:err});
+          }
+          return res.json({flg:1,msg:'【完成】'});    
+       });
+       return;
+     }
+
+
      var condition = {};
      condition.query = {
        docCat :2

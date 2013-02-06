@@ -353,6 +353,7 @@ section.question{
 .doctor-main .doctor-list{
   float: left;
   width: 707px;
+  margin-right: 15px;
 }
 /*问药*/
 .medicine-form input,.medicine-form select{

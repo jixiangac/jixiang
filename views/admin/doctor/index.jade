@@ -20,24 +20,25 @@ block content
             tbody
               tr
                 td.reply 时间
-                td 
-                  p #{item.time} #{item.timeB}
+                td #{item.time} #{item.timeB}
               tr
                 td.reply 概况
                 td
                   if !!item.doctor.length
-                    p 预约医师：
-                      a #{item.doctor}
-                  p 病情简述：
-                    a #{item.paitent}
+                    | 预约医师：
+                    a #{item.doctor}
+                    br
+                  | 病情简述：
+                  a #{item.paitent}
               if !!item.reply
                 tr
                   td.reply 回复
                   td
                     if !item.disagree
-                      p(style="color:green") #{item.agreereply}
+                      a(style="color:green") #{item.agreereply}
+                      br 
                       if !!item.replycontent
-                        p 备注：#{item.replycontent}
+                        a 备注：#{item.replycontent}
                     else
                       if !!item.replycontent
                         p(style="color:#888") 【预约没有成功】#{item.replycontent}

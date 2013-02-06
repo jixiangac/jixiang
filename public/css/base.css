@@ -382,6 +382,7 @@ section.admin-title h1{
 /*订单类表格*/
 .order-table{
   margin-top: 15px;
+  box-shadow: 1px 1px 8px #ddd;
 }
 .order-table td,.order-table caption,thead.tab-title th{
   border: 1px solid #ddd;
@@ -409,6 +410,10 @@ thead.tab-title tr{
 }
 .order-table .reply{
   width: 87px;
+}
+.order-table td.cat{
+  width: 26px;
+  text-align: center;
 }
 td.btn-control a{
   margin-left :14px;
@@ -494,6 +499,9 @@ span.label-block{
     padding:10px;
   }
  /*表单*/
+ .tab-nav{
+  padding-top: 10px;
+ }
  .form-inline .form-item{
  	margin-bottom:15px;
  }

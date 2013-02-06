@@ -156,3 +156,20 @@ function defaultEvent(event){
   var e = event || window.event;
   e.preventDefault();
 }
+/*--------------
+  select选择跳转
+ --------------*/
+ (function(){
+   if(!!jixiang.$('sel-cat')){
+     var host = location.pathname;
+     var selectCat = jixiang.$('sel-cat');
+     Utils.addHandler(selectCat,'change',function(){
+       if(parseInt(this.value,10) == 0){
+          window.location.href = host;
+       }else{
+         window.location.href = host+'?cat='+this.value;       
+       }
+
+     });
+    }
+ })()
