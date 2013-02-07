@@ -8,7 +8,7 @@ header
     .nav-wrap.container.clearfix
       if user
         ul.nav-list
-          - var menus = [{text:'首页',href:'/',cur:'index'},{text:'我的主页',href:'/people/'+user.username,cur:'people'},{text:'订餐',href:'/meal',cur:'meal'},{text:'问医',href:'/doctor',cur:'doctor'},{text:'问题咨询',href:'/question',cur:'question'}]      
+          - var menus = [{text:'首页',href:'/',cur:'index'},{text:'我的主页',href:'/people/'+user.username,cur:'people'},{text:'订餐',href:'/meal',cur:'meal'},{text:'问医',href:'/doctor',cur:'doctor'},{text:'养老服务',href:'/service',cur:'service'},{text:'问题咨询',href:'/question',cur:'question'}]      
           each menu in menus
             - var active = ''
               if menu.cur == cur
@@ -23,6 +23,6 @@ header
       else
         ul.no-login
           li
-            a 生命总是需要点什么...或许#{title}就是我实现梦想的地方呢..
+            a 请使用现代浏览器浏览，比如Chrome，Safari，IE9+，甚至是急速版的360.。。。
          
 

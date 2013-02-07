@@ -1,0 +1,100 @@
+extends ../layouts/header
+block content
+  #container.container.clearfix
+    //侧边导航
+    include aside
+    article.read-style.meal
+      section#doctor-nav.nav
+        ul.doctor-nav
+          - var doctors=[{text:'家政服务',sub:'家电维修，搬运，保姆，打扫'},{text:'养老政策',sub:'养老政策信息'},{text:'政策咨询',sub:'咨询养老政策'}]
+            each doctor,i in doctors
+               - var cur = ''
+               if i == 0
+                 - cur = 'cur'
+               li
+                 a(class=cur) #{doctor.text}
+                  span #{doctor.sub}
+      section#doctor-wrap.doctor-wrap
+        //- p#tips 您想干嘛点什么？点击上面吧
+        #doctor-main.doctor-main
+          //家政服务
+          .doctor-list
+            if !agree
+              form(class="form form-inline",method="post",action="/service")
+                fieldset
+                  .form-item
+                    label 预约时间
+                    select#yuMonth(name="yuMonth")
+                      -var month =new Date();
+                      -for(var i=month.getMonth()+1;i<=12;i++)
+                        option(value="#{i}")!{i}月
+                    select#yuDay(name="yuDay")
+                      -for(var i=1;i<=31;i++)
+                        option(value="#{i}")!{i}日
+                     select#yuTime(name="yuTime")
+                       option(value="上午") 上午
+                       option(value="下午") 下午
+                       option(value="晚上") 晚上
+                    //- span 填写预约时间
+                  .form-item
+                    label(for="service_cat") 服务分类
+                    select(name="service_cat")
+                      option(value="家电维修") 家电维修
+                      option(value="搬运服务") 搬运服务
+                      option(value="保姆服务") 保姆服务
+                      option(value="居室打扫") 居室打扫
+                      option(value="其他服务") 其他服务
+                    //- span 如果没有就不用填写
+                  .form-item
+                    label.fl-l 备注
+                    textarea.bootstrap(rows="5",cols="37",name="remark")
+                    //- span 简单描述一下你的病情，让医生更好对诊
+                  .form-item.form-actions
+                    button(class="btn",type="submit") 提交申请
+            else
+              table.table.table-top.order-table
+                caption #{agree.time} #{agree.timeB}的预约申请
+                  if !agree.reply
+                    span.fl-l(style="color:red")未答复
+                  else
+                    span.fl-l 已回复
+                tbody
+                  tr
+                    td.reply 概况
+                    td
+                      if !!agree.doctor.length
+                        a 预约医师：#{agree.doctor}
+                        br
+                      a 病情简述：#{agree.paitent}
+                    tr
+                      td.reply 回复
+                      td
+                        a(style="color:green") #{agree.agreereply}
+                        if !!agree.replycontent
+                          br
+                          a 备注：#{agree.replycontent} 
+          //养老政策
+          .doctor-list
+            table.table.table-top.order-table.form-inline.medicine-form
+              thead.tab-title
+                tr
+                  th 标题
+                  th.reply 时间
+              tbody
+                if !!doc.length
+                  each item in doc
+                    tr
+                      td
+                        a.btn-reply= item.title
+                      td.reply 2012-02-31
+          //医学咨询
+          .doctor-list
+            form#question(class="form form-inline",method="post",action="/question",name="2")
+                .form-item
+                  label(for="q-remark") 提点问题
+                  input#q(type="text",name="q")
+                  button#qsub.btn 提交问题
+            #answer.flow-mod 你好，我是养老小机器人，有什么问题就问我吧！
+block script
+  script(src="/js/doctor.js")
+  script(src="/js/question.js")

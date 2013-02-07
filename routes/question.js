@@ -52,7 +52,6 @@ var answer = function(req,res){
      // condition.limit = 5;
      jixiang.get(condition,'question',function(err,doc){
        if(err){
-        console.log(err)
         doc = [];
        }
        if(!!doc.length){
@@ -70,6 +69,24 @@ var answer = function(req,res){
          jixiang.save(item,'question',function(err,doc){});
        }
        return res.json({flg:1,answer:'这个问题我还不能回答你，但是我已经记录下来了，有了回复，你可以在【我的问题】中查看'});
+     });
+     return;
+   }
+   if(/^#政策#/.test(question)){
+     question = question.replace(/^#政策#/,'');
+     var condition = {};
+     condition.query = {
+        cat : 2
+       ,title : new RegExp(question,'gi')
+     };
+     jixiang.get(condition,'question',function(err,doc){
+       if(err){
+         doc = [];
+       }
+       if(!!doc.length){
+         return res.json({flg:2,answers:doc[0]});
+       }
+       return res.json({flg:1,answer:'不知道！'});
      });
      return;
    }

@@ -25,6 +25,8 @@ if(!!qForm){
     }
     if(cat == 1){//问医类问题
       question = '@问医：'+ question;
+    }else if(cat == 2){//养老政策类问题
+      question = '#政策#' + question;
     }
     sub.className = 'common-btn grey-btn';
     sub.innerHTML = '提交中..';

@@ -13,7 +13,7 @@ aside.read-style
     .hd.hd-bottom
       h3 分类管理
     ul.admin-nav-list
-      - var menus = [{text:'管理员管理',href:'/admin',cur:'index'},{text:'公告管理',href:'/admin/notice',cur:'notice'},{text:'社区居民',href:'/admin/people',cur:'people'},{text:'订餐管理',href:'/admin/meal',cur:'meal'},{text:'就医管理',href:'/admin/doctor',cur:'doctor'},{text:'活动管理',href:'/admin/exercise',cur:'exercise'},{text:'问题管理',href:'/admin/question',cur:'question'},{text:'权限管理',href:'/admin/limits',cur:'limits'}]
+      - var menus = [{text:'管理员管理',href:'/admin',cur:'index'},{text:'公告管理',href:'/admin/notice',cur:'notice'},{text:'社区居民',href:'/admin/people',cur:'people'},{text:'订餐管理',href:'/admin/meal',cur:'meal'},{text:'问医管理',href:'/admin/doctor',cur:'doctor'},{text:'服务管理',href:'/admin/service',cur:'service'},{text:'活动管理',href:'/admin/exercise',cur:'exercise'},{text:'问题管理',href:'/admin/question',cur:'question'},{text:'权限管理',href:'/admin/limits',cur:'limits'}]
       each menu in menus
         - var active = '';
           if menu.cur == cur

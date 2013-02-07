@@ -9,6 +9,7 @@ var meal = require('./routes/meal')
    ,register = require('./routes/register')
    ,user = require('./routes/user')
    ,doctor = require('./routes/doctor')
+   ,service = require('./routes/service')
    
 module.exports = function(app){
  /************************
@@ -75,6 +76,12 @@ module.exports = function(app){
    app.get('/doctor/ask',doctor.ask);
    app.get('/doctor/medicine',doctor.medicine);
    app.get('/doctor/question',doctor.myQ);
+   /*--------
+      家政
+    --------*/
+    app.get('/service',service.index);
+    app.post('/service',service.index);
+    app.get('/service/ask',service.service)
    /*--------
     问题咨询
     --------*/
@@ -160,6 +167,11 @@ module.exports = function(app){
    app.get('/admin/question/reply',question.reply);
    app.post('/admin/question/reply',question.reply);
    app.post('/admin/question/delete',question.del);
+  /*-----------
+      服务管理
+    -----------*/
+   app.get('/admin/service',service.admin);
+   app.post('/admin/service',service.admin);
   /*-----------
      后台登出
    -----------*/

@@ -40,7 +40,7 @@ var index = function(req,res){
           medicine.time = Utils.format_date(new Date(medicine.time),true);
           medicine.medlist = JSON.parse(medicine.medlist);
         }
-        console.log(medicine)
+        // console.log(medicine)
         res.render('./doctor/index', {
           title: '问医',
           user: req.session.user,

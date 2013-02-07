@@ -1,0 +1,49 @@
+extends ../layouts/header
+block content
+  #container.container.clearfix
+    //侧边导航
+    include ../layouts/aside
+    article.read-style
+      section.admin-title.line.clearfix
+        h1.fl-l 服务管理
+        a.common-btn.grey-btn.m20 家政服务
+      if !!doc.length
+        each item in doc
+          table.table.table-top.order-table
+            caption 【#{item.username}】的家政服务申请
+              if !item.reply
+                a.reply.btn-reply 删除
+                a.reply.btn-reply.doreply 点击答复
+              else
+                span.fl-l 已回复
+            tbody
+              tr
+                td.reply 时间
+                td #{item.time} #{item.timeB}
+              tr
+                td.reply 概况
+                td 服务分类：
+                  a #{item.service_cat}
+                   br
+                  | 备注：
+                  a #{item.remark}
+              if !!item.reply
+                tr
+                  td.reply 回复
+                  td
+                    a #{item.replycontent}
+
+            if !item.reply
+              tfoot.hide
+                tr
+                  td(colspan='2')
+                    form.form.form-inline(action="/admin/service",method="post")
+                      input(type="hidden",value="#{item._id}",name="askid")             
+                      input(type="text",name="reply")
+                      button.btn(type="submit") 回复 
+      else
+        table.table.table-top.order-table
+          caption.line 目前还没有人预约
+block script
+  script(src="/js/admin/doctor.js")     
+            
