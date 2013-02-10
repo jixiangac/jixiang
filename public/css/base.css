@@ -75,6 +75,7 @@ body{
 	color:#222;
 	line-height: 1;
 	font:12px/1.5 Arial,Helvetica,sans-serif;
+  background: #f1f1f1;
 }
 p{
   margin-bottom: 10px;
@@ -383,6 +384,7 @@ section.admin-title h1{
 .order-table{
   margin-top: 15px;
   box-shadow: 1px 1px 8px #ddd;
+  width:707px;
 }
 .order-table td,.order-table caption,thead.tab-title th{
   border: 1px solid #ddd;
@@ -478,26 +480,32 @@ span.label-block{
   width: 77px;
 }
 /*格局*/
- .container{
-  	width:980px;
-  	margin:0 auto;
-  }
-  .mod{
-    margin-top:10px;
-    background: #F8F8F8;
-    border-radius:5px;
-  }
-  .mod h2{
-    color:#060;
-    font-size:14px;
-  }
-  .hd{
-    padding: 8px;
+.container{
+  width:980px;
+  margin:0 auto;
+}
+#container{
+  border:1px solid #d7d7d7;
+  border-radius: 5px;
+  background: #fff url(/images/aside.png) 0 0 repeat-y;
+  /*box-shadow: 1px 1px 5px #d7d7d7;*/
+}
+.mod{
+  margin-top:10px;
+  background: #F8F8F8;
+  border-radius:5px;
+}
+.mod h2{
+  color:#060;
+  font-size:14px;
+}
+.hd{
+  padding: 8px;
 
-  }
-  .bd{
-    padding:10px;
-  }
+}
+.bd{
+  padding:10px;
+}
  /*表单*/
  .tab-nav{
   padding-top: 10px;
@@ -636,4 +644,75 @@ footer .ft-nav a{
 footer .ft-nav a:hover{
   color: #fff;
   background: #6E3939;
+}
+
+/*=侧边栏
+-----------*/
+aside.myaside{
+  float:left;
+  width: 143px;
+  padding: 10px 0;
+}
+.aside-list{
+  font-size: 14px;
+}
+.aside-list h3{
+  margin-left: 15px;
+  color: #555;
+  font-weight: bold;
+}
+.aside-list li a{
+  display:block;
+  padding-left: 30px;
+  color: #666;
+  height: 28px;
+  line-height: 28px;
+}
+.aside-list{
+  margin-top:10px;
+}
+.aside-list li a:hover{
+  background: #e6e6e6;
+  color: #000;
+}
+/*= 内容区
+------------*/
+#content{
+  width: 837px;
+  float: left;
+  overflow: hidden;
+}
+.wrap{
+  width: 710px;
+  margin: 20px auto;
+}
+#content section{
+  margin-left:0;
+}
+section.tab ul{
+  /*margin-left: 124px;*/
+}
+section.tab ul li{
+  float:left;
+}
+section.tab ul li a{
+  display: block;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  margin: 0 5px -1px 0;
+  cursor: pointer;
+  background: #f1f1f1;
+}
+section.tab ul .tab-title{
+  padding: 6px 34px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #888;
+}
+section.tab ul li a:hover,section.tab ul li a.cur{
+  color:#000;
+}
+section.tab ul li a.cur{
+  background:#fff;
+  border-bottom: 1px solid #fff;
 }

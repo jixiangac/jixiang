@@ -275,6 +275,7 @@ section.question{
 }
 #answer{
   margin-top: 20px;
+  width: 710px;
 }
 .review span{
   float:right;
@@ -319,6 +320,9 @@ section.question{
   margin-right: 30px;
   width: 216px;
   overflow: hidden;
+}
+.doctor-nav li.last{
+  margin-right:0;
 }
 .doctor-nav li a{
   display: block;

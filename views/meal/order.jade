@@ -1,54 +1,61 @@
 extends ../layouts/header
 block content
-  #container.container.clearfix
-    //侧边栏导航
-    aside.read-style.category
-      section.events
-        .hd
-          h3 订餐信息统计
-        //订单
-        #orderlist.bd-top
-
-      section.nav
-        .hd.hd-bottom
-          h3 订单情况
-        ul.admin-nav-list
-          - var menus = [{text:'等待配送',href:'/meal/order/sub',cur:'sub'},{text:'已配送',href:'/meal/order/send',cur:'send'},{text:'已完成',href:'/meal/order/done',cur:'done'}]
-          each menu in menus
-            - var active = ''
-            if menu.cur == orderCur
-              - active = 'cur'
-            li
-              a(href="#{menu.href}",class="#{active}") #{menu.text}
-          
-    article.read-style
-      section.admin-title.line.clearfix
-        h1.fl-l #{title}
-      if !!orders.length
-        each order in orders
-          table.table.table-top.order-table
-            tbody
-              -var total = 0
-              each item in order.orderlist
-                tr
-                  td= item.name
-                  td= item.price 
-                    |&nbsp;元
-                  td= item.num
-                    |&nbsp;份
-                  -total+= parseInt(item.price,10)*parseInt(item.num,10)
-            caption #{order.subtime} 的 购买清单 
-              span.total.fl-r 总价：!{total}&nbsp;元 
-                if orderCur == 'sub'
-                  |状态：
-                  a.common-btn.grey-btn 未配送
-                else if orderCur == 'send'
-                  |操作：
-                  a.common-btn.red-btn.orderdone(name="#{order._id}") 已收菜
-                else
-                  |状态：
-                  a.common-btn.grey-btn 已完成
-      else
-        p 没有信息
+  - if(!pjax){
+    |<div id="container" class="container clearfix">
+  - }   
+    if(!pjax)
+      //侧边栏导航
+      include ../layouts/aside
+    - if(!pjax) { 
+      | <article id="content">
+      |   <div class="wrap">
+    - }
+        if !pjax
+          section.tab.line.clearfix
+            ul#tab
+              li
+                h3.tab-title 我的订餐
+              li
+                a.pjax.cur(href="/meal/order/sub") 未配送
+              li
+                a.pjax(href="/meal/order/send") 已配送
+              li
+                a.pjax(href="/meal/order/done") 已完成
+        - if(!pjax){ 
+          | <div id="pjax-container">
+        -}
+          if !!orders.length
+            each order in orders
+              table.table.table-top.order-table
+                tbody
+                  -var total = 0
+                  each item in order.orderlist
+                    tr
+                      td= item.name
+                      td= item.price 
+                        |&nbsp;元
+                      td= item.num
+                        |&nbsp;份
+                      -total+= parseInt(item.price,10)*parseInt(item.num,10)
+                caption #{order.subtime} 的 购买清单 
+                  span.total.fl-r 总价：!{total}&nbsp;元 
+                    if orderCur == 'sub'
+                      |状态：
+                      a.common-btn.grey-btn 未配送
+                    else if orderCur == 'send'
+                      |操作：
+                      a.common-btn.red-btn.orderdone(name="#{order._id}") 已收菜
+                    else
+                      |状态：
+                      a.common-btn.grey-btn 已完成
+          else
+            table.table.table-top.order-table
+              caption.line 没有相关信息
+  - if(!pjax){
+    |      </div>
+    |    </div>
+    |  </article>
+    |</div>
+  - }
 block script
   script(src="/js/meal.js")

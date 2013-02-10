@@ -43,8 +43,10 @@ if(!!orderlist){//获取订单
 //点击收菜，完成订单交易
 var orderDone = jixiang.getByClass('orderdone');
 if(!!orderDone){
-  var handler = function(){
-    var self = this;
+  var handler = function(event){
+    var e = event || window.event;
+    var self = e.target || e.srcElement;
+    if(!jixiang.hasClass(self,'orderdone'))return;
     if(!confirm('确定收菜吗？')){
        return false;
     }
@@ -61,8 +63,31 @@ if(!!orderDone){
     }
     ajax(url,'post',serializeData(data),result);
   }
-  for(var i=0,len=orderDone.length;i<len;i++){
-    orderDone[i].index=i;
-    Utils.addHandler(orderDone[i],'click',handler);
+  var wrap =jixiang.$('pjax-container');
+  Utils.addHandler(wrap,'click',handler);
+}
+
+/*------------
+  --- TAB ---
+ -----------*/
+if(!!jixiang.$('tab')){
+  var tab = jixiang.$('tab');
+  var handler = function(event){
+    var pself = this;
+    var e = event || window.event;
+    defaultEvent(e);
+    var self = e.target || e.srcElement;
+    while(self.tagName.toLowerCase() !== 'a'){
+      self = self.parentNode;
+    }
+    if(jixiang.hasClass(self,'tab-title'))return;
+    if(jixiang.hasClass(self,'pjax')){
+       pjax(self,self.getAttribute('href'),'pjax-container');
+    }
+    for(var i=0,alis=pself.getElementsByTagName('a'),len=alis.length;i<len;i++){
+       alis[i].className = 'pjax';
+    }
+    self.className = 'cur';
   }
+  Utils.addHandler(tab,'click',handler)
 }

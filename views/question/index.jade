@@ -1,0 +1,20 @@
+extends ../layouts/header
+block content
+  #container.container.clearfix
+    //侧边栏导航
+    include ../layouts/aside
+    article#content
+      .wrap
+        section.line.question
+          img(src="/images/question.jpg",alt="问题咨询")
+        section.line
+          #question-wrap
+            form#question(action="/question",method="post")
+              label
+                a 提问点什么吧？
+              input#q(type="text",name="q")
+              button#qsub.common-btn.pink-btn 提交问题
+        section
+          #answer.flow-mod 有什么问题就在上面提出吧，输入help或者帮助可以得到使用说明。
+block script
+  script(src="/js/question.js")

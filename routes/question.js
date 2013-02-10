@@ -6,10 +6,11 @@ var jixiang = require('../models/base');
 var https = require('https');
 
 var index = function(req,res){
-   res.render('question',{
+   res.render('./question',{
    	  title : '问题咨询'
    	 ,user : req.session.user
    	 ,cur : 'question'
+     ,pjax : false
    });
 }
 //回应

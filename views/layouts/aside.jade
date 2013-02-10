@@ -1,0 +1,23 @@
+aside.myaside
+  section.nav
+    .aside-list
+      h3 我的服务
+      ul
+          - var menus = [{text:'我的订餐',href:'/meal/order/sub',cur:'sub'},{text:'我的问诊',href:'/doctor/ask',cur:'send'},{text:'我的托购',href:'/doctor/medicine',cur:'done'},{text:'我的家政',href:'/service/ask'}]
+          each menu in menus
+            li
+              a(href="#{menu.href}") #{menu.text}
+    .aside-list
+      h3 问题咨询
+      ul
+        - var menus = [ {text:'我的问题',href:'/doctor/question'},{text:'我要提问',href:'/question'}]
+          each menu in menus
+            li
+             a(href="#{menu.href}") #{menu.text}
+    .aside-list
+      h3 我的信息
+      ul
+        - var menus = [ {text:'我的资料',href:'#'},{text:'编辑资料',href:'#'},{text:'修改密码',href:'#'}]
+          each menu in menus
+            li
+             a(href="#{menu.href}") #{menu.text}

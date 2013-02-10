@@ -28,7 +28,8 @@ var index = function(req,res){
             subLen : subLen,
             sendLen : sendLen,
             cur: 'meal',
-            cat: ''
+            cat: '',
+            pjax : false
           });
         })
       });
@@ -66,7 +67,8 @@ var detail = function(req,res){
             subLen : subLen,
             sendLen : sendLen,
             cur: 'meal',
-            cat:''
+            cat:'',
+            pjax : false
           });
         })
       })
@@ -118,6 +120,7 @@ var category = function(req,res){
             ,subLen : subLen
             ,sendLen : sendLen
             ,cur : 'meal'
+            ,pjax : false
          });
        });
       });
@@ -165,6 +168,10 @@ var like = function(req,res){
 }
 //历史订单 1:已提交的订单
 var subed = function(req,res){
+   var pjax = false;
+   if(!!req.query.pjax){
+     pjax = true;
+   }
    var uid = parseInt(req.session.user._id,10);
    var condition={};
    condition.query={
@@ -190,11 +197,16 @@ var subed = function(req,res){
       ,orders : orders
       ,cur : 'meal'
       ,orderCur : 'sub'
+      ,pjax : pjax
      });
    });
 }
 //历史订单 2:已经配送的订单
 var sended = function(req,res){
+   var pjax = false;
+   if(!!req.query.pjax){
+     pjax = true;
+   }
    var uid = parseInt(req.session.user._id,10);
    var condition={};
    condition.query={
@@ -221,11 +233,16 @@ var sended = function(req,res){
       ,orders : orders
       ,cur : 'meal'
       ,orderCur : 'send'
+      ,pjax : pjax
      });
    });
 }
 //历史订单 3：已经完成的订单
 var done = function(req,res){
+   var pjax = false;
+   if(!!req.query.pjax){
+     pjax = true;
+   }
    var uid = parseInt(req.session.user._id,10);
    var condition={};
    condition.query={
@@ -252,6 +269,7 @@ var done = function(req,res){
       ,orders : orders
       ,cur : 'meal'
       ,orderCur : 'done'
+      ,pjax : pjax
      });
    });
 }

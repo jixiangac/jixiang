@@ -1,3 +1,4 @@
+-if(!pjax){
 !!!5
 html
   head
@@ -6,7 +7,10 @@ html
     link(rel="stylesheet",href="/css/base.css")
     link(rel="stylesheet",href="/css/style.css")
     body
-      include nav
+-}
+      if !pjax
+        include nav
       block content
-    include footer
-    block script
+    if !pjax
+      include footer
+      block script

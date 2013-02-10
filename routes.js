@@ -27,6 +27,7 @@ module.exports = function(app){
           title :'吉祥社区'
          ,user : req.session.user
          ,cur : 'index'
+         ,pjax : false
         });
   });
   app.get('/people/:username',notice.index);

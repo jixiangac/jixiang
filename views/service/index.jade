@@ -1,26 +1,36 @@
 extends ../layouts/header
 block content
-  #container.container.clearfix
-    //侧边导航
-    include aside
-    article.read-style.meal
-      section#doctor-nav.nav
-        ul.doctor-nav
-          - var doctors=[{text:'家政服务',sub:'家电维修，搬运，保姆，打扫'},{text:'养老政策',sub:'养老政策信息'},{text:'政策咨询',sub:'咨询养老政策'}]
-            each doctor,i in doctors
-               - var cur = ''
-               if i == 0
-                 - cur = 'cur'
-               li
-                 a(class=cur) #{doctor.text}
-                  span #{doctor.sub}
-      section#doctor-wrap.doctor-wrap
-        //- p#tips 您想干嘛点什么？点击上面吧
-        #doctor-main.doctor-main
-          //家政服务
-          .doctor-list
-            if !agree
-              form(class="form form-inline",method="post",action="/service")
+  - if (!pjax){
+    | <div id="container" class="container clearfix">
+  -}
+    if !pjax
+      //侧边导航
+      include ../layouts/aside
+    - if(!pjax){
+       | <article id="content" class="meal">
+       |   <div class="wrap">
+    - }
+       if !pjax
+          section#doctor-nav.nav
+            ul#tab.doctor-nav
+              - var services=[{text:'家政服务',sub:'家电维修，搬运，保姆，打扫',cat:'1'},{text:'养老政策',sub:'养老政策信息',cat:'2'},{text:'政策咨询',sub:'咨询养老政策',cat:'3'}]
+                each service,i in services
+                   - var cur = '',last=''
+                   if i == 0
+                     - cur = 'cur'
+                   if i == services.length-1
+                     - last ='last'
+                   li(class=last)
+                     a.pjax(class=cur,href="/service?cat=#{service.cat}") #{service.text}
+                       span #{service.sub}
+        - if(!pjax){
+          | <section id="pjax-container">
+        - }
+          //- p#tips 您想干嘛点什么？点击上面吧
+          if cat == 1
+            //家政服务
+            if !doc
+              form#wen-form(class="form form-inline",method="post",action="/service")
                 fieldset
                   .form-item
                     label 预约时间
@@ -53,8 +63,8 @@ block content
                     button(class="btn",type="submit") 提交申请
             else
               table.table.table-top.order-table
-                caption #{agree.time} #{agree.timeB}的预约申请
-                  if !agree.reply
+                caption #{doc.time} #{doc.timeB}的预约申请
+                  if !doc.reply
                     span.fl-l(style="color:red")未答复
                   else
                     span.fl-l 已回复
@@ -62,39 +72,55 @@ block content
                   tr
                     td.reply 概况
                     td
-                      if !!agree.doctor.length
-                        a 预约医师：#{agree.doctor}
-                        br
-                      a 病情简述：#{agree.paitent}
-                    tr
-                      td.reply 回复
-                      td
-                        a(style="color:green") #{agree.agreereply}
-                        if !!agree.replycontent
-                          br
-                          a 备注：#{agree.replycontent} 
-          //养老政策
-          .doctor-list
-            table.table.table-top.order-table.form-inline.medicine-form
-              thead.tab-title
-                tr
-                  th 标题
-                  th.reply 时间
-              tbody
-                if !!doc.length
-                  each item in doc
-                    tr
-                      td
-                        a.btn-reply= item.title
-                      td.reply 2012-02-31
-          //医学咨询
-          .doctor-list
+                      a 分类：#{doc.service_cat}
+                      br
+                      a 备注：#{doc.remark}
+                    if doc.reply
+                      tr
+                        td.reply 回复
+                        td
+                          if !!doc.replycontent
+                            a 备注：#{doc.replycontent}
+          if cat == 2
+            if !detail
+              //养老政策
+              table.table.order-table
+                thead.tab-title
+                  tr
+                    th 标题
+                    th.reply 时间
+                tbody
+                  if !!doc.length
+                    each item in doc
+                      tr
+                        td
+                          a.pjax.btn-reply(href="/service?cat=2&detail=#{item._id}")= item.title
+                        td.reply 2012-02-31
+            else
+             //养老政策文章页
+             table.table.order-table
+               thead.tab-title
+                 tr
+                   th= doc.title
+               tbody
+                 tr
+                  td
+                    p= doc.content
+          if cat == 3
+            //医学咨询
             form#question(class="form form-inline",method="post",action="/question",name="2")
                 .form-item
                   label(for="q-remark") 提点问题
                   input#q(type="text",name="q")
                   button#qsub.btn 提交问题
             #answer.flow-mod 你好，我是养老小机器人，有什么问题就问我吧！
+    - if(!pjax){
+      |         </section>
+      |      </div>
+      |   </article>
+      | </div>
+    - }
 block script
-  script(src="/js/doctor.js")
-  script(src="/js/question.js")
+  script(src="/js/service.js")
+  if cat == 3
+    #service-js

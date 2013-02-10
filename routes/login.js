@@ -12,6 +12,7 @@ var index = function(req,res){
       {
          title:'吉祥社区'
         ,user : req.session.user
+        ,pjax : false
       });
   }else if(req.method == 'POST'){
     //生成口令散列

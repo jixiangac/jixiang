@@ -4,69 +4,86 @@
 var jixiang = require('../models/base');
 var Utils = require('../models/utils');
 //首页
-var index = function(req,res){
+exports.index = function(req,res){
+  var cat = parseInt(req.query.cat,10) || 1;
+  var pjax = !!req.query.pjax ? true : false;
   if(req.method == 'GET'){
     var condition = {};
-    condition.query = {
-       uid : req.session.user._id
-      ,docCat : 1
-      ,agreetime : {
-        '$gte' : new Date().getTime()-86400000
-      } 
-    }
-    jixiang.getOne(condition,'doctors',function(err,doc){
-      if(!!doc){
-        doc.time = Utils.format_date(new Date(doc.time));
-        switch(doc.timeB){
-         case '1' : 
-           doc.timeB = '上午';
-           break;
-         case '2' :
-           doc.timeB = '下午';
-           break;
-         default : 
-           doc.timeB = '晚上';
+    //问诊预约
+    if(cat == 1){
+        var query = {
+           uid : req.session.user._id
+          ,cat : 1 
+          ,'$or' : [
+            {time : {'$gte':new Date()*1-86400000}}
+           ,{agreetime : {'$gte':new Date()*1-86400000}}
+          ]
         }
-        doc.agreereply = '约在 '+Utils.format_date(new Date(doc.agreetime),true) +' 就诊。';           
-      }
-      var condition = {};
+        jixiang.getOne(query,'doctors',function(err,doc){
+          console.log(doc)
+          if(!!doc){
+            doc.time = Utils.format_date(new Date(doc.time));
+            doc.agreereply = '约在 '+Utils.format_date(new Date(doc.agreetime),true) +' 就诊。';           
+          }
+          res.render('./doctor/index',{
+             title : '问医'
+            ,user : req.session.user
+            ,cur :　'doctor'
+            ,doc : doc
+            ,pjax : pjax
+            ,cat : cat
+          })
+        });
+        return;
+    }
+    //医药托购
+    if(cat == 2){
       condition.query = {
          uid : req.session.user._id
-        ,docCat : 2
+        ,cat : 2
         ,done : false
       }
-      jixiang.getOne(condition,'doctors',function(err,medicine){
-        if(!!medicine){
-          medicine.time = Utils.format_date(new Date(medicine.time),true);
-          medicine.medlist = JSON.parse(medicine.medlist);
+      jixiang.getOne(condition,'doctors',function(err,doc){
+        if(!!doc){
+          doc.time = Utils.format_date(new Date(doc.time),true);
+          doc.medlist = JSON.parse(doc.medlist);
         }
-        // console.log(medicine)
-        res.render('./doctor/index', {
-          title: '问医',
-          user: req.session.user,
-          cur: 'doctor',
-          cat:'/',
-          agree: doc,
-          med : medicine
-        }); 
-      })
-    });
+        res.render('./doctor/index',{
+          title : '问医'
+         ,user : req.session.user
+         ,cur : 'doctor'
+         ,cat : cat
+         ,pjax : pjax
+         ,med : doc
+        })
+      }) 
+      return;
+    }
+    if(cat == 3){
+      res.render('./doctor/index',{
+        title : '问医'
+       ,user : req.session.user
+       ,cur : 'doctor'
+       ,cat : cat
+       ,pjax : pjax
+      });
+      return;
+    }
+ 
   }else if(req.method == 'POST'){
-    var doctorType = parseInt(req.body.docType,10);
-
     var item = {};
-    if(doctorType == 1){//问诊
+    if(cat == 1){//问诊
       var time = new Date().getFullYear()+'-'+req.body.yuMonth+'-'+req.body.yuDay;
       item = {
-        docCat: 1
+        cat : 1
        ,time : new Date(time).getTime()
-       ,timeB : req.body.yuTime
+       ,time_b : req.body.yuTime
        ,doctor : req.body.doctors
        ,patient : req.body.patient
       }
-    }else if(doctorType == 2){//问药
+    }else if(cat == 2){//问药
       item = {
-        docCat : 2
+        cat : 2
        ,time : Date.now()
        ,medlist : req.body.list
        ,done : false
@@ -87,12 +104,15 @@ var index = function(req,res){
 
 }
 //我的问诊
-var ask = function(req,res){
+exports.ask = function(req,res){
+  var pjax = !!req.query.pjax ? true : false;
+  var cat = req.query.cat || 1;
   var condition = {};
   condition.query = {
-    docCat : 1
+    cat : 1
    ,uid : req.session.user._id
-  };
+   ,reply : (cat == 1) ? false : true
+  }
   condition.sort = {
     _id : -1
   }
@@ -100,33 +120,21 @@ var ask = function(req,res){
     if(err){
       doc = [];
     }
-    var items = [];
+    // var items = [];
     if(!!doc.length){
-      var now = new Date().getTime()-86400000;//延迟一天
+      //var now = new Date().getTime()-86400000;//延迟一天
       doc.forEach(function(item,index){
         item.time = Utils.format_date(new Date(item.time));
-        switch(item.timeB){
-         case '1' : 
-           item.timeB = '上午';
-           break;
-         case '2' :
-           item.timeB = '下午';
-           break;
-         default : 
-           item.timeB = '晚上';
-        }
-
         if(!item.disagree){
           var max = item.time;
           if(!!item.agreetime){
-            max = item.agreetime > max ? item.agreetime : max;
+            //max = item.agreetime > max ? item.agreetime : max;
             item.agreetime = Utils.format_date(new Date(item.agreetime),true);
             item.agreereply = '约在 '+Utils.format_date(new Date(item.agreetime),true) +' 就诊。';
           }
-          if(max > now){ 
-            items.push(item);
-            //doc.splice(index,1);
-          }
+          // if(max > now){ 
+          //   items.push(item);
+          // }
         }  
 
       });
@@ -137,18 +145,21 @@ var ask = function(req,res){
       ,cur : 'doctor'
       ,cat : '/ask'
       ,doc : doc
-      ,appointment : items
+      ,pjax : pjax
     });
   });
 
 }
 //我的药品
-var medicine = function(req,res){
+exports.medicine = function(req,res){
+  var pjax = !!req.query.pjax ? true : false;
+  var cat = req.query.cat || 1;
   if(req.method == 'GET'){
     var condition = {};
     condition.query = {
-      docCat : 2
+      cat : 2
      ,uid : req.session.user._id
+     ,reply : (cat == 1) ? false : true
     }
     condition.sort = {
       _id : -1
@@ -170,13 +181,14 @@ var medicine = function(req,res){
         ,cur : 'doctor'
         ,cat : '/medicine'
         ,doc : doc
+        ,pjax : pjax
       });
     });
 
   }
 }
 //我的问题
-var myQ = function(req,res){
+exports.myQ = function(req,res){
   var condition = {};
   condition.query = {
     subcat : 1
@@ -189,29 +201,25 @@ var myQ = function(req,res){
     if(err){
       doc=[];
     }
-    console.log(doc)
     res.render('./doctor/question',{
       title : '我的问题'
      ,user : req.session.user
      ,cur : 'doctor'
      ,cat : '/question'
      ,doc : doc
+     ,pjax : false
     });
   });
 }
-exports.index = index;
-exports.ask = ask;
-exports.medicine = medicine;
-exports.myQ = myQ;
 
 /*----------------
       admin
   ----------------*/
-var admin = function(req,res){
+exports.admin = function(req,res){
   if(req.method == 'GET'){
     var condition={};
     condition.query = {
-       docCat : 1
+       cat : 1
     };
     condition.sort = {
       _id : -1
@@ -224,17 +232,6 @@ var admin = function(req,res){
        if(!!doc.length){
          doc.forEach(function(item){
            item.time = Utils.format_date(new Date(item.time));
-           switch(item.timeB){
-             case '1' : 
-               item.timeB = '上午';
-               break;
-             case '2' :
-               item.timeB = '下午';
-               break;
-             default : 
-               item.timeB = '晚上';
-           }
-
            if(!!item.agreetime){
               item.agreereply = '约在 '+Utils.format_date(new Date(item.agreetime),true) +' 就诊。';     
            }
@@ -284,11 +281,11 @@ var admin = function(req,res){
   }
 }
 //管理托购申请
-var reMedicine = function(req,res){
+exports.reMedicine = function(req,res){
   if(req.method == 'GET'){
      var condition = {};
      condition.query = {
-       docCat : 2
+       cat : 2
       ,done : false
      }
      condition.sort = {
@@ -298,7 +295,6 @@ var reMedicine = function(req,res){
        if(err){
          doc = [];
        }
-       console.log(doc)
        if(!!doc.length){
          doc.forEach(function(item){
            item.time = Utils.format_date(new Date(item.time),true);
@@ -337,7 +333,7 @@ var reMedicine = function(req,res){
 
      var condition = {};
      condition.query = {
-       docCat :2
+       cat :2
       ,_id : id
      };
      condition.modify = {
@@ -356,5 +352,3 @@ var reMedicine = function(req,res){
   }
 
 }
-exports.admin = admin;
-exports.reMedicine = reMedicine;

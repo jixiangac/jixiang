@@ -1,42 +1,64 @@
 extends ../layouts/header
 block content
-  #container.container.clearfix
-    //侧边导航
-    include aside
-    article.read-style
-      section.admin-title.line.clearfix
-        h1.fl-l #{title}
-      if doc.length
-        each app in doc
-          table.table.table-top.order-table
-            caption #{app.time} #{app.timeB}的预约申请
-              if !app.reply
-                span.fl-l(style="color:red")未答复
-              else
-                span.fl-l 已回复
-            tbody
-              tr
-                td.reply 概况
-                td
-                  a 预约类别：#{app.service_cat}
-                  br
-                  a 备注：#{app.remark}   
-              if !!app.reply
+  - if(!pjax){
+     | <div id="container" class="container clearfix">
+  - }
+    if !pjax
+      //侧边导航
+      include ../layouts/aside
+    - if(!pjax){
+        | <article id="content">
+        |   <div class="wrap">
+    - }
+      if !pjax
+        section.tab.line.clearfix
+          ul#tab
+            li
+              h3.tab-title 我的家政
+            li
+              a.pjax.cur(href="/service/ask?cat=1") 未回复
+            li
+              a.pjax(href="/service/ask?cat=2") 已回复
+       - if(!pjax){
+          | <div id="pjax-container">
+       - }
+        if doc.length
+          each app in doc
+            table.table.table-top.order-table
+              caption #{app.time} #{app.timeB}的预约申请
+                if !app.reply
+                  span.fl-l(style="color:red")未答复
+                else
+                  span.fl-l 已回复
+              tbody
                 tr
-                  td.reply 回复
+                  td.reply 概况
                   td
-                    if !app.disagree
-                      a(style="color:green") #{app.agreereply}
-                      if !!app.replycontent
-                        br 
-                        a 备注：#{app.replycontent}
-                    else
-                      if !!app.replycontent
-                        a(style="color:#888") 【预约不成功】#{app.replycontent}
+                    a 预约类别：#{app.service_cat}
+                    br
+                    a 备注：#{app.remark}   
+                if !!app.reply
+                  tr
+                    td.reply 回复
+                    td
+                      if !app.disagree
+                        a(style="color:green") #{app.agreereply}
+                        if !!app.replycontent
+                          br 
+                          a 备注：#{app.replycontent}
                       else
-                        a(style="color:#888") 【预约不成功】这个医师很懒，什么也没有说             
-      else
-        table.table.table-top.order-table
-            caption.line 您现在没有问诊预约信息
+                        if !!app.replycontent
+                          a(style="color:#888") 【预约不成功】#{app.replycontent}
+                        else
+                          a(style="color:#888") 【预约不成功】这个医师很懒，什么也没有说             
+        else
+          table.table.table-top.order-table
+              caption.line 没有相关信息
+  - if(!pjax){
+      |        </div>
+      |     </article>
+      |   </div>
+      | </div>
+  - }
 block script
-  script(src="/js/doctor.js")
+  script(src="/js/tab.js")

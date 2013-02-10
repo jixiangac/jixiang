@@ -1,38 +1,60 @@
 extends ../layouts/header
 block content
-  #container.container.clearfix
-    //侧边导航
-    include aside
-    article.read-style
-      section.admin-title.line.clearfix
-        h1.fl-l #{title}
-      if !!doc.length
-        each med in doc
-          table#show-med.table.table-top.order-table.form-inline.medicine-form
-            if !med.reply
-              caption 
-                a(style="color:red") 这是您在 #{med.time} 提交的托购药品的信息，目前还没有回音
-            else
-              caption #{med.time}  提交的托购药品信息
-            thead.tab-title
-              tr
-                th.reply 药品名称
-                th.reply 药品数量
-                th 描述
-            tbody
-              each item in med.medlist
+  - if(!pjax){
+     | <div id="container" class="container clearfix">
+  - }
+    if !pjax
+      //侧边导航
+      include ../layouts/aside
+    - if(!pjax){
+        | <article id="content">
+        |   <div class="wrap">
+    - }
+      if !pjax
+        section.tab.line.clearfix
+          ul#tab
+            li
+              h3.tab-title 药品托购
+            li
+              a.pjax.cur(href="/doctor/medicine?cat=1") 未回复
+            li
+              a.pjax(href="/doctor/medicine?cat=2") 已回复
+       - if(!pjax){
+          | <div id="pjax-container">
+       - }
+        if !!doc.length
+          each med in doc
+            table#show-med.table.table-top.order-table.form-inline.medicine-form
+              if !med.reply
+                caption 
+                  a(style="color:red") 这是您在 #{med.time} 提交的托购药品的信息，目前还没有回音
+              else
+                caption #{med.time}  提交的托购药品信息
+              thead.tab-title
                 tr
-                  td.med-name= item.name
-                  td.reply= item.num
-                  td= item.description
-            if !!med.reply
-              tfoot
-                tr
-                  td.reply 回复
-                  td(colspan="2")
-                    a #{med.replycontent}       
-      else
-        table.table.table-top.order-table
-            caption.line 您现在没有药品信息
+                  th.reply 药品名称
+                  th.reply 药品数量
+                  th 描述
+              tbody
+                each item in med.medlist
+                  tr
+                    td.med-name= item.name
+                    td.reply= item.num
+                    td= item.description
+              if !!med.reply
+                tfoot
+                  tr
+                    td.reply 回复
+                    td(colspan="2")
+                      a #{med.replycontent}       
+        else
+          table.table.table-top.order-table
+              caption.line 没有相关信息
+  - if(!pjax){
+      |        </div>
+      |     </article>
+      |   </div>
+      | </div>
+  - }
 block script
-  script(src="/js/doctor.js")
+  script(src="/js/tab.js")

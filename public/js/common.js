@@ -173,3 +173,34 @@ function defaultEvent(event){
      });
     }
  })()
+
+/*-------------
+  --- PJAX ---
+ ------------*/
+var pjax = function(self,url,container,callback){
+  var container = jixiang.$(container);
+  var aniNum = 0;
+  var ani = setInterval(function(){
+    (aniNum += 40) > 800 ? sendPjax() : container.style.marginLeft = '-'+aniNum+'px';
+  },10);
+
+  var state = {
+    url : url
+   ,title : document.title
+  }
+  var purl = (url.indexOf('?') !== -1) ? url+'&pjax=1' : url+'?pjax=1';
+  var result = function(res){
+      container.innerHTML = res;
+      ani = setInterval(function(){
+        (aniNum -= 40) == -40 ? clearInterval(ani) : container.style.marginLeft = '-'+aniNum+'px';
+      },10);
+      window.history.pushState(state,document.title,url);
+      if(callback)callback();
+  };
+
+  function sendPjax(){
+    clearInterval(ani);
+    ajax(purl,'get',null,result);
+  }
+
+}
