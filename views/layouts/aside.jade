@@ -10,7 +10,7 @@ aside.myaside
     .aside-list
       h3 问题咨询
       ul
-        - var menus = [ {text:'我的问题',href:'/doctor/question'},{text:'我要提问',href:'/question'}]
+        - var menus = [ {text:'我的问题',href:'/question/answer'},{text:'我要提问',href:'/question'}]
           each menu in menus
             li
              a(href="#{menu.href}") #{menu.text}

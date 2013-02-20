@@ -9,11 +9,9 @@
     var e = event || window.event;
     defaultEvent(e);
     var self = e.target || e.srcElement;
-    if(self.tagName.toLowerCase() == 'button')return;
     while(self.tagName.toLowerCase() !== 'a'){
       self = self.parentNode;
     }
-
     if(self.className.indexOf('pjax') == -1)return;
     pjax(self,self.getAttribute('href'),'pjax-container',function(){
        var cat = self.getAttribute('href').replace('/service?cat=','')
@@ -42,5 +40,5 @@
 
   }
   Utils.addHandler(tab,'click',handler)
-  Utils.addHandler(jixiang.$('pjax-container'),'click',handler);
+ // Utils.addHandler(jixiang.$('pjax-container'),'click',handler);
 })()

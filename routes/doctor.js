@@ -188,29 +188,30 @@ exports.medicine = function(req,res){
   }
 }
 //我的问题
-exports.myQ = function(req,res){
-  var condition = {};
-  condition.query = {
-    subcat : 1
-   ,uid : req.session.user._id
-  };
-  condition.sort = {
-    _id : -1
-  };
-  jixiang.get(condition,'question',function(err,doc){
-    if(err){
-      doc=[];
-    }
-    res.render('./doctor/question',{
-      title : '我的问题'
-     ,user : req.session.user
-     ,cur : 'doctor'
-     ,cat : '/question'
-     ,doc : doc
-     ,pjax : false
-    });
-  });
-}
+// exports.myQ = function(req,res){
+//   var pjax = !!req.query.pjax ? true : false;
+//   var condition = {};
+//   condition.query = {
+//     subcat : 1
+//    ,uid : req.session.user._id
+//   };
+//   condition.sort = {
+//     _id : -1
+//   };
+//   jixiang.get(condition,'question',function(err,doc){
+//     if(err){
+//       doc=[];
+//     }
+//     res.render('./doctor/question',{
+//       title : '我的问题'
+//      ,user : req.session.user
+//      ,cur : 'doctor'
+//      ,cat : '/question'
+//      ,doc : doc
+//      ,pjax : pjax
+//     });
+//   });
+// }
 
 /*----------------
       admin

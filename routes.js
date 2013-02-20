@@ -15,6 +15,21 @@ module.exports = function(app){
  /************************
   *      前台路由        *
   ************************/
+  // app.all('*',function(req,res,next){
+  //    var pattern = /.*\.(gif|jpg|jpeg|png|bmp|js|css).*$/;
+  //    if(!pattern.test(req.path)){
+  //      if(req.path.indexOf('login') || req.path.indexOf('reg')){
+  //         next();
+  //      }else{
+  //         if(!req.session.user){
+  //           return res.redirect('/login');
+  //         }else if(!req.session.admin){
+  //           return res.redirect('/admin/login');
+  //         }
+  //         next();
+  //      }
+  //    }
+  // })
   /*--------
       首页
    --------*/
@@ -76,7 +91,7 @@ module.exports = function(app){
    app.post('/doctor',doctor.index);
    app.get('/doctor/ask',doctor.ask);
    app.get('/doctor/medicine',doctor.medicine);
-   app.get('/doctor/question',doctor.myQ);
+   // app.get('/doctor/question',doctor.myQ);
    /*--------
       家政
     --------*/
@@ -87,6 +102,7 @@ module.exports = function(app){
     问题咨询
     --------*/
    app.get('/question',question.index);
+   app.get('/question/answer',question.qlist);
    app.post('/question',question.answer);
    app.post('/question/review',question.review);
   /*-------

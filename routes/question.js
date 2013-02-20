@@ -5,7 +5,7 @@ var Utils = require('../models/utils');
 var jixiang = require('../models/base');
 var https = require('https');
 
-var index = function(req,res){
+exports.index = function(req,res){
    res.render('./question',{
    	  title : '问题咨询'
    	 ,user : req.session.user
@@ -40,7 +40,7 @@ var FAQ = { //常见问题
   ,'最后问你一个问题':'爱过'
   ,'是谁':'是谁有这么重要吗？如果你觉得重要的话你可以百度哦！'
 }
-var answer = function(req,res){
+exports.answer = function(req,res){
    var question = req.body.question;
    //问医类问题的回答
    if(/^@问医：/.test(question)){
@@ -236,7 +236,7 @@ var answer = function(req,res){
 }
 
 //有用没用
-var review = function(req,res){
+exports.review = function(req,res){
   var id= parseInt(req.body.id,10);
   var re = parseInt(req.body.review,10);
   var condition = {};
@@ -256,16 +256,32 @@ var review = function(req,res){
     return res.json({flg:1,msg:'操作成功！'});
   });
 }
-//对外接口
-exports.index = index;
-exports.answer = answer;
-exports.review = review;
 
+//问题列表
+exports.qlist = function(req,res){
+   var pjax = !!req.query.pjax;
+   var cat = parseInt(req.query.cat,10) || 1;
+   var condition = {};
+   condition.query = {
+      uid : req.session.user._id
+     ,reply : cat !== 1
+   }
+   jixiang.get(condition,'question',function(err,doc){
+     res.render('./question/list',{
+        title : '我的问题'
+       ,user : req.session.user
+       ,cur : 'question'
+       ,doc : doc
+       ,pjax : pjax
+     });
+
+   })
+}
 /*------------------
     　　admin
 -------------------*/
 
-var　admin = function(req,res){
+var admin = function(req,res){
   var condition = {};
   var cat;
   switch(parseInt(req.query.cat,10)){

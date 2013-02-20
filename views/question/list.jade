@@ -1,12 +1,27 @@
 extends ../layouts/header
 block content
-  #container.container.clearfix
-    //侧边导航
-    include ../layouts/aside
-    article#content
-      .wrap
-        section.admin-title.line.clearfix
-          h1.fl-l #{title}
+  - if(!pjax){
+     | <div id="container" class="container clearfix">
+  - }
+    if !pjax
+      //侧边导航
+      include ../layouts/aside
+    - if(!pjax){
+        | <article id="content">
+        |   <div class="wrap">
+    - }
+      if !pjax
+        section.tab.line.clearfix
+          ul#tab
+            li
+              h3.tab-title 我的问题
+            li
+              a.pjax.cur(href="/question/answer?cat=1") 未回复
+            li
+              a.pjax(href="/question/answer?cat=2") 已回复
+       - if(!pjax){
+          | <div id="pjax-container">
+       - }
         if !!doc.length
           each q in doc
             table.table.table-top.order-table.form-inline.medicine-form
@@ -27,5 +42,11 @@ block content
         else
           table.table.table-top.order-table
               caption.line 您还没有不明白的问题
+  - if(!pjax){
+      |        </div>
+      |     </article>
+      |   </div>
+      | </div>
+  - }
 block script
-  script(src="/js/doctor.js")
+  script(src="/js/tab.js")
