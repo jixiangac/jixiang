@@ -1,0 +1,25 @@
+/**
+ *  animate css3
+ *
+ *  @jixiangac
+ *  
+ *  css3动画类
+ */
+
+
+/*左右缓动的效果*/
+.easing{
+  -webkit-animation: ozShareboxSlide .5s ease-out;
+}
+
+/*旋转*/
+.rotate{
+  -webkit-perspective : 3000px;
+  perspective: 3000px;
+  -webkit-perspective-origin : 50% 200px;
+  perspective-origin: 50% 200px;
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+  -webkit-transition: all .8s ease-in-out;
+  transition: all .8s ease-in-out;
+}

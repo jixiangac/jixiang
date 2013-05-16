@@ -1,0 +1,21 @@
+/**
+ *  盒子box
+ *  @jixiangac
+ */
+
+.mod-grey{
+  background: #f5f5f5;
+  border-radius: 2px;
+}
+.mod-grey-hd{
+  border-bottom: 1px solid #e5e5e5;
+  padding: 11px 30px;
+}
+.mod-grey-bd{
+  padding-top: 30px;
+}
+.mod-grey-ft{
+  padding: 10px 5px;
+  line-height: 30px;
+  background: #fff;
+}

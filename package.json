@@ -9,6 +9,7 @@
     "express": "3.0.3",
     "jade": ">=0.0.1",
     "connect-mongo":"0.2.0",
-    "mongodb":"1.0.2"
+    "mongodb":"1.0.2",
+    "nodemailer":"*"
   }
 }

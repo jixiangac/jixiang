@@ -13,6 +13,7 @@ var index = function(req,res){
          title:'吉祥社区'
         ,user : req.session.user
         ,pjax : false
+        ,jsflg : 'sign'
       });
   }else if(req.method == 'POST'){
     //生成口令散列
@@ -53,7 +54,8 @@ var admin = function(req,res){
     res.render('./admin/login',
       {
         title:'吉祥社区管理后台'
-         ,user : req.session.admin
+       ,user : req.session.admin
+       ,jsflg : 'sign'
       });
   }else if(req.method == 'POST'){
     var md5 = crypto.createHash('md5');

@@ -20,3 +20,54 @@ exports.format_date = function (date,flag) {//flag 为true返回时分秒
   }
   return result;
 };
+/**
+ * 分页
+ */
+exports.pagenav = function(page,count,limit){
+  var pages = parseInt(page,10) || 1;
+  var condition = {
+     skip : (pages-1)*limit
+    ,limit : limit
+  }
+  var pageNum = {
+     max : Math.ceil(count/7) ? Math.ceil(count/7) : 1
+    ,cur : pages
+    ,next : pages+1
+    ,prev : pages-1
+  }
+  if(pageNum.cur > pageNum.max)return false;
+  
+  return {
+     pageNum:pageNum
+    ,condition:condition
+  }
+}
+/**
+ * 发送邮件
+ */
+var nodemailer = require('nodemailer');
+exports.email = function(toemail,subject,text,html){
+  var smtpTransport = nodemailer.createTransport("SMTP",{
+      service: "Gmail",
+      auth: {
+          user: "jixiangxx@gmail.com",
+          pass: "asklili123456"
+      }
+  });
+  var mailOptions = {
+      from: "吉祥社区<jixiangxx@gmail.com>", // sender address
+      to: toemail, // list of receivers
+      subject: subject, // Subject line
+      text: text, // plaintext body
+      html: html // html body
+  }
+  //发邮件
+  smtpTransport.sendMail(mailOptions, function(error, response){
+  if(error){
+      console.log(error);
+  }else{
+      console.log("Message sent: " + response.message);
+   }
+  });
+
+}

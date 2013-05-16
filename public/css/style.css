@@ -3,6 +3,12 @@
  * @Author          jixiangac
  * @Email           jixiangac@gmail.com
  */
+
+@import 'base.css';
+@import 'animate.css';
+@import 'sign.css';
+@import 'form.css';
+
 /*= 首页
 ---------*/
 #container .welcome{

@@ -1,0 +1,160 @@
+/*= Reset default browser CSS. Based on work by Eric 
+    Meyer: http://meyerweb.com/eric/tools/css/reset/index.html
+ ---------------------------------------------*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td{
+  border:0;
+  font-family:inherit;
+  font-size:100%;
+  font-style:inherit;
+  font-weight:inherit;
+  margin:0;
+  outline:0;
+  padding:0;
+  vertical-align:baseline;
+}
+ol, ul{
+  list-style:none;
+}
+table{ /* tables still need 'cellspacing="0"' in the markup */
+  border-collapse:separate;
+  border-spacing:0;
+}
+caption, th, td{
+  font-weight:normal;
+  text-align:left;
+}
+blockquote:before, blockquote:after,
+q:before, q:after{
+  content:"";
+}
+blockquote, q{
+  quotes:"" "";
+}
+textarea{
+  resize:none;
+}
+a{
+  text-decoration: none;
+  color: #6E3939;
+}
+a img{
+  border:0;
+}
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section{
+  display:block;
+}
+
+::-webkit-selection,
+::-moz-selection,
+::selection{
+  background-color:#0099cc;
+  color:#fff; }
+
+html, body{
+  margin:0;
+  padding:0;
+  -webkit-font-smoothing:antialiased;
+  /* prevent subpixel antialiasing, which thickens the text */
+  /* text-rendering: optimizeLegibility; */
+  /* turned off ligatures due to bug 5945455 */ }
+body{
+  color: #555;
+  line-height: 1;
+  font:12px/1.5 Arial,Helvetica,sans-serif;
+  /*background: #e5e5e5;*/
+  background: url(../images/bg.png) 0 0 repeat;
+}
+
+::-webkit-scrollbar{ width:10px; margin-right:2px }
+::-webkit-scrollbar-track-piece{background-color:#F5F5F5;border-left:1px solid #D2D2D2;}
+::-webkit-scrollbar-thumb{ background:#CBCBCB; width:10px }
+::-webkit-scrollbar-thumb:hover{ background:#909090 }
+
+
+/*
+*  行间距样式
+*/
+p{
+  line-height: 1.8;
+  text-indent: 2em;
+}
+.non-indent p{
+  text-indent: 0;
+}
+
+.fl-r{
+  float: right;
+}
+.fl-l{
+  float: left;
+}
+
+.m10{margin-left: 10px}
+.m20{margin-left: 20px}
+
+.mt10{margin-top: 10px}
+.mr10{margin-right: 10px}
+.mb10{margin-bottom: 10px}
+.ml10{margin-left: 10px}
+
+.mt20{margin-top: 20px}
+.mr20{margin-right: 20px}
+.mb20{margin-bottom: 20px}
+.ml20{margin-left: 20px}
+
+.mt30{margin-top: 30px}
+.mr30{margin-right: 30px}
+.mb30{margin-bottom: 30px}
+.ml30{margin-left: 30px}
+
+.mt40{margin-top: 40px}
+.mr40{margin-right: 40px}
+.mb40{margin-bottom: 40px}
+.ml40{margin-left: 40px}
+
+.mt60{margin-top: 60px}
+.mr60{margin-right: 60px}
+.mb60{margin-bottom: 60px}
+.ml60{margin-left: 60px}
+
+.mt80{margin-top: 80px}
+.mr80{margin-right: 80px}
+.mb80{margin-bottom: 80px}
+.ml80{margin-left: 80px}
+
+.span10{width: 10px;}
+.span20{width: 20px;}
+.span30{width: 30px;}
+.span40{width: 40px;}
+.span50{width: 50px;}
+.span60{width: 60px;}
+.span70{width: 70px;}
+.span80{width: 80px;}
+.span90{width: 90px;}
+.span100{width: 100px;}
+.span120{width: 120px;}
+.span150{width: 150px;}
+.span180{width: 180px;}
+.span240{width: 240px;}
+
+.show{
+  display: block;
+}
+.hide{
+  display: none;
+}
+
+/*
+* 清除浮动
+*/
+.clearfix:before, .clearfix:after,.hd:before,.hd:after{ content:"."; display:block; height:0; visibility:hidden }
+.clearfix:after,.hd:after{ clear:both }
+.clearfix,.hd{ zoom:1 }

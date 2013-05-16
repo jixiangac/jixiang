@@ -1,0 +1,51 @@
+/**
+ *  表单
+ */
+
+ .tab-nav{
+  padding-top: 10px;
+ }
+
+ .form-inline .form-item{
+  margin-bottom:15px;
+ }
+ .form-inline label{
+   display: inline-block;
+   *display:inline;
+   *zoom:1;
+   width:80px;
+   text-align:right;
+   margin-right:10px;
+   line-height: 30px;
+   vertical-align: baseline;
+   font-size: 14px;
+   color: #666;
+ }
+ .form-inline input,.form-inline select{
+  border:1px solid #ccc;  
+  height:20px;
+  line-height:20px;
+  vertical-align: middle;
+  padding: 4px 6px;
+  font-size:14px;
+  width:270px;
+ }
+
+ .form-inline input:focus,.bootstrap:focus{
+  border-color: rgba(82, 168, 236, 0.8);
+  outline: 0;
+  outline: thin dotted \9;
+  /* IE6-9 */
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+ }
+.form-inline .form-actions{
+  margin-top:10px;
+  padding-left:90px;
+ }
+ .form-inline select{
+   width:93px;
+   height:30px;
+   margin-right: 4px;
+ }
