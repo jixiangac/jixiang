@@ -32,16 +32,23 @@ module.exports = function(app){
   });
   app.get('/people/:username',notice.index);
 
-  /*----------
-     登入模块
-   ----------*/
+  /**
+   *
+   *   登入 & 注册 & 忘记密码
+   *
+   * 
+   */
   app.get('/login',login.index);
   app.post('/login',login.index);
-  /*----------
-     注册模块
-   ----------*/
-   app.get('/reg',register.index);
-   app.post('/reg',register.index);
+
+  app.post('/reg',login.reg);
+  
+  app.get('/forgot',login.forgot);
+  app.post('/forgot',login.forgot);
+  
+  app.get('/setpass',login.setpass);
+  app.post('/setpass',login.setpass);
+
   /*-------------
        订餐
    -------------*/

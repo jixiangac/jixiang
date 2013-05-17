@@ -1,0 +1,47 @@
+extends layouts/header
+block content
+  #pjax-index.container
+    #sign-wrap
+      #sign-main.sign-main.mod-grey
+        if template === 1
+          #forgot-wrap
+            .mod-grey-hd
+              a 忘记密码
+            .mod-grey-bd
+              form#forgot-form.form.form-inline.ajax-form(method="post",action="/forgot")
+                fieldset
+                  .form-item
+                    label(for="email") 电子邮箱
+                    input.require(type="text",id="email", name="email")
+                  .form-item.form-actions
+                    button(class="btn",type="submit") 提交
+            .mod-grey-ft
+              p 想起帐号了？
+                a#login(href="/login") 点我登入
+        if template === 2
+          #setpass-wrap
+            if !setpass
+              .mod-grey-hd
+                a 重置密码
+              .mod-grey-bd
+                form#setpass-form.form.form-inline.ajax-form(method="post",action="/setpass?key=#{options.key}&email=#{options.email}")
+                  fieldset
+                    .form-item
+                      label(for="password") 密码
+                      input.require(type="text",id="password", name="password")
+                    .form-item
+                      label(for="repassword") 重复密码
+                      input.require(type="text",id="repassword", name="repassword")
+                    .form-item.form-actions
+                      button(class="btn",type="submit") 提交
+              .mod-grey-ft
+                p 请在24小时内重新设置密码
+            else
+              .mod-grey-hd
+                a 出错了
+              .mod-grey-bd(style="padding-bottom:30px")
+                p= setpass
+              .mod-grey-ft
+                p
+                  a(href="/forgot") 点击这里重新申请
+

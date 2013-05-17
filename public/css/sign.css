@@ -4,7 +4,10 @@
  * @jixiangac
  */
 
-#sign-main{
-  width: 600px;
+#sign-wrap{
   margin: 150px auto;
+  overflow: hidden;
+}
+#sign-main,#sign-wrap{
+  width: 600px;
 } 

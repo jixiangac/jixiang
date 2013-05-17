@@ -1,62 +1,66 @@
 extends layouts/header
 block content
   #pjax-index.container
-    #sign-main.sign-main.mod-grey
-      #login-wrap
-        .mod-grey-hd
-          a 登入社区
-        .mod-grey-bd
-          form#login-form(class="form form-inline",method="post",action="/login")
-            fieldset
-              .form-item
-                label(for="username") 用户名
-                input(type="text",id="username", name="username")
+    #sign-wrap
+      #sign-main.sign-main.mod-grey
+        #login-wrap
+          .mod-grey-hd
+            a 登入社区
+          .mod-grey-bd
+            form#login-form(class="form form-inline",method="post",action="/login")
+              fieldset
+                .form-item
+                  label(for="username") 用户名
+                  input.require(type="text",id="username", name="username")
 
-              .form-item
-                label(for="password") 密码
-                input(type="password",id="password",name="password")
-              .form-item.form-actions
-                button(class="btn",type="submit") 登入
-        .mod-grey-ft
-          p 还没注册？
-            a#reg(href="/reg",data-rotate="true") 点我注册
-            a.fl-r.mr20(href="/forgot") 忘记密码
-      #reg-wrap.hide
-        .mod-grey-hd
-          a 用户注册
-        .mod-grey-bd
-          form#reg-form.form.form-inline(method="post",action="/reg")
-            fieldset
-              .form-item
-                label(for="username") 用户名
-                input#username(type="text",name="username")
-              .form-item
-                label(for="password") 密码
-                input#password(type="password",name="password")
-              .form-item
-                label(for="re-password") 重复密码
-                input#re-password(type="password",name="re-password")
-              .form-item
-                label(for="sex") 性别
-                select#sex(name="sex")
-                  option(value="1") 男
-                  option(value="2") 女
-                  option(value="3") 其他
-              .form-item
-                label 出生年月
-                select#birthYear(name="birthYear")
-                  -for(var i=1900;i<=new Date().getFullYear();i++)
-                    option(value="#{i}")!{i}年
-                select#birthMonth(name="birthMonth")
-                  -for(var i=1;i<=12;i++)
-                    option(value="#{i}")!{i}月
-                select#birthDay(name="birthDay")
-                  -for(var i=1;i<=31;i++)
-                    option(value="#{i}")!{i}日
-              .form-item.form-actions
-                button.btn(type="submit") 注册
-        .mod-grey-ft
-          p 已有帐号？
-            a#login(href="/login",data-rotate="true") 点我登入
+                .form-item
+                  label(for="password") 密码
+                  input.require(type="password",id="password",name="password")
+                .form-item.form-actions
+                  button(class="btn",type="submit") 登入
+          .mod-grey-ft
+            p 还没注册？
+              a#reg(href="/reg",data-rotate="true") 点我注册
+              a.fl-r.mr20(href="/forgot") 忘记密码
+        #reg-wrap.hide
+          .mod-grey-hd
+            a 用户注册
+          .mod-grey-bd
+            form#reg-form.form.form-inline(method="post",action="/reg")
+              fieldset
+                .form-item
+                  label(for="username") 用户名
+                  input#username.require(type="text",name="username")
+                .form-item
+                  label(for="email") 电子邮箱
+                  input#email.require(type="text",name="email")
+                .form-item
+                  label(for="password") 密码
+                  input#password.require(type="password",name="password",value="")
+                .form-item
+                  label(for="repassword") 重复密码
+                  input#repassword.require(type="password",name="repassword")
+                .form-item
+                  label(for="sex") 性别
+                  select#sex(name="sex")
+                    option(value="1") 男
+                    option(value="2") 女
+                    option(value="3") 其他
+                .form-item
+                  label 出生年月
+                  select#birthYear(name="birthYear")
+                    -for(var i=1900;i<=new Date().getFullYear();i++)
+                      option(value="#{i}")!{i}年
+                  select#birthMonth(name="birthMonth")
+                    -for(var i=1;i<=12;i++)
+                      option(value="#{i}")!{i}月
+                  select#birthDay(name="birthDay")
+                    -for(var i=1;i<=31;i++)
+                      option(value="#{i}")!{i}日
+                .form-item.form-actions
+                  button.btn(type="submit") 注册
+          .mod-grey-ft
+            p 已有帐号？
+              a#login(href="/login",data-rotate="true") 点我登入
 
 

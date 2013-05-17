@@ -2,9 +2,10 @@
  * 登陆&注册
  */
 define(function(require){
-   var jixiang = require('./util/base');
+   var jixiang = require('./models/base');
+   var ajax = require('./models/ajax');
    /**
-    * 点击注册旋转
+    * 点击登入&注册的卡片旋转
     */
    
    function rotate(obj1,obj2){
@@ -12,33 +13,40 @@ define(function(require){
       var signBox = jixiang.$('sign-main')
          ,box1 = jixiang.$(obj1)
          ,box2 = jixiang.$(obj2);
-
-      signBox.className += ' rotate';
+      
+      signBox.className += ' rotateinit rotate90';
       
       setTimeout(function(){
-        box1.style.visibility = 'hidden';
+        box1.style.cssText = 'display:none';
+        box2.style.display = 'block';
+        signBox.className += ' rotate0';
         setTimeout(function(){
-          box1.style.cssText = 'display:none';
-          box2.style.display = 'block';
-          signBox.className = signBox.className.replace(/\s*rotate\s*/gi,'');
-        },400);
-      },400);
+          signBox.className = signBox.className.replace(/\s*rotate\-*\w*\d*\s*/gi,'');
+        },300);
+      },300);
 
    }
-
-   var handler = function(event){
+ 
+   jixiang.addHandler(jixiang.$('sign-main'),'click',function(event){
       var e = event || window.event;
       var target = e.target || e.srcElement;
       if(target.tagName.toLowerCase() !== 'a' || !target.getAttribute('data-rotate') )return;
       e.preventDefault();
       var obj1 = target.parentNode.parentNode.parentNode.id,obj2 = target.id; 
-
       rotate(obj1,obj2+'-wrap');
-   }
+   });
+
+
+   /**
+    *  点击忘记密码的滑动
+    */
+
    
-   jixiang.addHandler(jixiang.$('sign-main'),'click',handler);
-
-
+   /**
+    *  表单提交绑定事件
+    * 
+    */
+   jixiang.addHandler(jixiang.$('sign-wrap'),'submit',ajax.ajaxForm);
 
 });
 
