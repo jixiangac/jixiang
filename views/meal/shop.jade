@@ -1,0 +1,22 @@
+extends ../layouts/header
+block content
+  #container
+    article.container
+      section.mod-grey-hd
+        h3.business-title 请点击你想要选购的
+          a.fl-r(href="/meal") 返回上一级
+      section.mod-grey-bd.container
+        h3.business-title
+        #business-list
+          #meal-detail-list
+            a.business-item.mod-grey.meal-selected
+              .mod-grey-hd
+                  span 小馄饨
+              i.num 1
+            -for(var i=0;i<10;i++)
+              a.business-item.mod-grey
+                .mod-grey-hd
+                  span 小馄饨
+        .sub-action.ml30
+          button(class="btn btn-info") 就这样吧
+        

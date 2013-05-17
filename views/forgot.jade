@@ -7,7 +7,7 @@ block content
           #forgot-wrap
             .mod-grey-hd
               a 忘记密码
-            .mod-grey-bd
+            .mod-grey-bd.mod-grey-bd-top
               form#forgot-form.form.form-inline.ajax-form(method="post",action="/forgot")
                 fieldset
                   .form-item
@@ -23,7 +23,7 @@ block content
             if !setpass
               .mod-grey-hd
                 a 重置密码
-              .mod-grey-bd
+              .mod-grey-bd.mod-grey-bd-top
                 form#setpass-form.form.form-inline.ajax-form(method="post",action="/setpass?key=#{options.key}&email=#{options.email}")
                   fieldset
                     .form-item

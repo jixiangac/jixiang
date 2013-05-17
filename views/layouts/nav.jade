@@ -1,28 +1,24 @@
-header
-  #head-nav.container.clearfix
-    h1#logo
-      a(href="/") #{title}
-    #description  一个服务于老年人的社区
+//- header
+//-   #head-nav.container.clearfix
+//-     h1#logo
+//-       a(href="/") #{title}
+//-     #description  一个服务于老年人的社区
 
-  nav
-    .nav-wrap.container.clearfix
-      if user
-        ul.nav-list
-          - var menus = [{text:'首页',href:'/',cur:'index'},{text:'订餐',href:'/meal',cur:'meal'},{text:'问医',href:'/doctor',cur:'doctor'},{text:'居家养老',href:'/service',cur:'service'},{text:'问题咨询',href:'/question',cur:'question'}]      
-          each menu in menus
-            - var active = ''
-              if menu.cur == cur
-                - active = 'cur'
-              li(class='#{active}')
-                a(href='#{menu.href}') #{menu.text}
-        ul.login
-          li.user
-            a(href="#") #{user.username}
-          li.logout
-            a(href="/logout") 退出
-      else
-        ul.no-login
-          li
-            a 请使用现代浏览器浏览，比如Chrome，Safari，IE9+，甚至是急速版的360.。。。
+nav
+  if user
+    ul.login.fl-r
+      li.user
+        a(href="#") #{user.username}
+      li.logout
+        a(href="/logout") 退出
+    .nav-wrap
+      ul.nav-list
+        - var menus = [{text:'首页',href:'/',cur:'index'},{text:'订餐',href:'/meal',cur:'meal'},{text:'问医',href:'/doctor',cur:'doctor'},{text:'居家养老',href:'/service',cur:'service'},{text:'问题咨询',href:'/question',cur:'question'}]      
+        each menu in menus
+          - var active = ''
+            if menu.cur == cur
+              - active = 'cur'
+            li(class='#{active}')
+              a(href='#{menu.href}') #{menu.text}
          
 

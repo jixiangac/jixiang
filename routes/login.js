@@ -73,8 +73,6 @@ exports.reg = function(req,res){
        ,jsflg : 'sign'
       });
   }else if(req.method == 'POST'){
-    console.log(req.body['repassword'])
-    console.log(req.body['password'])
     if(req.body['repassword'] !== req.body['password']){
       return res.json({success:false,pwderror:1,msg:'密码不一致'});
     }
@@ -89,6 +87,7 @@ exports.reg = function(req,res){
       ,birthday : req.body.birthYear+'-'+req.body.birthMonth+'-'+req.body.birthDay
       ,regdate : Date.now()
       ,logindate : Date.now()
+      ,cat : 2
     };
     jixiang.getOne({
       '$or' : [

@@ -28,6 +28,7 @@ module.exports = function(app){
          ,user : req.session.user
          ,cur : 'index'
          ,pjax : false
+         ,jsflg : 'index'
         });
   });
   app.get('/people/:username',notice.index);
@@ -54,10 +55,14 @@ module.exports = function(app){
    -------------*/
    //订餐首页
    app.get('/meal',meal.index);
+
+   app.get('/meal/shop',meal.shop)
+   app.post('/meal/shop',meal.shop)
+
    //菜品的详情页
-   app.get(/^\/meal\/detail\/?(\d+)$/,meal.detail);
+   // app.get(/^\/meal\/detail\/?(\d+)$/,meal.detail);
    //菜品分类
-   app.get(/^\/meal\/category\/?(\d*)$/,meal.category);
+   // app.get(/^\/meal\/category\/?(\d*)$/,meal.category);
    //菜品的喜欢
    app.post('/meal/like',meal.like);
    //订单清单

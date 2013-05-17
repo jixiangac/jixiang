@@ -170,11 +170,11 @@ a.btn-reply:active{
 }
 /*= 内容区
 -----------*/
-article.read-style{
-  float: right;
-  width: 760px;
+article{
+  display:table;
+  margin: 0 auto;
 }
-aside.read-style section{
+/*aside.read-style section{
   margin-bottom: 6px;
 }
 .read-style section h3{
@@ -190,17 +190,17 @@ span.label-block{
   display: block;
   float: left;
   width: 77px;
-}
+}*/
 /*格局*/
 .container{
   width:980px;
   margin:0 auto;
 }
 #container{
-  border:1px solid #d7d7d7;
+  /*border:1px solid #d7d7d7;
   border-radius: 5px;
-  background: #fff url(/images/aside.png) 0 0 repeat-y;
-  /*box-shadow: 1px 1px 5px #d7d7d7;*/
+  background: #fff url(/images/aside.png) 0 0 repeat-y;*/
+  margin-top: 100px;
 }
 .mod{
   margin-top:10px;
@@ -245,41 +245,7 @@ span.label-block{
  	line-height: 43px;
  	margin-left: 20px;
  }
- /*菜单*/
- nav li{
- 	display: inline;
- }
- nav li a{
- 	color: #6E3939;
- 	font-size: 14px;
- 	padding: 5px;
- }
- nav{
- 	padding: 8px 0;
- 	border-top: 1px solid #ddd;
- }
-.nav-list{
-	padding-left:10px;
-	float:left;
-}
 
-.nav-list li{
-  margin-right: 20px;
-}
-.nav-list li a:hover,.nav-list li.cur a{
-	border-radius: 3px;
-	background:#6E3939;
-	color:#fff;
-}
-/*登入信息*/
-.login{
-	float:right;
-}
-.login li.logout:before{
-	color: #ADADA9;
-	content:'|';
-	margin-right:10px;
-}
 
 /*= 底部
 -----------*/

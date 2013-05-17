@@ -1,32 +1,37 @@
 extends ../layouts/header
 block content
-  #container.container.clearfix
+  #container
     //侧边导航
-    include aside
-    article.read-style.meal
-      section.slide
-        img(src="/images/meal.jpg",alt="人生在世，吃喝二字")
-
-      section.my-meal
-        h3 社区精选
-        .bd.meal-recommend
-          if meals.length
-          ul
-           each meal,i in meals
-            li
-              .meal-info
-                a.meal-title= meal.name
-                 -var flag=false
-                  each item in meal.like
-                    if item == user._id
-                      -flag=true
-                      -break
-                if flag
-                  a.like-red &nbsp;
-                else
-                  a.like-gray(href="/meal/like/#{meal._id}",title="喜欢")&nbsp;
-                span #{meal.like.length}
-              a(href="/meal/detail/#{meal._id}")
-                img(src="/images/meal/#{meal.pic}",alt="#{meal.name}")
-block script
-  script(src="/js/meal.js")
+    //- include aside
+    article.container
+      section.mod-grey-hd
+        img.center(src="/images/meal.jpg",alt="人生在世，吃喝二字")
+      section.mod-grey-bd.container
+        h3.business-title 请选择商家进入订餐
+        #business-list
+          -for(var i=0;i<10;i++)
+            a.business-item.mod-grey(href="/meal/shop?id=xx")
+              .mod-grey-hd
+                span 沙县小吃
+              .mod-grey-bd
+                p xxx
+              .mod-grey-ft
+                p 出错
+          //- if meals.length
+          //- ul
+          //-  each meal,i in meals
+          //-   li
+          //-     .meal-info
+          //-       a.meal-title= meal.name
+          //-        -var flag=false
+          //-         each item in meal.like
+          //-           if item == user._id
+          //-             -flag=true
+          //-             -break
+          //-       if flag
+          //-         a.like-red &nbsp;
+          //-       else
+          //-         a.like-gray(href="/meal/like/#{meal._id}",title="喜欢")&nbsp;
+          //-       span #{meal.like.length}
+          //-     a(href="/meal/detail/#{meal._id}")
+          //-       img(src="/images/meal/#{meal.pic}",alt="#{meal.name}")

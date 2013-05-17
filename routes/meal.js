@@ -1,8 +1,10 @@
 /**
  *  订餐 Routes
  */
+var config = require('../config');
 var jixiang = require('../models/base');
-var Utils = require('../models/utils');
+var utils = require('../models/utils');
+
 //订餐首页
 var index = function(req,res){
      var condition = {
@@ -29,104 +31,123 @@ var index = function(req,res){
             sendLen : sendLen,
             cur: 'meal',
             cat: '',
-            pjax : false
+            pjax : false,
+            jsflg : 'meal'
           });
         })
       });
      });
+}
+//商家菜单
+exports.shop = function(req,res){
+  if(req.method === 'GET'){
+     render();
+     function render(){
+        var renders = {
+          title : config.name + '订餐'
+         ,user : req.session.user
+         ,cur : 'meal'
+         ,pjax : false
+         ,jsflg : 'meal'
+        }
+        res.render('./meal/shop',renders);
+     }
+  }else if(req.method === 'POST'){
+
+  }
 }
 //菜品详情
-var detail = function(req,res){
-    var condition = {};
-    condition.query = {
-      _id: parseInt(req.params[0], 10)
-    };
-    jixiang.getOne(condition,'meals',function(err, meal) {
-       switch(meal.cat){
-         case '1':
-           meal.cat_name = '早餐';
-           break;
-         case '2':
-           meal.cat_name = '午餐';
-           break;
-         case '3' :
-           meal.cat_name ='下午茶';
-           break;
-         case '4' :
-           meal.cat_name ='晚餐';
-           break;
-         default :
-           meal.cat_name ='早餐';
-       }
-      jixiang.count({sendstatus:false,donestatus:false},'orders',function(err,subLen){
-        jixiang.count({sendstatus:true,donestatus:false},'orders',function(err,sendLen){
-          res.render('./meal/detail', {
-            title: meal.name + '的详情',
-            user: req.session.user,
-            meals: meal,
-            subLen : subLen,
-            sendLen : sendLen,
-            cur: 'meal',
-            cat:'',
-            pjax : false
-          });
-        })
-      })
+// var detail = function(req,res){
+//     var condition = {};
+//     condition.query = {
+//       _id: parseInt(req.params[0], 10)
+//     };
+//     jixiang.getOne(condition,'meals',function(err, meal) {
+//        switch(meal.cat){
+//          case '1':
+//            meal.cat_name = '早餐';
+//            break;
+//          case '2':
+//            meal.cat_name = '午餐';
+//            break;
+//          case '3' :
+//            meal.cat_name ='下午茶';
+//            break;
+//          case '4' :
+//            meal.cat_name ='晚餐';
+//            break;
+//          default :
+//            meal.cat_name ='早餐';
+//        }
+//       jixiang.count({sendstatus:false,donestatus:false},'orders',function(err,subLen){
+//         jixiang.count({sendstatus:true,donestatus:false},'orders',function(err,sendLen){
+//           res.render('./meal/detail', {
+//             title: meal.name + '的详情',
+//             user: req.session.user,
+//             meals: meal,
+//             subLen : subLen,
+//             sendLen : sendLen,
+//             cur: 'meal',
+//             cat:'',
+//             pjax : false
+//           });
+//         })
+//       })
 
-    });
-}
+//     });
+// }
 
-//菜品分类
-var category = function(req,res){
-     var condition={};
-     var cat_title;
-     if(req.params[0]){
-       condition.query={
-         cat : req.params[0]
-       };
-     }else{
-       condition.sort={
-         like : -1
-       };
-       condition.limit=12;
-     }
-     switch(req.params[0]){
-        case '1':
-          cat_title="早餐";
-          break;
-        case '2':
-          cat_title="午餐";
-          break;
-        case '3':
-          cat_title="下午茶";
-          break;
-        case '4':
-          cat_title="晚餐";
-          break;
-        default:
-          cat_title="热门";
-     }
-     jixiang.get(condition,'meals',function(err,meals){
-      if(err){
-        meals=[];
-      }
-      jixiang.count({sendstatus:false,donestatus:false},'orders',function(err,subLen){
-        jixiang.count({sendstatus:true,donestatus:false},'orders',function(err,sendLen){
-         res.render('./meal/category',{
-             title : '菜品分类'
-            ,user : req.session.user
-            ,cat : cat_title
-            ,meals : meals
-            ,subLen : subLen
-            ,sendLen : sendLen
-            ,cur : 'meal'
-            ,pjax : false
-         });
-       });
-      });
+// //菜品分类
+// var category = function(req,res){
+//      var condition={};
+//      var cat_title;
+//      if(req.params[0]){
+//        condition.query={
+//          cat : req.params[0]
+//        };
+//      }else{
+//        condition.sort={
+//          like : -1
+//        };
+//        condition.limit=12;
+//      }
+//      switch(req.params[0]){
+//         case '1':
+//           cat_title="早餐";
+//           break;
+//         case '2':
+//           cat_title="午餐";
+//           break;
+//         case '3':
+//           cat_title="下午茶";
+//           break;
+//         case '4':
+//           cat_title="晚餐";
+//           break;
+//         default:
+//           cat_title="热门";
+//      }
+//      jixiang.get(condition,'meals',function(err,meals){
+//       if(err){
+//         meals=[];
+//       }
+//       jixiang.count({sendstatus:false,donestatus:false},'orders',function(err,subLen){
+//         jixiang.count({sendstatus:true,donestatus:false},'orders',function(err,sendLen){
+//          res.render('./meal/category',{
+//              title : '菜品分类'
+//             ,user : req.session.user
+//             ,cat : cat_title
+//             ,meals : meals
+//             ,subLen : subLen
+//             ,sendLen : sendLen
+//             ,cur : 'meal'
+//             ,pjax : false
+//          });
+//        });
+//       });
 
-     });
-}
+//      });
+// }
 //增加新订单
 var newlist = function(req,res){
 
@@ -187,7 +208,7 @@ var subed = function(req,res){
      }
      if(!!orders.length){
        orders.forEach(function(item){
-         item.subtime = Utils.format_date(new Date(item.subtime),true);
+         item.subtime = utils.format_date(new Date(item.subtime),true);
          item.orderlist = JSON.parse(item.orderlist);
        });
      }
@@ -223,7 +244,7 @@ var sended = function(req,res){
      }
      if(!!orders.length){
        orders.forEach(function(item){
-         item.subtime = Utils.format_date(new Date(item.subtime),true);
+         item.subtime = utils.format_date(new Date(item.subtime),true);
          item.orderlist = JSON.parse(item.orderlist);
        });
      }
@@ -259,7 +280,7 @@ var done = function(req,res){
      }
      if(!!orders.length){
        orders.forEach(function(item){
-         item.subtime = Utils.format_date(new Date(item.subtime),true);
+         item.subtime = utils.format_date(new Date(item.subtime),true);
          item.orderlist = JSON.parse(item.orderlist);
        });
      }
@@ -295,8 +316,8 @@ var doneconfirm = function(req,res){
 }
 //对外接口
 exports.index = index;
-exports.detail = detail;
-exports.category = category;
+// exports.detail = detail;
+// exports.category = category;
 exports.newlist = newlist;
 exports.like = like;
 exports.subed = subed;
@@ -323,7 +344,7 @@ var admin = function(req,res){
     }
     if(!!orders.length){
      orders.forEach(function(item){
-       item.subtime = Utils.format_date(new Date(item.subtime),true);
+       item.subtime = utils.format_date(new Date(item.subtime),true);
        item.orderlist = JSON.parse(item.orderlist);
      });
     }
