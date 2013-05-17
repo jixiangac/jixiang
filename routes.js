@@ -116,14 +116,14 @@ module.exports = function(app){
   /*----------
     后台登入
    ----------*/
-  app.get('/admin/login',checkNotLogin);
+  // app.get('/admin/login',checkNotLogin);
   app.get('/admin/login',login.admin);
   app.post('/admin/login',login.admin);
   /*-----------
      管理首页
   ------------*/
   //管理员列表
-  app.get('/admin',checkLogin);
+  // app.get('/admin',checkLogin);
   app.get('/admin',user.admin);
   /*-----------
      社区居民

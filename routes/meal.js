@@ -5,23 +5,33 @@ var config = require('../config');
 var jixiang = require('../models/base');
 var utils = require('../models/utils');
 
-var renderModel = {
-  title : config.name + '订餐'
- ,user : req.session.user
- ,cur : 'meal'
- ,data : data
- ,pjax : false
- ,jsflg : 'meal'          
-}
-
 //订餐首页
 var index = function(req,res){
    var data = {};//要发送的数据
    if(req.method === 'GET'){
+     var n = 1;
+     //查看当前用户是否有订单
+     jixiang.get({
+       query : {
+          user : req.session.user.username
+         ,isDone : false
+       }
+     },'orders',function(err,doc){
+        if(err)doc=[];
+        data.order = JSON.stringify(doc);
+        --n || render();
+     });
 
      function render(){
-        var reders = renderModel;
-        res.render('./meal/index',renders)
+      var renders = {
+        title : config.name + '订餐'
+       ,user : req.session.user
+       ,cur : 'meal'
+       ,data : data
+       ,pjax : false
+       ,jsflg : 'meal'          
+      }
+      res.render('./meal/index',renders)
      }
    }else if(req.method === 'POST'){
 
@@ -74,10 +84,12 @@ exports.shop = function(req,res){
   }else if(req.method === 'POST'){
      var order = {
         user : req.session.user.username
-       ,list : req.body.orders
+       ,list : JSON.parse( req.body.orders )
+       ,total : +req.body.total
        ,ordertime : new Date()*1
        ,isDone : false
      }
+     console.log(order.list)
      jixiang.save(order,'orders',function(err,doc){
         if(err)return res.json({success:false,msg:'出现了一点小问题，订购没有成功！'});
         return res.json({success:true,msg:'订购成功！'});

@@ -1,0 +1,28 @@
+/**
+ * 吉祥社区
+ * 
+ * @jixiangac
+ * 
+ * 表格样式
+ * 
+ */
+
+.order{
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 0 auto;
+}
+.order tr{
+  border-top: 1px solid #ccc;
+  background: #fff;
+}
+.order tr:nth-child(2n){
+  background: #f8f8f8;
+}
+.order td,.order th{
+  border: 1px solid #ddd;
+  padding: 6px 13px;
+}
+.order th{
+  text-align: center;
+}

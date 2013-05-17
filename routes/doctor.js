@@ -32,6 +32,7 @@ exports.index = function(req,res){
             ,doc : doc
             ,pjax : pjax
             ,cat : cat
+            ,jsflg : 'doctor'
           })
         });
         return;
@@ -55,6 +56,7 @@ exports.index = function(req,res){
          ,cat : cat
          ,pjax : pjax
          ,med : doc
+         ,jsflg : 'doctor'
         })
       }) 
       return;
@@ -66,6 +68,7 @@ exports.index = function(req,res){
        ,cur : 'doctor'
        ,cat : cat
        ,pjax : pjax
+       ,jsflg : 'doctor'
       });
       return;
     }
@@ -146,6 +149,7 @@ exports.ask = function(req,res){
       ,cat : '/ask'
       ,doc : doc
       ,pjax : pjax
+      ,jsflg : 'doctor'
     });
   });
 
@@ -182,6 +186,7 @@ exports.medicine = function(req,res){
         ,cat : '/medicine'
         ,doc : doc
         ,pjax : pjax
+        ,jsflg : 'doctor'
       });
     });
 

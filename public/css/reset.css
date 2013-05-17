@@ -235,12 +235,14 @@ nav li a{
   z-index: 1025;
 }
 .popbox{
-  width: 800px;
-  height: 600px;
+  width: 400px;
   position: fixed;
   left: 50%;
   top: 50%;
-  margin: -300px 0 0 -400px;
+  margin: -200px 0 0 -200px;
   z-index: 9999;
+}
+.popbox .mod-grey-bd{
+  max-height: 300px;
   overflow: auto;
 }

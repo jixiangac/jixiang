@@ -29,6 +29,7 @@ exports.index = function(req,res){
          ,cur : 'service'
          ,doc : doc
          ,pjax : pjax
+         ,jsflg : 'service'
         })
       })
       return;
@@ -51,6 +52,7 @@ exports.index = function(req,res){
            ,doc : doc
            ,detail : true
            ,pjax : pjax
+           ,jsflg : 'service'
           });
         })
         return;
@@ -79,6 +81,7 @@ exports.index = function(req,res){
          ,doc : doc
          ,detail : false
          ,pjax : pjax
+         ,jsflg : 'service'
         });
       });
       return;
@@ -90,6 +93,7 @@ exports.index = function(req,res){
         ,cat : cat
         ,cur : 'service'
         ,pjax : pjax
+        ,jsflg : 'service'
       })
       return;
     }
@@ -161,6 +165,7 @@ exports.service = function(req,res){
         ,cat : '/ask'
         ,doc : doc
         ,pjax : pjax
+        ,jsflg : 'service'
       });
     });
   }else if(req.method == 'POST'){

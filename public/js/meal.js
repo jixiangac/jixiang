@@ -10,81 +10,122 @@ define(function(require,exports,module){
     * i标签 为数量
     * 
     */
-   jixiang.addHandler(jixiang.$('meal-detail-list'),'click',function(event){
-     var e = event || window.event;
-     var target = e.target || e.srcElement;
-     e.preventDefault();
-     while(target.tagName.toLowerCase() !== 'a'){
-        target = target.parentNode;
-        if(target.tagName.toLowerCase() === 'body')return;
-     }
+   if(document.getElementById('meal-detail-list')){
+     jixiang.addHandler(jixiang.$('meal-detail-list'),'click',function(event){
+       var e = event || window.event;
+       var target = e.target || e.srcElement;
+       e.preventDefault();
+       while(target.tagName.toLowerCase() !== 'a'){
+          target = target.parentNode;
+          if(target.tagName.toLowerCase() === 'body')return;
+       }
 
-     if( !jixiang.hasClass(target,'meal-selected') ){
-        target.className += ' meal-selected';
-     }else{
-        var re = target.className.replace(/\s*meal-selected/,'');
-        var i = target.getElementsByTagName('i');
-        if(i.length)i[0].parentNode.removeChild(i[0]);
-        target.className = re;
-     }
-   });
+       if( !jixiang.hasClass(target,'meal-selected') ){
+          target.className += ' meal-selected';
+       }else{
+          var re = target.className.replace(/\s*meal-selected/,'');
+          var i = target.getElementsByTagName('i');
+          if(i.length)i[0].parentNode.removeChild(i[0]);
+          target.className = re;
+       }
+     });
+   }
    /**
     * 生成订单
     * 
     */
-   jixiang.addHandler(jixiang.$('meal-sub'),'click',function(){
-     var self = this;
-     this.disabled = true;
-     var box = '<div class="mod-grey">'
-                 +'<div class="mod-grey-hd"><h3>你的购买清单是：</h3></div>'
-                 +'<div class="mod-grey-bd mod-grey-bd-pd20">';
-     var meals = jixiang.getByClass('business-item');
-     var len = meals.length;
-     var i = 0;
-     var orders = [];
-     while(i < len){
-       if( jixiang.hasClass(meals[i],'meal-selected') ){
-          var text = meals[i].getElementsByTagName('span')[0].innerHTML;
-          var num = meals[i].getElementsByTagName('i').length ? 
-                        meals[i].getElementsByTagName('i')[0].innerHTML : 1;
-          // orders[text] = num;
-          var order = [text,num];
-          orders.push(order);
-          box += '<p>'+ text +'&nbsp;<span>数量：'+num+'</span></p>';
-       }
-       i++;
-     }
-
-     box += '<button id="order-ok" class="btn btn-info">确认选购</button><button id="cancel" class="btn">我再想想</button></div></div>'
-     
-     new popbox.init(box);
-     /**
-      * 确认选购
-      */
-     jixiang.addHandler(jixiang.$('order-ok'),'click',function(){
-        var options = {
-          url : window.location.href
-         ,type : 'post'
-         ,data : jixiang.serializeData({orders:JSON.stringify(orders)})
-         ,callback : function(res){
-            alert(res.msg)
+   if(document.getElementById('meal-sub')){
+     jixiang.addHandler(jixiang.$('meal-sub'),'click',function(){
+       var self = this;
+       this.disabled = true;
+       var box = '<div class="mod-grey">'
+                   +'<div class="mod-grey-hd"><h3>你的购买清单是：</h3></div>'
+                   +'<div class="mod-grey-bd mod-grey-bd-pd20">'
+                      +'<table class="order">'
+                         +'<thead><tr><th>名称</th><th>数量</th><th>单价</th></tr></thead>'
+                         +'<tbody>';
+       var meals = jixiang.getByClass('business-item');
+       var len = meals.length;
+       var i = 0;
+       var orders = [];
+       var total = 0;
+       while(i < len){
+         if( jixiang.hasClass(meals[i],'meal-selected') ){
+            var text = meals[i].getElementsByTagName('span')[0].innerHTML;
+            var num = meals[i].getElementsByTagName('i').length ? 
+                          parseInt(meals[i].getElementsByTagName('i')[0].innerHTML,10) : 1;
+            var price = meals[i].getElementsByTagName('em').length ?
+                          parseInt(meals[i].getElementsByTagName('em')[0].innerHTML,10) : 0;
+            total += price*num;
+            var order = [text,num,price];
+            orders.push(order);
+            box += '<tr><td>'+ text +'</td><td>'+ num +'</td><td>'+price*num+'&nbsp;元</td></tr>';
          }
-        }
-        jixiang.ajax(options);
-     });
-     /**
-      * 取消选购
-      */
-     jixiang.addHandler(jixiang.$('cancel'),'click',function(){
-        var pop = jixiang.getByClass('popbox')[0];
-        var overlay = jixiang.getByClass('overlay')[0];
-        pop.parentNode.removeChild(pop);
-        overlay.parentNode.removeChild(overlay);
-        self.disabled = false;
-     });
-   });
+         i++;
+       }
 
-
+       box += '<tr><td colspan="3">总价：'+total+'&nbsp;元</td></tr>'
+              +'</tbody></table></div>'
+              +'<div class="mod-grey-ft">'
+               +'<button id="order-ok" class="btn btn-info ml10">确认选购</button>'
+               +'<button id="cancel" class="btn ml10">我再想想</button>'
+              +'</div>'
+           +'</div>';
+       
+       new popbox.init(box);
+       //确认选购
+       jixiang.addHandler(jixiang.$('order-ok'),'click',function(){
+          var options = {
+            url : window.location.href
+           ,type : 'post'
+           ,data : jixiang.serializeData({orders:JSON.stringify(orders),total:total})
+           ,callback : function(res){
+              alert(res.msg)
+           }
+          }
+          jixiang.ajax(options);
+       });
+       //消选购
+       jixiang.addHandler(jixiang.$('cancel'),'click',function(){
+          var pop = jixiang.getByClass('popbox')[0];
+          var overlay = jixiang.getByClass('overlay')[0];
+          pop.parentNode.removeChild(pop);
+          overlay.parentNode.removeChild(overlay);
+          self.disabled = false;
+       });
+     });    
+   }
+   if(typeof order !== 'undefined' && order.length){
+       var box = '<div class="mod-grey">'
+                   +'<div class="mod-grey-hd"><h3>你有 '+order.length+' 个正在配送的订单：</h3></div>'
+                   +'<div class="mod-grey-bd mod-grey-bd-pd20">'
+                      +'<table class="order">'
+                         +'<thead><tr><th>名称</th><th>数量</th><th>单价</th></tr></thead>'
+                         +'<tbody>';
+       var len = order.length;
+       var i = 0;
+       while( i < len){
+         var o = order[i].list;
+         for(var key in o){
+           box += '<tr><td>'+ o[key][0] +'</td><td>'+o[key][1]+'</td><td>'+o[key][2]+'&nbsp;元</td></tr>';
+         }
+         box += '<tr><td colspan="3">总价：'+order[i].total+'&nbsp;元</td></tr>'
+         i++;
+       }
+       box += '</tbody></table></div>'
+              +'<div class="mod-grey-ft">'
+               +'<button id="cancel" class="btn btn-info ml10">我知道了</button>'
+              +'</div>'
+           +'</div>';
+       new popbox.init(box);
+       //关闭
+       jixiang.addHandler(jixiang.$('cancel'),'click',function(){
+          var pop = jixiang.getByClass('popbox')[0];
+          var overlay = jixiang.getByClass('overlay')[0];
+          pop.parentNode.removeChild(pop);
+          overlay.parentNode.removeChild(overlay);
+       });
+   }
    
 })
 //  //喜欢

@@ -3,6 +3,11 @@
  * @Author       jixiangac
  * @E-mail       jixiangac@gmail.com
  */
+@import 'base.css';
+@import 'animate.css';
+@import 'form.css';
+@import 'table.css';
+
 /*= 发布公告
 ------------*/
 .issue-notice{

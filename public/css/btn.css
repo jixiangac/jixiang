@@ -12,7 +12,7 @@
 .btn {
   position: relative;
   padding: 6px 18px;
-  margin: 0;
+  /*margin: 0;*/
   color: #333;
   text-shadow: 0 1px 0 #fff;
   white-space: nowrap;
