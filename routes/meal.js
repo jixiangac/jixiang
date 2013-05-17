@@ -5,38 +5,57 @@ var config = require('../config');
 var jixiang = require('../models/base');
 var utils = require('../models/utils');
 
+var renderModel = {
+  title : config.name + '订餐'
+ ,user : req.session.user
+ ,cur : 'meal'
+ ,data : data
+ ,pjax : false
+ ,jsflg : 'meal'          
+}
+
 //订餐首页
 var index = function(req,res){
-     var condition = {
-      query: {
-        handpick: '1'
-      },
-      sort: {
-        _id: -1
-      },
-      limit: 4
-     }
+   var data = {};//要发送的数据
+   if(req.method === 'GET'){
 
-     jixiang.get(condition,'meals',function(err, meals) {
-      if(err) {
-        meals = [];
-      }
-      jixiang.count({sendstatus:false,donestatus:false},'orders',function(err,subLen){
-        jixiang.count({sendstatus:true,donestatus:false},'orders',function(err,sendLen){
-          res.render('./meal/index', {
-            title: '订餐',
-            user: req.session.user,
-            meals: meals,
-            subLen : subLen,
-            sendLen : sendLen,
-            cur: 'meal',
-            cat: '',
-            pjax : false,
-            jsflg : 'meal'
-          });
-        })
-      });
-     });
+     function render(){
+        var reders = renderModel;
+        res.render('./meal/index',renders)
+     }
+   }else if(req.method === 'POST'){
+
+   }
+     // var condition = {
+     //  query: {
+     //    handpick: '1'
+     //  },
+     //  sort: {
+     //    _id: -1
+     //  },
+     //  limit: 4
+     // }
+
+     // jixiang.get(condition,'meals',function(err, meals) {
+     //  if(err) {
+     //    meals = [];
+     //  }
+     //  jixiang.count({sendstatus:false,donestatus:false},'orders',function(err,subLen){
+     //    jixiang.count({sendstatus:true,donestatus:false},'orders',function(err,sendLen){
+     //      res.render('./meal/index', {
+     //        title: '订餐',
+     //        user: req.session.user,
+     //        meals: meals,
+     //        subLen : subLen,
+     //        sendLen : sendLen,
+     //        cur: 'meal',
+     //        cat: '',
+     //        pjax : false,
+     //        jsflg : 'meal'
+     //      });
+     //    })
+     //  });
+     // });
 }
 //商家菜单
 exports.shop = function(req,res){
@@ -53,7 +72,16 @@ exports.shop = function(req,res){
         res.render('./meal/shop',renders);
      }
   }else if(req.method === 'POST'){
-
+     var order = {
+        user : req.session.user.username
+       ,list : req.body.orders
+       ,ordertime : new Date()*1
+       ,isDone : false
+     }
+     jixiang.save(order,'orders',function(err,doc){
+        if(err)return res.json({success:false,msg:'出现了一点小问题，订购没有成功！'});
+        return res.json({success:true,msg:'订购成功！'});
+     });
   }
 }
 //菜品详情

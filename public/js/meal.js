@@ -47,9 +47,8 @@ define(function(require,exports,module){
           var text = meals[i].getElementsByTagName('span')[0].innerHTML;
           var num = meals[i].getElementsByTagName('i').length ? 
                         meals[i].getElementsByTagName('i')[0].innerHTML : 1;
-          var order = [];
-          order.push(text);
-          order.push(num);
+          // orders[text] = num;
+          var order = [text,num];
           orders.push(order);
           box += '<p>'+ text +'&nbsp;<span>数量：'+num+'</span></p>';
        }
@@ -66,11 +65,9 @@ define(function(require,exports,module){
         var options = {
           url : window.location.href
          ,type : 'post'
-         ,data : jixiang.serializeData(orders)
+         ,data : jixiang.serializeData({orders:JSON.stringify(orders)})
          ,callback : function(res){
-            if(res.success){
-              alert('请等待配送！')
-            }
+            alert(res.msg)
          }
         }
         jixiang.ajax(options);
