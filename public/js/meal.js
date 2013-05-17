@@ -3,17 +3,22 @@
  */
 define(function(require,exports,module){
    var jixiang = require('./models/base');
-
+   var popbox = require('./models/popbox');
+   /**
+    * 订餐选择
+    * 
+    * i标签 为数量
+    * 
+    */
    jixiang.addHandler(jixiang.$('meal-detail-list'),'click',function(event){
      var e = event || window.event;
      var target = e.target || e.srcElement;
      e.preventDefault();
-
      while(target.tagName.toLowerCase() !== 'a'){
         target = target.parentNode;
+        if(target.tagName.toLowerCase() === 'body')return;
      }
-     if(target.tagName.toLowerCase() !== 'a')return;
-    
+
      if( !jixiang.hasClass(target,'meal-selected') ){
         target.className += ' meal-selected';
      }else{
@@ -23,6 +28,66 @@ define(function(require,exports,module){
         target.className = re;
      }
    });
+   /**
+    * 生成订单
+    * 
+    */
+   jixiang.addHandler(jixiang.$('meal-sub'),'click',function(){
+     var self = this;
+     this.disabled = true;
+     var box = '<div class="mod-grey">'
+                 +'<div class="mod-grey-hd"><h3>你的购买清单是：</h3></div>'
+                 +'<div class="mod-grey-bd mod-grey-bd-pd20">';
+     var meals = jixiang.getByClass('business-item');
+     var len = meals.length;
+     var i = 0;
+     var orders = [];
+     while(i < len){
+       if( jixiang.hasClass(meals[i],'meal-selected') ){
+          var text = meals[i].getElementsByTagName('span')[0].innerHTML;
+          var num = meals[i].getElementsByTagName('i').length ? 
+                        meals[i].getElementsByTagName('i')[0].innerHTML : 1;
+          var order = [];
+          order.push(text);
+          order.push(num);
+          orders.push(order);
+          box += '<p>'+ text +'&nbsp;<span>数量：'+num+'</span></p>';
+       }
+       i++;
+     }
+
+     box += '<button id="order-ok" class="btn btn-info">确认选购</button><button id="cancel" class="btn">我再想想</button></div></div>'
+     
+     new popbox.init(box);
+     /**
+      * 确认选购
+      */
+     jixiang.addHandler(jixiang.$('order-ok'),'click',function(){
+        var options = {
+          url : window.location.href
+         ,type : 'post'
+         ,data : jixiang.serializeData(orders)
+         ,callback : function(res){
+            if(res.success){
+              alert('请等待配送！')
+            }
+         }
+        }
+        jixiang.ajax(options);
+     });
+     /**
+      * 取消选购
+      */
+     jixiang.addHandler(jixiang.$('cancel'),'click',function(){
+        var pop = jixiang.getByClass('popbox')[0];
+        var overlay = jixiang.getByClass('overlay')[0];
+        pop.parentNode.removeChild(pop);
+        overlay.parentNode.removeChild(overlay);
+        self.disabled = false;
+     });
+   });
+
+
    
 })
 //  //喜欢

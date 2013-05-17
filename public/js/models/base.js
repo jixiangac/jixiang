@@ -148,7 +148,7 @@ define(function(require,exports,module){
       Ajax封装
    --------------*/
   function ajax(options) {
-
+     
       var options = {
         url : options.url || '/'
        ,async : !options.async
@@ -157,6 +157,7 @@ define(function(require,exports,module){
        ,callback : options.callback || null
        ,errorCallback : options.errorCallback || null
       }
+
       var xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function() {
         if(xhr.readyState == 4) {

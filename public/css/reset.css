@@ -222,3 +222,25 @@ nav li a{
   vertical-align: top;
   padding: 13px 0;
 }
+
+
+/*默认弹窗类*/
+.overlay{
+  width: 100%;
+  height: 100%;
+  background: #3C3C3C;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1025;
+}
+.popbox{
+  width: 800px;
+  height: 600px;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  margin: -300px 0 0 -400px;
+  z-index: 9999;
+  overflow: auto;
+}
