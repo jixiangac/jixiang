@@ -1,32 +1,13 @@
 extends ../layouts/header
 block content
-  - if (!pjax){
-    | <div id="container" class="container clearfix">
-  -}
-    if !pjax
-      //侧边导航
-      include ../layouts/aside
-    - if(!pjax){
-       | <article id="content" class="meal">
-       |   <div class="wrap">
-    - }
-       if !pjax
-          section#doctor-nav.nav
-            ul#tab.doctor-nav
-              - var services=[{text:'家政服务',sub:'家电维修，搬运，保姆，打扫',cat:'1'},{text:'养老政策',sub:'养老政策信息',cat:'2'},{text:'政策咨询',sub:'咨询养老政策',cat:'3'}]
-                each service,i in services
-                   - var cur = '',last=''
-                   if i == 0
-                     - cur = 'cur'
-                   if i == services.length-1
-                     - last ='last'
-                   li(class=last)
-                     a.pjax(class=cur,href="/service?cat=#{service.cat}") #{service.text}
-                       span #{service.sub}
-        - if(!pjax){
-          | <section id="pjax-container">
-        - }
-          //- p#tips 您想干嘛点什么？点击上面吧
+  #container
+      article.mod-grey.clearfix
+        section.mod-grey-hd
+          a(href="/services") 服务选择 
+          a.ml10.mr10 »
+          -var cats=['','家政预约','养老政策','政策咨询']
+          a #{cats[cat]}
+        section.mod-grey-bd.mod-grey-bd-pd20
           if cat == 1
             //家政服务
             if !doc
@@ -84,12 +65,11 @@ block content
           if cat == 2
             if !detail
               //养老政策
-              table.table.order-table
-                thead.tab-title
-                  tr
-                    th 标题
-                    th.reply 时间
+              table.order.order-w980
                 tbody
+                  tr
+                    td 标题
+                    td.reply 时间
                   if !!doc.length
                     each item in doc
                       tr
@@ -98,11 +78,10 @@ block content
                         td.reply 2012-02-31
             else
              //养老政策文章页
-             table.table.order-table
-               thead.tab-title
-                 tr
-                   th= doc.title
+             table.order.order-w980
                tbody
+                tr
+                   td= doc.title
                  tr
                   td
                     p= doc.content
@@ -114,14 +93,8 @@ block content
                   input#q(type="text",name="q")
                   button#qsub.btn 提交问题
             #answer.flow-mod 你好，我是养老小机器人，有什么问题就问我吧！
-    - if(!pjax){
-      |         </section>
-      |      </div>
-      |   </article>
-      | </div>
-    - }
-block script
-  script(src="/js/service.js")
-  script(src="/js/doctor.js")
-  if cat == 3
-    #service-js
+//- block script
+//-   script(src="/js/service.js")
+//-   script(src="/js/doctor.js")
+//-   if cat == 3
+//-     #service-js

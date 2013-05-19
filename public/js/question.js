@@ -1,45 +1,49 @@
 /**
  * 问题JS
  */
-var qForm = jixiang.$('question');
-if(!!qForm){
-  var q = jixiang.$('q');
-  var sub = jixiang.$('qsub');
-  var cat = parseInt(qForm.name,10);
+define(function(require,exports,module){
+  var jixiang = require('./models/base');
+
+  var qInput = jixiang.$('q');
+  var cat = parseInt(this.name,10) || 0;
   var hadQ = '';
+  var answer = jixiang.$('answer');
+  var hadClick = false;//是否点击过 +1,-1
+
   var handler = function(event){
     var e = event || window.event;
+    var target = e.target || e.srcElement;
     e.preventDefault();
+
     var question=q.value.replace(/\s+/g,'');
+    //问题为空就阻止提交
     if(question.length===0){
        alert('写几个字吧？');
        q.value='';
        q.focus();
        return;
     }
+    //提交的是上一个问题阻止掉
     if(question == hadQ ){
       alert('这个问题的答案就在下面哦！');
       q.value='';
       q.focus();
       return;
     }
-    if(cat == 1){//问医类问题
+    
+    //问题分类
+    if(cat == 1){
       question = '@问医：'+ question;
-    }else if(cat == 2){//养老政策类问题
+    }else if(cat == 2){
       question = '#政策#' + question;
     }
-    sub.className = 'common-btn grey-btn';
-    sub.innerHTML = '提交中..';
-    Utils.removeHandler(sub,'click',handler);
-    //发送
-    var url = qForm.getAttribute('action');
-    var type = qForm.getAttribute('method');
-    var data = {
-      question : question
-    }
-    var result = function(res){
+
+    var btns = target.getElementsByTagName('button')[0];
+    btns.disabled = true;
+    btns.innerHTML = '提交中..';
+    //回调函数
+    var callback = function(res){
        hadQ = question;
-       var answer = jixiang.$('answer');
        if(res.flg==1){
           // console.log(res.answer)
           answer.innerHTML = res.answer;
@@ -47,17 +51,16 @@ if(!!qForm){
           var data = res.answers;
           var a_title = '<h3>'+data.title+'</h3>';
           var a_content = '<p>'+data.content+'</p>';
-          var btn = '<div class="review"><span class="useless">'
-                           +'<a name="'+data._id+'" class="useless-btn" id="useless-btn">没用</a>'
+          var btnText = '<div class="review"><span class="useless">'
+                           +'<a name="'+data._id+'" class="useless-btn" id="useless-btn" role="btn">没用</a>'
                            +'<em>'+data.useless+'</em>'
                       +'</span>'
                       +'<span class="useful">'
-                        +'<a name="'+data._id+'" class="useful-btn" id="useful-btn">有用</a>'
+                        +'<a name="'+data._id+'" class="useful-btn" id="useful-btn" role="btn">有用</a>'
                         +'<em>'+data.useful+'</em>'
                     +'</div>';
-          answer.innerHTML = a_title+a_content+btn;
-          Utils.addHandler(jixiang.$('useless-btn'),'click',review);
-          Utils.addHandler(jixiang.$('useful-btn'),'click',review);
+          answer.innerHTML = a_title+a_content+btnText;
+          hadClick = false;
        }else if(res.flg == 3){
          var info = res.answer;
          var html = '<div class="douban"><ul>';
@@ -99,50 +102,71 @@ if(!!qForm){
          answer.innerHTML = html;
        }
       q.value='';
-      sub.innerHTML = '1秒后可再提问';
+      btns.innerHTML = '1秒后可再提问';
       setTimeout(function(){
-        sub.className = 'common-btn pink-btn';
-        sub.innerHTML = '提交问题';
-        Utils.addHandler(sub,'click',handler);            
+        btns.disabled = false;
+        btns.innerHTML = '提交问题';            
       },1000);
     }
+    //错误发生后的回调
     var errorCallback = function(){
-      var answer = jixiang.$('answer');
       answer.innerHTML = '这个问题让我好像崩溃了，要不你再问问其他的！';
       q.value='';
-      sub.innerHTML = '1秒后可再提问';
+      btns.innerHTML = '1秒后可再提问';
       setTimeout(function(){
-        sub.className = 'common-btn pink-btn';
-        sub.innerHTML = '提交问题';
-        Utils.addHandler(sub,'click',handler);            
+        btns.disabled = false;
+        btns.innerHTML = '提交问题';          
       },1000);
     }
-    ajax(url,type,serializeData(data),result,errorCallback);
+    //提交的数据和回调参数
+    var options = {
+       url : this.getAttribute('action')
+      ,data : jixiang.serializeData({question:question})
+      ,callback : callback
+      ,errorCallback : errorCallback
+    }
+    jixiang.ajax(options);
   }
 
-  Utils.addHandler(sub,'click',handler);
+  jixiang.addHandler(jixiang.$('question'),'submit',handler);
 
-  var review = function(){
-      var self = this;
-      var id = parseInt(this.getAttribute('name'),10);
-      var data = {
-        id : id
-      };
-      if(self.id == 'useless-btn'){
-         data.review = 0;
-      }else if(self.id == 'useful-btn'){
-         data.review = 1;
-      }
-      var result = function(res){
-         if(res.flg == 1){
-           var next = self.nextSibling;
-           while(next.nodeType !==1){
-             next=next.nextSibling;
-           }
-           next.innerHTML = (parseInt(next.innerHTML,10)+1);
-           Utils.removeHandler(self,'click',review);
+  //回应+1 -1操作
+  function review(event){
+    var e = event || window.event;
+    var target = e.target || e.srcElement;
+    e.preventDefault();
+
+    while(target.tagName.toLowerCase() !== 'a'){
+      target = target.parentNode;
+      if(target.id === 'answer')break;
+    }
+    if(target.getAttribute('role') !== 'btn')return;
+    if(hadClick)return;
+    hadClick = true;
+
+    var data = {
+      id : parseInt(target.getAttribute('name'),10)
+     ,review : (target.id === 'useful-btn') ? 1 : 0
+    }
+
+    var callback = function(res){
+       if(res.flg == 1){
+         var next = target.nextSibling;
+         while(next.nodeType !==1){
+           next=next.nextSibling;
          }
-      }
-      ajax('/question/review','post',serializeData(data),result);
+         next.innerHTML = (parseInt(next.innerHTML,10)+1);
+       }
+    }
+
+    var options = {
+      url : '/question/review'
+     ,data : jixiang.serializeData(data)
+     ,callback : callback
+    }
+    jixiang.ajax(options);
   }
-}
+ 
+  jixiang.addHandler(jixiang.$('answer'),'click',review);
+
+});

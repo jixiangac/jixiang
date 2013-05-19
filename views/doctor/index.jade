@@ -1,123 +1,127 @@
 extends ../layouts/header
 block content
-   #container.container.clearfix
-    article#content.meal
-      .wrap
-        #section#pjax-container
-          if cat == 1
-            //问诊预约
-            if !doc
-              form#wen-form(class="form form-inline",method="post",action="/doctor?cat=1")
-                fieldset
-                  .form-item
-                    label 预约时间
-                    select#yuMonth(name="yuMonth")
-                      -var month =new Date();
-                      -for(var i=month.getMonth()+1;i<=12;i++)
-                        option(value="#{i}")!{i}月
-                    select#yuDay(name="yuDay")
-                      -for(var i=month.getDate();i<=31;i++)
-                        option(value="#{i}")!{i}日
-                     select#yuTime(name="yuTime")
-                       option(value="上午") 上午
-                       option(value="下午") 下午
-                       option(value="晚上") 晚上
-                    //- span 填写预约时间
-                  .form-item
-                    label(for="doctors") 预约医师
-                    input#doctors(type="text",name="doctors")
-                    //- span 如果没有就不用填写
-                  .form-item
-                    label.fl-l 病情简述
-                    textarea.bootstrap(rows="5",cols="37",name="patient")
-                    //- span 简单描述一下你的病情，让医生更好对诊
-                  .form-item.form-actions
-                    button(class="btn",type="submit") 提交预约
-            else
-              table.table.table-top.order-table
-                caption #{doc.time} #{doc.time_b}的预约申请
-                  if !doc.reply
-                    span.fl-l(style="color:red")未答复
-                  else
-                    span.fl-l 已回复
-                tbody
-                  tr
-                    td.reply 概况
-                    td
-                      if !!doc.doctor.length
-                        a 预约医师：#{doc.doctor}
-                        br
-                      a 病情简述：#{doc.paitent}
-                    if doc.reply
-                      tr
-                        td.reply 回复
-                        td
-                          a(style="color:green") #{doc.agreereply}
-                          if !!doc.replycontent
-                            br
-                            a 备注：#{doc.replycontent} 
-          if cat == 2
-            //药品托购
-            if !med
-              a#add-med.btn-reply 增加一条
-              table#med-table.table.table-top.order-table.form-inline.medicine-form
-                thead.tab-title
-                  tr
-                    th.reply 药品名称
-                    th.reply 药品数量
-                    th 描述
-                    th.reply 操作
-                tbody
-                  tr#no-med
-                    td(colspan="4")
-                      a 还没有托购信息，点击【增加一条】进行添加，全部添加完成后请点击【提交】
-                tfoot
-                  tr#med-sub.hide
-                    td(colspan="4")
-                      a.btn 提交药品托购
-                  tr#med-model.hide
-                    td.med-name 
-                      input.med-name.med-item(type="text")
-                    td.reply
-                      select.med-item(name="mednum")
-                        -for(var i=1;i<=10;i++)
-                          option(value="#{i}") #{i}
-                    td 
-                      input.med-description.med-item(type="text")
-                    td.reply.btn-control
-                       a.btn-reply.med-save 保存
-                       a.btn-reply.med-cancel 取消
-            else
-             if !med.reply
-               a 这是您在 #{med.time} 提交的托购药品的信息，目前还没有回音
-             else
-               a 当你领取了药品后，管理员确认后，你才可以发起新的申请，这里是你上次的药品清单
-             table#show-med.table.table-top.order-table.form-inline.medicine-form
-                thead.tab-title
-                  tr
-                    th.reply 药品名称
-                    th.reply 药品数量
-                    th 描述
-                tbody
-                  each item in med.medlist
-                    tr
-                      td.med-name= item.name
-                      td.reply= item.num
-                      td= item.description
-                if !!med.reply
-                  tfoot
+   #container
+    article.mod-grey.clearfix
+      section.mod-grey-hd
+        a(href="/services") 服务选择 
+        a.ml10.mr10 »
+        -var cats=['','问诊预约','药品购买','医学咨询']
+        a #{cats[cat]}
+      section.mod-grey-bd.mod-grey-bd-pd20
+        if cat == 1
+          //问诊预约
+          if !doc
+            form#wen-form(class="form form-inline",method="post",action="/doctor?cat=1")
+              fieldset
+                .form-item
+                  label 预约时间
+                  select#yuMonth(name="yuMonth")
+                    -var month =new Date();
+                    -for(var i=month.getMonth()+1;i<=12;i++)
+                      option(value="#{i}")!{i}月
+                  select#yuDay(name="yuDay")
+                    -for(var i=month.getDate();i<=31;i++)
+                      option(value="#{i}")!{i}日
+                   select#yuTime(name="yuTime")
+                     option(value="上午") 上午
+                     option(value="下午") 下午
+                     option(value="晚上") 晚上
+                  //- span 填写预约时间
+                .form-item
+                  label(for="doctors") 预约医师
+                  input#doctors(type="text",name="doctors")
+                  //- span 如果没有就不用填写
+                .form-item
+                  label.fl-l 病情简述
+                  textarea.bootstrap(rows="5",cols="37",name="patient")
+                  //- span 简单描述一下你的病情，让医生更好对诊
+                .form-item.form-actions
+                  button(class="btn",type="submit") 提交预约
+          else
+            table.order
+              tbody
+                tr
+                  td(colspan="2") #{doc.time} #{doc.time_b}的预约申请
+                if !doc.reply
+                  span.fl-l(style="color:red")未答复
+                else
+                  span.fl-l 已回复
+                tr
+                  td.reply 概况
+                  td
+                    if !!doc.doctor.length
+                      a 预约医师：#{doc.doctor}
+                      br
+                    a 病情简述：#{doc.paitent}
+                  if doc.reply
                     tr
                       td.reply 回复
-                      td(colspan="2")
-                        a #{med.replycontent} 
-          if cat == 3
-            //医学咨询
-            form#question(class="form form-inline",method="post",action="/question",name="1")
-                .form-item
-                  label(for="q-remark") 提点问题
-                  input#q(type="text",name="q")
-                  button#qsub.btn 提交问题
-            #answer.flow-mod 你好，我是问医小机器人，有什么问题就问我吧！
+                      td
+                        a(style="color:green") #{doc.agreereply}
+                        if !!doc.replycontent
+                          br
+                          a 备注：#{doc.replycontent} 
+        if cat == 2
+          //药品托购
+          if !med
+            a#add-med.btn-reply 增加一条
+            table#med-table.order
+              tbody
+                tr
+                  td.reply 药品名称
+                  td.reply 药品数量
+                  td 描述
+                  td.reply 操作
+                tr#no-med
+                  td(colspan="4")
+                    a 还没有托购信息，点击【增加一条】进行添加，全部添加完成后请点击【提交】
+              tfoot
+                tr#med-sub.hide
+                  td(colspan="4")
+                    a.btn 提交药品托购
+                tr#med-model.hide
+                  td.med-name 
+                    input.med-name.med-item(type="text")
+                  td.reply
+                    select.med-item(name="mednum")
+                      -for(var i=1;i<=10;i++)
+                        option(value="#{i}") #{i}
+                  td 
+                    input.med-description.med-item(type="text")
+                  td.reply.btn-control
+                     a.btn-reply.med-save 保存
+                     a.btn-reply.med-cancel 取消
+          else
+           if !med.reply
+             a 这是您在 #{med.time} 提交的托购药品的信息，目前还没有回音
+           else
+             a 当你领取了药品后，管理员确认后，你才可以发起新的申请，这里是你上次的药品清单
+           table#show-med.table.table-top.order-table.form-inline.medicine-form
+              thead.tab-title
+                tr
+                  th.reply 药品名称
+                  th.reply 药品数量
+                  th 描述
+              tbody
+                each item in med.medlist
+                  tr
+                    td.med-name= item.name
+                    td.reply= item.num
+                    td= item.description
+              if !!med.reply
+                tfoot
+                  tr
+                    td.reply 回复
+                    td(colspan="2")
+                      a #{med.replycontent} 
+        if cat == 3
+          //医学咨询
+          form#question(class="form form-inline",method="post",action="/question",name="1")
+              .form-item
+                label(for="q-remark") 提点问题
+                input#q(type="text",name="q")
+                button#qsub.btn 提交问题
+          #answer.flow-mod 你好，我是问医小机器人，有什么问题就问我吧！
 block script
   //- script
   //-   //tab

@@ -260,7 +260,7 @@ article.detail{
 
 /* = 问题咨询
 --------------*/
-section.question{
+/*section.question{
   padding-bottom: 10px;
 }
 #question-wrap{
@@ -276,8 +276,8 @@ section.question{
   font-size:14px;
   margin: 0 7px;
   width:478px;
-}
-#question-wrap .common-btn{
+}*/
+/*#question-wrap .common-btn{
   padding: 6px 31px;
   font-size: 13px;
   border: none;
@@ -286,8 +286,8 @@ section.question{
 #question-wrap input:focus{
   border-color: #CA8687;
   outline: 0;
-  outline: thin dotted \9;/* IE6-9 */
-}
+  outline: thin dotted \9;
+}*/
 #answer{
   margin-top: 20px;
   width: 710px;
