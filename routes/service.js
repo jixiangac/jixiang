@@ -66,14 +66,14 @@ exports.index = function(req,res){
         }
         jixiang.getOne(query,'question',function(err,doc){
           res.render('./service/index',{
-            title : '家政'
+            title : '养老政策-'+doc.title
            ,user : req.session.user
            ,cat : cat
-           ,cur : 'service'
+           ,cur : 'question'
            ,doc : doc
            ,detail : true
            ,pjax : pjax
-           ,jsflg : 'service'
+           ,jsflg : 'question'
           });
         })
         return;
@@ -95,26 +95,26 @@ exports.index = function(req,res){
         }
         console.log(doc)
         res.render('./service/index',{
-          title : '家政'
+          title : '养老政策'
          ,user : req.session.user
          ,cat : cat
-         ,cur :'service'
+         ,cur :'question'
          ,doc : doc
          ,detail : false
          ,pjax : pjax
-         ,jsflg : 'service'
+         ,jsflg : 'question'
         });
       });
       return;
     }
     if(cat == 3){
       res.render('./service/index',{
-         title : '家政'
+         title : '问题咨询-政策咨询'
         ,user : req.session.user
         ,cat : cat
-        ,cur : 'service'
+        ,cur : 'question'
         ,pjax : pjax
-        ,jsflg : 'service'
+        ,jsflg : 'question'
       })
       return;
     }

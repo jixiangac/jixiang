@@ -3,13 +3,33 @@ block content
   #container
     article.mod-grey.clearfix
       section.mod-grey-hd
-        h3  问题咨询
+        a 问题咨询
+        a.ml10.mr10 »
+        a 咨询首页
+      section.mod-grey-hd
+        .q-nav
+          a.btn.mr20.btn-inverse 咨询首页
+          a.btn.mr20(href="/doctor?cat=3") 医学咨询
+          a.btn.mr20(href="/service?cat=3") 政策咨询
+          a.btn.mr20(href="#") 常见问题
+          a.btn.mr20(href="/service?cat=2") 养老政策       
       section.mod-grey-bd.mod-grey-bd-pd20
         form#question.form.form-inline(action="/question",method="post",autocomplete="off")
           .form-item
             label(style="width:120px;") 提问点什么吧？
             input#q(type="text",name="q")
-            button#qsub.btn.ml20(type="submit") 提交问题
-        #answer.flow-mod 有什么问题就在上面提出吧，输入help或者帮助可以得到使用说明。
-//- block script
-//-   script(src="/js/question.js")
+            button#qsub.btn.btn-info.ml20(type="submit") 提交问题
+        #answer.flow-mod 
+          p 输入help或者帮助可以得到使用说明。
+          p 如果只想咨询医学相关内容，请点击导航处的
+            b.mlr5 [医学咨询]
+            |按钮
+          p 如果只想咨询政策相关内容，请点击导航处的
+            b.mlr5 [政策咨询]
+            |按钮
+          p 查看常见问题，请点击导航处的
+            b.mlr5 [常见问题]
+            |按钮
+          p 查看养老政策，请点击导航处的
+            b.mlr5 [养老政策]
+            |按钮

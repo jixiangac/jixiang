@@ -5,7 +5,6 @@ define(function(require,exports,module){
   var jixiang = require('./models/base');
 
   var qInput = jixiang.$('q');
-  var cat = parseInt(this.name,10) || 0;
   var hadQ = '';
   var answer = jixiang.$('answer');
   var hadClick = false;//是否点击过 +1,-1
@@ -14,7 +13,7 @@ define(function(require,exports,module){
     var e = event || window.event;
     var target = e.target || e.srcElement;
     e.preventDefault();
-
+    
     var question=q.value.replace(/\s+/g,'');
     //问题为空就阻止提交
     if(question.length===0){
@@ -30,11 +29,13 @@ define(function(require,exports,module){
       q.focus();
       return;
     }
-    
+    var _q = question;
+    var cat = parseInt(this.name,10) || 0;
+    console.log(cat)
     //问题分类
-    if(cat == 1){
-      question = '@问医：'+ question;
-    }else if(cat == 2){
+    if(cat === 1){
+      question = '#问医#'+ question;
+    }else if(cat === 2){
       question = '#政策#' + question;
     }
 
@@ -43,7 +44,7 @@ define(function(require,exports,module){
     btns.innerHTML = '提交中..';
     //回调函数
     var callback = function(res){
-       hadQ = question;
+       hadQ = _q;
        if(res.flg==1){
           // console.log(res.answer)
           answer.innerHTML = res.answer;
@@ -134,13 +135,12 @@ define(function(require,exports,module){
   function review(event){
     var e = event || window.event;
     var target = e.target || e.srcElement;
-    e.preventDefault();
-
     while(target.tagName.toLowerCase() !== 'a'){
-      target = target.parentNode;
       if(target.id === 'answer')break;
+      target = target.parentNode;
     }
     if(target.getAttribute('role') !== 'btn')return;
+    e.preventDefault();
     if(hadClick)return;
     hadClick = true;
 

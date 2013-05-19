@@ -2,11 +2,24 @@ extends ../layouts/header
 block content
    #container
     article.mod-grey.clearfix
-      section.mod-grey-hd
-        a(href="/services") 服务选择 
-        a.ml10.mr10 »
-        -var cats=['','问诊预约','药品购买','医学咨询']
-        a #{cats[cat]}
+      if cat === 3
+        section.mod-grey-hd
+          a 问题咨询
+          a.ml10.mr10 »
+          a 医学咨询
+        section.mod-grey-hd
+          .q-nav
+            a.btn.mr20(href="/question") 咨询首页
+            a.btn.btn-inverse.mr20(href="/doctor?cat=3") 医学咨询
+            a.btn.mr20(href="/service?cat=3") 政策咨询
+            a.btn.mr20(href="#") 常见问题
+            a.btn.mr20(href="/service?cat=2") 养老政策 
+      else
+        section.mod-grey-hd
+          a(href="/services") 服务选择 
+          a.ml10.mr10 »
+          -var cats=['','问诊预约','药品购买','医学咨询']
+          a #{cats[cat]}
       section.mod-grey-bd.mod-grey-bd-pd20
         if cat == 1
           //问诊预约
@@ -65,7 +78,7 @@ block content
           //药品托购
           if !med
             a#add-med.btn-reply 增加一条
-            table#med-table.order
+            table#med-table.order(style="width:710px;")
               tbody
                 tr
                   td.reply 药品名称
@@ -118,9 +131,9 @@ block content
           //医学咨询
           form#question(class="form form-inline",method="post",action="/question",name="1")
               .form-item
-                label(for="q-remark") 提点问题
+                label(for="q-remark",style="width:220px") 医学问题什么的尽管杀过来吧
                 input#q(type="text",name="q")
-                button#qsub.btn 提交问题
+                button#qsub.btn.btn-info.ml20(type="submit") 提交问题
           #answer.flow-mod 你好，我是问医小机器人，有什么问题就问我吧！
 block script
   //- script

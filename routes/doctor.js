@@ -28,7 +28,7 @@ exports.index = function(req,res){
           res.render('./doctor/index',{
              title : '问医'
             ,user : req.session.user
-            ,cur :　'doctor'
+            ,cur :　'service'
             ,doc : doc
             ,pjax : pjax
             ,cat : cat
@@ -52,7 +52,7 @@ exports.index = function(req,res){
         res.render('./doctor/index',{
           title : '问医'
          ,user : req.session.user
-         ,cur : 'doctor'
+         ,cur : 'service'
          ,cat : cat
          ,pjax : pjax
          ,med : doc
@@ -63,12 +63,12 @@ exports.index = function(req,res){
     }
     if(cat == 3){
       res.render('./doctor/index',{
-        title : '问医'
+        title : '政策咨询-医学咨询'
        ,user : req.session.user
-       ,cur : 'doctor'
+       ,cur : 'question'
        ,cat : cat
        ,pjax : pjax
-       ,jsflg : 'doctor'
+       ,jsflg : 'question'
       });
       return;
     }

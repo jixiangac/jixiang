@@ -299,6 +299,10 @@ article.detail{
   margin: 0 12px;
   color: #666;
 }
+.q-nav{
+  display: table;
+  margin: 0 auto;
+}
 /*豆瓣类回复的样式*/
 .douban h2{
   font-size: 24px;

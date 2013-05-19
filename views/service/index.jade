@@ -2,11 +2,29 @@ extends ../layouts/header
 block content
   #container
       article.mod-grey.clearfix
-        section.mod-grey-hd
-          a(href="/services") 服务选择 
-          a.ml10.mr10 »
-          -var cats=['','家政预约','养老政策','政策咨询']
-          a #{cats[cat]}
+        if cat === 1
+          section.mod-grey-hd
+            a(href="/services") 服务选择 
+            a.ml10.mr10 »
+            a 家政预约
+        else
+          - var cats = ['养老政策','政策咨询']
+          section.mod-grey-hd
+            a 问题咨询
+            a.ml10.mr10 »
+            a #{cats[cat-2]}
+          section.mod-grey-hd
+            -var q1 = '',q2 = ''
+             if cat === 2
+               -q1 = 'btn-inverse'
+             else
+               -q2 = 'btn-inverse'
+            .q-nav
+              a.btn.mr20(href="/question") 咨询首页
+              a.btn.mr20(href="/doctor?cat=3") 医学咨询
+              a.btn.mr20(href="/service?cat=3",class=q2) 政策咨询
+              a.btn.mr20(href="#") 常见问题
+              a.btn.mr20(href="/service?cat=2",class=q1) 养老政策 
         section.mod-grey-bd.mod-grey-bd-pd20
           if cat == 1
             //家政服务
@@ -65,7 +83,7 @@ block content
           if cat == 2
             if !detail
               //养老政策
-              table.order.order-w980
+              table.order(style="width:710px;")
                 tbody
                   tr
                     td 标题
@@ -78,7 +96,7 @@ block content
                         td.reply 2012-02-31
             else
              //养老政策文章页
-             table.order.order-w980
+             table.order(style="width:710px;")
                tbody
                 tr
                    td= doc.title
@@ -86,12 +104,12 @@ block content
                   td
                     p= doc.content
           if cat == 3
-            //医学咨询
+            //政策
             form#question(class="form form-inline",method="post",action="/question",name="2")
                 .form-item
-                  label(for="q-remark") 提点问题
+                  label(for="q-remark",style="width:220px;") 养老问题什么的尽管杀过来吧
                   input#q(type="text",name="q")
-                  button#qsub.btn 提交问题
+                  button#qsub.btn.btn-info.ml20 提交问题
             #answer.flow-mod 你好，我是养老小机器人，有什么问题就问我吧！
 //- block script
 //-   script(src="/js/service.js")

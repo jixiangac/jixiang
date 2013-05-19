@@ -27,7 +27,7 @@ var helloAnswer = {
  ,'time23' : '您还是早点睡吧...'
 }
 var FAQ = { //常见问题
-   '^(help|帮助)$':'<h3>使用说明</h3><p>普通提问直接输入，比如“你好”，我会跟你互动，比如“时间”,我会告诉你现在时间，</p><p>指令式提问可以提高精准，比如“@电影：”+需要查询的电影，可以查询相关电影信息;</p><p>同理，还有“@电影：”，“@音乐：”</p><p>如果你问的问题有“有用”，“没用”的按钮，你也可以进行表态！</p>'
+   '^(help|帮助)$':'<h3>使用说明</h3><p>普通提问直接输入，比如“你好”，我会跟你互动，比如“时间”,我会告诉你现在时间，</p><p>指令式提问可以提高精准，比如“#电影#”+需要查询的电影，可以查询相关电影信息;</p><p>同理，还有“#电影#”，“#音乐#”</p><p>如果你问的问题有“有用”，“没用”的按钮，你也可以进行表态！</p>'
   ,'jixiangac':'这是我的主人哦，你们不要欺负他！'
   ,'吉祥社区':'这是主人正在开发的一个社区，我好期待的呢！'
   ,'帅' : '我能叫你蟋蟀哥哥吗？'
@@ -44,8 +44,8 @@ var FAQ = { //常见问题
 exports.answer = function(req,res){
    var question = req.body.question;
    //问医类问题的回答
-   if(/^@问医：/.test(question)){
-     question = question.replace(/^@问医：/,'');
+   if(/^#问医#/.test(question)){
+     question = question.replace(/^#问医#/,'');
      var condition = {};
      condition.query = {
          cat : 1
@@ -93,19 +93,19 @@ exports.answer = function(req,res){
      return;
    }
    //豆瓣API，apikey=0dd9395b7b5b1212298bac1272113636
-   if(/^@(图书|电影|音乐)：/.test(question)){
+   if(/^#(图书|电影|音乐)#/.test(question)){
       var douban,tips;
-      if(/^@图书/.test(question)){
+      if(/^#图书/.test(question)){
          douban = 'book';
          tips = '图书';
-      }else if(/^@电影/.test(question)){
+      }else if(/^#电影/.test(question)){
          douban = 'movie';
          tips = '电影';
       }else{
          douban = 'music';
          tips = '音乐';
       }
-      var query = question.replace(/^@(图书|电影|音乐)：/,'');
+      var query = question.replace(/^#(图书|电影|音乐)#/,'');
       var options = {
          host : 'api.douban.com'
         ,path :'/v2/'+douban+'/search?q='+encodeURIComponent(query)+'&count=5&apikey=0dd9395b7b5b1212298bac1272113636'

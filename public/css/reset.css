@@ -102,7 +102,10 @@ p{
 }
 .m10{margin-left: 10px}
 .m20{margin-left: 20px}
-
+.mlr5{
+  margin-left:5px;
+  margin-right: 5px;
+}
 .mt10{margin-top: 10px}
 .mr10{margin-right: 10px}
 .mb10{margin-bottom: 10px}
@@ -179,7 +182,7 @@ p{
 .span240{width: 240px;}
 
 .order-w980{
-  width: 980px !important;
+  width: 710px !important;
 }
 .show{
   display: block;
