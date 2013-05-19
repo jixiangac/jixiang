@@ -1,32 +1,9 @@
 extends ../layouts/header
 block content
-   - if(!pjax){
-     | <div id="container" class="container clearfix">
-   - }
-    if !pjax
-      //侧边导航
-      include ../layouts/aside
-    - if(!pjax){
-      | <article id="content" class="meal">
-      |   <div class="wrap">
-    - }
-        if !pjax
-          section#doctor-nav.nav
-            ul#tab.doctor-nav
-              - var doctors=[{text:'问诊预约',sub:'预约医生',cat:1},{text:'药品托购',sub:'帮忙买药',cat:2},{text:'医学咨询',sub:'提问问题',cat:3}]
-                each doctor,i in doctors
-                   - var cur = '',last=''
-                   if i == 0
-                     - cur = 'cur'
-                   if i == doctors.length-1
-                     -  last= 'last'
-                   li(class=last)
-                     a.pjax(class=cur,href="/doctor?cat=#{doctor.cat}") #{doctor.text}
-                      span #{doctor.sub}
-        - if(!pjax){
-           | <section id="pjax-container">
-        - }
-          //- p#tips 您想干嘛点什么？点击上面吧
+   #container.container.clearfix
+    article#content.meal
+      .wrap
+        #section#pjax-container
           if cat == 1
             //问诊预约
             if !doc
@@ -141,57 +118,44 @@ block content
                   input#q(type="text",name="q")
                   button#qsub.btn 提交问题
             #answer.flow-mod 你好，我是问医小机器人，有什么问题就问我吧！
-    - if(!pjax){
-      |         </section>
-      |       </div>
-      |    </article>
-      |  </div>
-    - }
 block script
-  script
-    //tab
-    (function(){
-      var tab = jixiang.$('tab');
-      var handler = function(event){
-        var pself = this;
-        var e = event || window.event;
-        defaultEvent(e);
-        var self = e.target || e.srcElement;
-        while(self.tagName.toLowerCase() !== 'a'){
-          self = self.parentNode;
-        }
-        if(jixiang.hasClass(self,'tab-title'))return;
-        if(jixiang.hasClass(self,'pjax')){
-           pjax(self,self.getAttribute('href'),'pjax-container',function(){
-               var script = document.createElement('script');
-               var cat = self.getAttribute('href').replace('/doctor?cat=','')
-               var doctor_js = jixiang.$('doctor-js');
-               switch(parseInt(cat,10)){
-                 case 1 :
-                   script.src = '/js/doctor.js';
-                   break;
-                 case 2 :
-                   script.src = '/js/medicine.js';
-                   break;
-                 case 3 :
-                   script.src = '/js/question.js';
-                   break;
-               }
-               doctor_js.innerHTML='';
-               doctor_js.appendChild(script);
-            });
-        }
-        for(var i=0,alis=pself.getElementsByTagName('a'),len=alis.length;i<len;i++){
-           alis[i].className = 'pjax';
-        }
-        self.className = 'cur';
-      }
-      Utils.addHandler(tab,'click',handler)
-    })()
-  #doctor-js
-    if cat == 1
-      script(src="/js/doctor.js")
-    if cat == 2
-      script(src="/js/medicine.js")
-    if cat == 3
-      script(src="/js/question.js")
+  //- script
+  //-   //tab
+  //-   (function(){
+  //-     var tab = jixiang.$('tab');
+  //-     var handler = function(event){
+  //-       var pself = this;
+  //-       var e = event || window.event;
+  //-       defaultEvent(e);
+  //-       var self = e.target || e.srcElement;
+  //-       while(self.tagName.toLowerCase() !== 'a'){
+  //-         self = self.parentNode;
+  //-       }
+  //-       if(jixiang.hasClass(self,'tab-title'))return;
+  //-       if(jixiang.hasClass(self,'pjax')){
+  //-          pjax(self,self.getAttribute('href'),'pjax-container',function(){
+  //-              var script = document.createElement('script');
+  //-              var cat = self.getAttribute('href').replace('/doctor?cat=','')
+  //-              var doctor_js = jixiang.$('doctor-js');
+  //-              switch(parseInt(cat,10)){
+  //-                case 1 :
+  //-                  script.src = '/js/doctor.js';
+  //-                  break;
+  //-                case 2 :
+  //-                  script.src = '/js/medicine.js';
+  //-                  break;
+  //-                case 3 :
+  //-                  script.src = '/js/question.js';
+  //-                  break;
+  //-              }
+  //-              doctor_js.innerHTML='';
+  //-              doctor_js.appendChild(script);
+  //-           });
+  //-       }
+  //-       for(var i=0,alis=pself.getElementsByTagName('a'),len=alis.length;i<len;i++){
+  //-          alis[i].className = 'pjax';
+  //-       }
+  //-       self.className = 'cur';
+  //-     }
+  //-     Utils.addHandler(tab,'click',handler)
+  //-   })()

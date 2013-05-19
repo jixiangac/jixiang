@@ -1,30 +1,29 @@
 extends ../layouts/header
 block content
   #container.container.clearfix
-    //侧边导航
-    include ../layouts/aside
-    article.read-style
-      section.admin-title.line.clearfix
-        h1.fl-l 问题管理
-        a.common-btn.grey-btn.m20 添加新问题
-        a.common-btn.pink-btn.fl-r(href="/admin/question") 问题列表
-
-      section.add-meal
+    article#question.mod-grey
+      section.mod-grey-hd.mod-pd-top10.tab.clearfix
+        ul#tab
+          li
+            h3.tab-title 添加新问题
+          li
+            a(href="/admin/question") 问题列表
+      section.mod-grey-bd.mod-grey-bd-pd20
         form(action="/admin/question/add",method="post")
           .detail-info.non-indent.m20
-            p
+            div
               span.label 问题标题：
               input.q_text(type="text",name="q_name",style="width:370px")
-            p
+            div
               span.label 问题分类：
               select(name="q_cat")
                 option(value="1") 问医
                 option(value="2") 家政
                 option(value="3") 政策
                 option(value="4") 其他
-            p
-              span.label 解答：
-              textarea.q_text(name="q_answer",cols="50",rows="10")
-            p
-              span.label &nbsp;
-              button(type="submit") 增加
+            div.issue-bd
+              label 解答：
+              .issue-content
+                textarea.q_text(name="q_answer",cols="50",rows="10")
+            div
+              button.btn(type="submit") 增加

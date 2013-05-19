@@ -1,51 +1,54 @@
 extends ../layouts/header
 block content
   #container.container.clearfix
-    //侧边栏导航
-    include ../layouts/aside
-    article.read-style
-      section.admin-title.line.clearfix
-        h1.fl-l 问题管理
-        a.common-btn.grey-btn.m20 未回复的问题
-        a.common-btn.pink-btn.fl-r(href="/admin/question/add") 添加新问题
-        a.common-btn.pink-btn.fl-r(href="/admin/question") 问题列表
-      div.tab-nav.form-inline
-        - var selMenus = [{text:'所有',cat:0},{text:'问医',cat:1},{text:'家政',cat:2},{text:'政策',cat:3},{text:'其他',cat:4}]
-        select#sel-cat
-          each item in selMenus
-            - var selected = false
-            if pagecat == item.cat
-              - selected = true
-            option(value=item.cat,selected=selected)= item.text
-        input.fl-r(type="text")
-      if !!answers.length
-        each answer in answers
-          table.table.table-top.order-table.form-inline.medicine-form
-            thead.tab-title
-              tr
-                th.cat 分类
-                th 内容
-                th.cat 操作
-            tbody
-              tr.cur
-                td.cat
-                  a #{answer.subcat}
-                td #{answer.username}提问：
-                  a #{answer.title}
-                td.cat
+    article#question.mod-grey
+      section.mod-grey-hd.mod-pd-top10.tab.clearfix
+        ul#tab
+          li
+            h3.tab-title 问题管理
+          li
+            a(href="/admin/question") 问题列表
+          li
+            a.cur 未回复的问题
+        a.mr10.mt10.fl-r(href="/admin/question/add") 添加新问题
+      .mod-grey-bd.mod-grey-bd-pd20
+        div.tab-nav.form-inline
+          - var selMenus = [{text:'所有',cat:0},{text:'问医',cat:1},{text:'家政',cat:2},{text:'政策',cat:3},{text:'其他',cat:4}]
+          select#sel-cat
+            each item in selMenus
+              - var selected = false
+              if pagecat == item.cat
+                - selected = true
+              option(value=item.cat,selected=selected)= item.text
+          input.fl-r(type="text")
+        if !!answers.length
+          each answer in answers
+            table.order.order-w980
+              thead.tab-title
+                tr
+                  th.cat 分类
+                  th 内容
+                  th.cat 操作
+              tbody
+                tr.cur
+                  td.cat
+                    a #{answer.subcat}
+                  td #{answer.username}提问：
+                    a #{answer.title}
+                  td.cat
+                    if !!answer.reply
+                      a.btn-reply(href="/admin/question/reply?id=#{answer._id}") 修改
+                tr
+                  td.cat 解答
                   if !!answer.reply
-                    a.btn-reply(href="/admin/question/reply?id=#{answer._id}") 修改
-              tr
-                td.cat 解答
-                if !!answer.reply
-                  td 答：#{answer.content}
-                else
-                  td 
-                    a(style="color:red")该问题还没有回答，
-                    a.btn-reply(href="/admin/question/reply?id=#{answer._id}") 【回复这个问题】
-                td.cat
-                  a.btn-reply.delete.sub(href="/admin/question/delete/#{answer._id}") 删除
+                    td 答：#{answer.content}
+                  else
+                    td 
+                      a(style="color:red") 该问题还没有回答，
+                      a.btn-reply(href="/admin/question/reply?id=#{answer._id}") 【回复这个问题】
+                  td.cat
+                    a.btn-reply.delete.sub(href="/admin/question/delete/#{answer._id}") 删除
 
-      else
-        table.table.table-top.order-table
-            caption.line 没有这个系列的问题
+        else
+          table.table.table-top.order-table
+              caption.line 没有这个系列的问题

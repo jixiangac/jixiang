@@ -1,35 +1,37 @@
 extends ../layouts/header
 block content
   #container.container.clearfix
-    //侧边导航
-    include ../layouts/aside
-    article.read-style
-      section.admin-title.line.clearfix
-        h1.fl-l 订餐管理
-        a.common-btn.grey-btn.m20 订单管理
-        a.common-btn.pink-btn.fl-r(href="/admin/meal/control") 菜品管理
-
-      if !!orders.length
-        each order in orders
-          table.table.table-top.order-table
-            tbody
-              -var total = 0
-              each item in order.orderlist
-                tr
-                  td= item.name
-                  td= item.price 
-                    |&nbsp;元
-                  td= item.num
-                    |&nbsp;份
-                  -total+= parseInt(item.price,10)*parseInt(item.num,10)
-            caption 【#{order.username}】于#{order.subtime} 的 购买清单 
-              span.total.fl-r 总价：!{total}&nbsp;元
-                |&nbsp;操作：
-                if !order.sendstatus
-                  a.edit.common-btn.sub.send(href="/admin/order/send/#{order._id}") 发单
-                  a.delete.common-btn.sub(href="/admin/order/delete/#{order._id}") 删除
-                else
-                  a.delete.common-btn 订单已发
-      else
-        p 没有信息
+    article#notice.mod-grey  
+      section.mod-grey-hd.mod-pd-top10.tab.clearfix
+        ul#tab
+          li
+            h3.tab-title 订餐管理
+          li
+            a.cur 订单管理
+          li
+            a(href="/admin/notice/history") 商家管理
+      .mod-grey-bd.mod-grey-bd-pd20
+        if !!orders.length
+          each order in orders
+            table.order
+              tbody
+                -var total = 0
+                each item in order.orderlist
+                  tr
+                    td= item.name
+                    td= item.price 
+                      |&nbsp;元
+                    td= item.num
+                      |&nbsp;份
+                    -total+= parseInt(item.price,10)*parseInt(item.num,10)
+              caption 【#{order.username}】于#{order.subtime} 的 购买清单 
+                span.total.fl-r 总价：!{total}&nbsp;元
+                  |&nbsp;操作：
+                  if !order.sendstatus
+                    a.edit.common-btn.sub.send(href="/admin/order/send/#{order._id}") 发单
+                    a.delete.common-btn.sub(href="/admin/order/delete/#{order._id}") 删除
+                  else
+                    a.delete.common-btn 订单已发
+        else
+          p 没有信息
             

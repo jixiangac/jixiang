@@ -5,28 +5,31 @@
  */
 
 @import 'reset.css';
+@import 'animate.css';
+@import 'form.css';
+@import 'table.css';
 @import 'btn.css';
 @import 'box.css';
 
  /*= 布局样式
   --------------------*/
 /*侧边栏导航*/
-aside.read-style{
+/*aside.read-style{
   float: left;
   width: 200px;
 }
 section.line{
    border-bottom: 1px solid #ddd; 
-}
+}*/
 /*aside&article左右换栏*/
-.ex-side aside{
+/*.ex-side aside{
   float: right;
 }
 .ex-side article{
   float: left;
-}
+}*/
 /*hd&bd线条*/
-.hd-bottom{
+/*.hd-bottom{
   border-bottom: 1px solid #eee;
 }
 .bd-top{
@@ -34,9 +37,9 @@ section.line{
 }
 .bd-back{
   background: #F8F8F2;
-}
+}*/
 /*分类导航*/
-.admin-nav-list li{
+/*.admin-nav-list li{
   display: block;
   border-bottom: 1px solid #eee;
 }
@@ -51,12 +54,12 @@ section.line{
 }
 .admin-nav-list li a:hover,.admin-nav-list li a.cur{
   background: #F2F2EC;
-}
+}*/
 /*布局*/
-section.admin-title{
+/*section.admin-title{
   margin-top:11px;
-}
-section.admin-title h1{
+}*/
+/*section.admin-title h1{
   font-size: 16px;
   font-weight:bold;
   color: #666;
@@ -64,7 +67,7 @@ section.admin-title h1{
   border-left:4px solid #ca8687;
   padding-left: 20px;
   margin-bottom: 8px;
-}
+}*/
 /*表格*/
 .table-top{
   margin-top: 20px;
@@ -327,7 +330,7 @@ section.tab ul li a{
   border: 1px solid #ddd;
   margin: 0 5px -1px 0;
   cursor: pointer;
-  background: #f1f1f1;
+  background: #fff;
 }
 section.tab ul .tab-title{
   padding: 6px 34px;
@@ -339,6 +342,6 @@ section.tab ul li a:hover,section.tab ul li a.cur{
   color:#000;
 }
 section.tab ul li a.cur{
-  background:#fff;
-  border-bottom: 1px solid #fff;
+  background:#f5f5f5;
+  border-bottom: 1px solid #f5f5f5;
 }

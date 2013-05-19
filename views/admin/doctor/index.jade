@@ -1,82 +1,83 @@
 extends ../layouts/header
 block content
   #container.container.clearfix
-    //侧边导航
-    include ../layouts/aside
-    article.read-style
-      section.admin-title.line.clearfix
-        h1.fl-l 问医管理
-        a.common-btn.grey-btn.m20 问诊预约
-        a.common-btn.pink-btn.fl-r(href="/admin/doctor/medicine") 药品托购
-      if !!doc.length
-        each item in doc
-          table.table.table-top.order-table
-            caption 【#{item.username}】的就诊预约
-              if !item.reply
-                a.reply.btn-reply 删除
-                a.reply.btn-reply.doreply 点击答复
-              else
-                span.fl-l 已回复
-            tbody
-              tr
-                td.reply 时间
-                td #{item.time} #{item.timeB}
-              tr
-                td.reply 概况
-                td
-                  if !!item.doctor.length
-                    | 预约医师：
-                    a #{item.doctor}
-                    br
-                  | 病情简述：
-                  a #{item.paitent}
-              if !!item.reply
+    article#notice-history.mod-grey  
+      section.mod-grey-hd.mod-pd-top10.tab.clearfix
+        ul#tab
+          li
+            h3.tab-title 问医管理
+          li
+            a.cur 问诊预约
+          li
+            a(href="/admin/doctor/medicine") 药品托购
+      .mod-grey-bd.mod-grey-bd-pd20
+        if !!doc.length
+          each item in doc
+            table.order.order-w980
+              caption 【#{item.username}】的就诊预约
+                if !item.reply
+                  a.reply.btn-reply 删除
+                  a.reply.btn-reply.doreply 点击答复
+                else
+                  span.fl-l 已回复
+              tbody
                 tr
-                  td.reply 回复
+                  td.reply 时间
+                  td #{item.time} #{item.timeB}
+                tr
+                  td.reply 概况
                   td
-                    if !item.disagree
-                      a(style="color:green") #{item.agreereply}
-                      br 
-                      if !!item.replycontent
-                        a 备注：#{item.replycontent}
-                    else
-                      if !!item.replycontent
-                        p(style="color:#888") 【预约没有成功】#{item.replycontent}
+                    if !!item.doctor.length
+                      | 预约医师：
+                      a #{item.doctor}
+                      br
+                    | 病情简述：
+                    a #{item.paitent}
+                if !!item.reply
+                  tr
+                    td.reply 回复
+                    td
+                      if !item.disagree
+                        a(style="color:green") #{item.agreereply}
+                        br 
+                        if !!item.replycontent
+                          a 备注：#{item.replycontent}
                       else
-                        p(style="color:#888") 【预约没有成功】这个医师很懒，什么也没有说
+                        if !!item.replycontent
+                          p(style="color:#888") 【预约没有成功】#{item.replycontent}
+                        else
+                          p(style="color:#888") 【预约没有成功】这个医师很懒，什么也没有说
 
-            if !item.reply
-              tfoot.hide
-                tr
-                  td(colspan='2')
-                    form.form.form-inline(action="/admin/doctor",method="post")
-                      input(type="hidden",value="#{item._id}",name="askid")
-                      |可约在
-                      select#yuMonth(name="yuMonth")
-                        - var month = new Date(item.time).getMonth()+1
-                        - for(var i=1;i<=12;i++)
-                            - var selected=false
-                            if i == month
+              if !item.reply
+                tfoot.hide
+                  tr
+                    td(colspan='2')
+                      form.form.form-inline(action="/admin/doctor",method="post")
+                        input(type="hidden",value="#{item._id}",name="askid")
+                        |可约在
+                        select#yuMonth(name="yuMonth")
+                          - var month = new Date(item.time).getMonth()+1
+                          - for(var i=1;i<=12;i++)
+                              - var selected=false
+                              if i == month
+                                - selected = true
+                              option(value="#{i}",selected=selected)!{i}月
+                        select#yuDay(name="yuDay")
+                         - var day = new Date(item.time).getDate()
+                         - for(var i=1;i<=31;i++)
+                            - var selected = false
+                            if i == day
                               - selected = true
-                            option(value="#{i}",selected=selected)!{i}月
-                      select#yuDay(name="yuDay")
-                       - var day = new Date(item.time).getDate()
-                       - for(var i=1;i<=31;i++)
-                          - var selected = false
-                          if i == day
-                            - selected = true
-                          option(value="#{i}",selected=selected)!{i}日
-                      select#yuHour(name="yuHour")
-                        - for(var i=0;i<24;i++)
-                          if i<10
-                            -i='0'+i
-                          option(value="#{i}") #{i} : 00
-                      button.btn(type="submit") 可约               
-                      input(type="text",name="reply")
-                      a.btn.disagree 拒绝
-      else
-        table.table.table-top.order-table
-          caption.line 目前还没有人预约
-block script
-  script(src="/js/admin/doctor.js")     
+                            option(value="#{i}",selected=selected)!{i}日
+                        select#yuHour(name="yuHour")
+                          - for(var i=0;i<24;i++)
+                            if i<10
+                              -i='0'+i
+                            option(value="#{i}") #{i} : 00
+                        button.btn(type="submit") 可约               
+                        input(type="text",name="reply")
+                        a.btn.disagree 拒绝
+        else
+          table.table.table-top.order-table
+            caption.line 目前还没有人预约   
             

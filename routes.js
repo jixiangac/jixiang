@@ -81,6 +81,14 @@ module.exports = function(app){
    app.get('/meal/order/done',meal.done);
    //确认收菜，交易完成
    app.post('/meal/order/done',meal.doneconfirm);
+
+
+   /**
+    *  服务首页
+    *  包括（线上问诊、问诊预约、药品购买、家政服务）
+    * 
+    */
+   app.get('/services',service.indexs);
    /*--------
       问医
      --------*/
@@ -117,32 +125,33 @@ module.exports = function(app){
     后台登入
    ----------*/
   // app.get('/admin/login',checkNotLogin);
-  app.get('/admin/login',login.admin);
-  app.post('/admin/login',login.admin);
+  // app.get('/admin/login',login.admin);
+  // app.post('/admin/login',login.admin);
   /*-----------
      管理首页
   ------------*/
-  //管理员列表
-  // app.get('/admin',checkLogin);
-  app.get('/admin',user.admin);
   /*-----------
-     社区居民
+     人员管理
    -----------*/
   //用户列表
-  app.get(/^\/admin\/people\/?(\d)*$/,user.index);
+  app.get('/admin/people',user.index);
+  app.get('/admin/people/admin',user.admin);
   //用户编辑&删除
-  app.post('/admin/people/delete',user.delUser);
+  app.get('/admin/people/delete',user.delUser);
+  //用户个人信息
+  app.get('/admin/people/info',user.person);
+  app.post('/admin/people/info',user.person);
   /*-----------
      发布公告
     ----------*/
   //获取公告
   app.get('/admin/notice',notice.admin);
   //发布&&修改公告
-  app.post('/admin/notice',notice.issue);
+  app.post('/admin/notice',notice.admin);
   //历史公告页
-  app.get(/^\/admin\/notice\/history\/?(\d*)$/,notice.history);
+  app.get('/admin/notice/history',notice.history);
   //把新公告放入历史公告中
-  app.post('/admin/notice/history',notice.layside);
+  app.post('/admin/notice/history',notice.history);
   /*-----------
      订餐管理
     ----------*/

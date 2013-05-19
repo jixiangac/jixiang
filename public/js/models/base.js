@@ -162,7 +162,7 @@ define(function(require,exports,module){
       xhr.onreadystatechange = function() {
         if(xhr.readyState == 4) {
           if(xhr.status >= 200 && xhr.status < 300 || xhr.status == 304) {
-            if(options.type=='post'){
+            if(options.type=='post' || options.type == 'get'){
                var result = JSON.parse(xhr.responseText);
                if(options.callback)options.callback(result);//成功后的回调
              }else{
@@ -188,7 +188,7 @@ define(function(require,exports,module){
     var e = event || window.event;
     e.preventDefault();
   }
-  exports.defaultEvent;
+  exports.defaultEvent = defaultEvent;
   /*-------------
     --- PJAX ---
    ------------*/

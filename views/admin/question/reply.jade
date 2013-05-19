@@ -1,37 +1,38 @@
 extends ../layouts/header
 block content
   #container.container.clearfix
-    //侧边导航
-    include ../layouts/aside
-    article.read-style
-      section.admin-title.line.clearfix
-        h1.fl-l 问题管理
-        a.common-btn.grey-btn.m20 回答问题
-        a.common-btn.pink-btn.fl-r(href="/admin/question/noreply") 未回答的问题
-
-      section.add-meal
-        form(action="/admin/question/reply?id=#{doc._id}",method="post")
-          .detail-info.non-indent.m20
-            p 
-             a 该问题由【#{doc.username}】提出
-            p
-              span.label 问题标题：
-              input.q_text(type="text",name="q_name",style="width:370px",value='#{doc.title}')
-            p
-              span.label 问题分类：
-              - var selMenus = [{text:'问医',cat:1},{text:'家政',cat:2},{text:'政策',cat:3},{text:'其他',cat:4}]
-              select(name="q_cat")
-                each item in selMenus
-                  - var selected = false
-                  if doc.cat == item.cat
-                    - selected =true
-                  option(value=item.cat,selected=selected)= item.text
-            p
-              span.label 作为普适问题：
-              input(type="checkbox",name="add")
-            p
-              span.label 解答：
-              textarea.q_text(name="q_answer",cols="50",rows="10")= doc.content
-            p
-              span.label &nbsp;
-              button(type="submit") 修改
+    article#question.mod-grey
+      section.mod-grey-hd.mod-pd-top10.tab.clearfix
+        ul#tab
+          li
+            h3.tab-title 回答问题
+          li
+            a(href="/admin/question/noreply") 未回答的问题
+        a.mr10.mt10.fl-r(href="/admin/question") 返回
+      .mod-grey-bd.mod-grey-bd-pd20
+        section.add-meal
+          form(action="/admin/question/reply?id=#{doc._id}",method="post")
+            .detail-info.non-indent.m20
+              div 
+               a 该问题由【#{doc.username}】提出
+              div
+                span.label 问题标题：
+                input.q_text(type="text",name="q_name",style="width:370px",value='#{doc.title}')
+              div
+                span.label 问题分类：
+                - var selMenus = [{text:'问医',cat:1},{text:'家政',cat:2},{text:'政策',cat:3},{text:'其他',cat:4}]
+                select(name="q_cat")
+                  each item in selMenus
+                    - var selected = false
+                    if doc.cat == item.cat
+                      - selected =true
+                    option(value=item.cat,selected=selected)= item.text
+              div
+                span.label 作为普适问题：
+                input(type="checkbox",name="add")
+              div.issue-bd
+                label 解答：
+                .issue-content
+                  textarea.q_text(name="q_answer",cols="50",rows="10")= doc.content
+              div
+                button.btn(type="submit") 修改

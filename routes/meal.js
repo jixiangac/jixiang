@@ -259,6 +259,7 @@ var subed = function(req,res){
       ,cur : 'meal'
       ,orderCur : 'sub'
       ,pjax : pjax
+      ,jsflg : 'meal'
      });
    });
 }
@@ -295,6 +296,7 @@ var sended = function(req,res){
       ,cur : 'meal'
       ,orderCur : 'send'
       ,pjax : pjax
+      ,jsflg : 'meal'
      });
    });
 }
@@ -331,6 +333,7 @@ var done = function(req,res){
       ,cur : 'meal'
       ,orderCur : 'done'
       ,pjax : pjax
+      ,jsflg : 'meal'
      });
    });
 }
@@ -390,7 +393,7 @@ var admin = function(req,res){
     }
     res.render('./admin/meal/index',{
        title : '订餐管理-订单管理'
-      ,user : req.session.admin
+      ,user : req.session.user
       ,orders : orders
       ,cur : 'meal'
     });
@@ -487,7 +490,7 @@ var mealManager = function(req,res){
 
       res.render('./admin/meal/control',{
          title : '订餐管理-菜品管理'
-        ,user : req.session.admin
+        ,user : req.session.user
         ,meals : meals
         ,cur : 'meal'
         ,pages : pageNum
@@ -502,7 +505,7 @@ var addMeal = function(req,res){
   if(req.method == 'GET'){
     res.render('./admin/meal/add',{
        title : '订餐管理-添加新菜品'
-      ,user : req.session.admin
+      ,user : req.session.user
       ,cur : 'meal'
     });    
   }else if(req.method == 'POST'){
@@ -558,7 +561,7 @@ var modifyMeal = function(req,res){
       }
       res.render('./admin/meal/edit',{
          title : '菜品修改'
-        ,user : req.session.admin
+        ,user : req.session.user
         ,meals : meals[0]
         ,cur : 'meal'
       });

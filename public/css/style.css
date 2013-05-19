@@ -5,12 +5,19 @@
  */
 
 @import 'base.css';
-@import 'animate.css';
+
 @import 'sign.css';
-@import 'form.css';
-@import 'table.css';
 @import 'meal.css';
 
+.service-img{
+  display: table;
+  margin: 0 auto;
+}
+.service-img img{
+  width: 165px;
+  height: 165px;
+  margin-top: -5px;
+}
 /*= 首页
 ---------*/
 #container .welcome{

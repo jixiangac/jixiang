@@ -4,13 +4,16 @@
  * @E-mail       jixiangac@gmail.com
  */
 @import 'base.css';
-@import 'animate.css';
-@import 'form.css';
-@import 'table.css';
 
 /*= 发布公告
 ------------*/
-.issue-notice{
+.issue-item{
+  display: inline-block;
+}
+.issue-content textarea{
+  width: 98.5%;
+}
+/*.issue-notice{
 	margin-top: 40px;
 }
 .issue-notice legend{
@@ -25,10 +28,10 @@
 }
 .issue-author{
 	float:right;
-}
+}*/
 /*= 订餐管理
 -------------*/
-section.add-meal{
+/*section.add-meal{
   margin-top: 20px;
   overflow: hidden;
 }
@@ -50,10 +53,10 @@ section.add-meal{
 	display: block;
 	float: left;
 	width: 100px;
-}
+}*/
 /*= 问题管理
 -------------*/
-.text-left td,.text-left th{
+/*.text-left td,.text-left th{
   text-align: left;
 }
 .text-left tbody tr{
@@ -78,12 +81,12 @@ span.useless{
 }
 span.useful{
   color: green;
-}
+}*/
 /*= 问医管理
   -----------*/
-input.reply{
+/*input.reply{
   width: 550px;
   padding: 4px 10px;
   margin-right: 10px;
   vertical-align : middle;
-}
+}*/

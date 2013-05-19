@@ -25,12 +25,11 @@ exports.index = function(req,res){
     //生成口令散列
     var md5 = crypto.createHash('md5');
     var password = md5.update(req.body.password).digest('base64');
-    jixiang.getOne({username:req.body.username},'users',function(err,user){
-      if(!user){
-        return res.json({flg:0,msg:'用户名或者密码错误！'});
-      }
-      if(user.password != password){
-        return res.json({flg:0,msg:'用户名或者密码错误！'});
+    var user_cat = req.body.admin ? 1 : 2;
+
+    jixiang.getOne({username:req.body.username,cat : user_cat},'users',function(err,user){
+      if(!user || user.password != password){
+        return res.json({success:false,msg:'用户名或者密码错误！'});
       }
       var condition = {};
       condition.query = {
@@ -45,7 +44,8 @@ exports.index = function(req,res){
         console.log("had logined!");
       });
       req.session.user = user;
-      res.json({flg:1,msg:'登入成功!',redirect:'/'});
+      var redirect = (user_cat === 1) ? '/admin' : '/';
+      res.json({success:true,msg:'登入成功!',redirect: redirect});
     });
   }
 }
@@ -96,7 +96,7 @@ exports.reg = function(req,res){
        ]
     },'users',function(err,doc){
       if(doc){
-        err = '用户名已经存在!';
+        err = '用户名或者邮箱已经存在!';
       }
       if(err){
         return res.json({success:false,msg:err});
@@ -219,7 +219,7 @@ exports.setpass = function(req,res){
 //     res.render('./admin/login',
 //       {
 //         title:'吉祥社区管理后台'
-//        ,user : req.session.admin
+//        ,user : req.session.user
 //        ,jsflg : 'sign'
 //       });
 //   }else if(req.method == 'POST'){
@@ -244,7 +244,7 @@ exports.setpass = function(req,res){
 //       jixiang.update(condition,'admin',function(err){
 //          console.log('had logined');
 //       });
-//       req.session.admin = user;
+//       req.session.user = user;
 //       res.json({flg:1,msg:'登入成功!',redirect:'/admin'});
 //     });   
 //   }

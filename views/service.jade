@@ -1,0 +1,18 @@
+extends layouts/header
+block content
+  #container
+    article.container
+      section.mod-grey-hd.mt30.mb30
+        h3 请选择你要选择的服务
+      section.mod-grey-bd.container
+        #business-list
+          -var list = [{name : '线上问诊',e_name:'comment',href:'/doctor/asks',des:'线上咨询病情'},{name:'问诊预约',e_name:'text',href:'/doctor?cat=1',des:'预约医生'},{name:'药品购买',e_name:'med',href:'/doctor?cat=2',des:'社区帮你买你需要的药品'},{name:'家政服务',e_name:'home',href:'/service?cat=1',des:'居家养老，帮帮忙！'}]
+          each item in list
+            a.business-item.mod-grey(href=item.href)
+              .mod-grey-hd
+                span=item.name
+              .mod-grey-bd
+                .service-img
+                  img(src="/images/icon/#{item.e_name}.png")
+              .mod-grey-ft
+                p=item.des

@@ -1,0 +1,34 @@
+extends ../layouts/header
+block content
+  #container.container.clearfix
+    article#people.mod-grey  
+      section.mod-grey-hd.mod-pd-top10.tab.clearfix
+        ul#tab
+          li
+            h3.tab-title 个人信息
+          li
+            a.cur #{doc.username}
+        a.mr10.mt10.fl-r(href="/admin/people") 返回
+      .mod-grey-bd.mod-grey-bd-pd20
+        table#people-list.order
+          tbody
+            tr
+              td UID
+              td= doc._id
+            tr
+              td 用户名
+              td= doc.username
+            tr
+              td 性别
+              td= doc.sex
+            tr
+              td 出生年月
+              td= doc.birthday
+            tr
+              td 注册时间
+              td= doc.regdate
+            tr
+              td 最近登入时间
+              td= doc.logindate
+
+

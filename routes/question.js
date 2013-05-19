@@ -274,6 +274,7 @@ exports.qlist = function(req,res){
        ,cur : 'question'
        ,doc : doc
        ,pjax : pjax
+       ,jsflg : 'question'
      });
 
    })
@@ -327,7 +328,7 @@ var admin = function(req,res){
     }
     res.render('./admin/question/index',{
        title : '问题管理'
-      ,user : req.session.admin
+      ,user : req.session.user
       ,answers : answers
       ,cur : 'question'
       ,pagecat : cat
@@ -339,7 +340,7 @@ var newQ = function(req,res){
   if(req.method == 'GET'){
     res.render('./admin/question/new',{
        title : '添加新问题'
-      ,user : req.session.admin
+      ,user : req.session.user
       ,cur : 'question'
     });      
   }else if(req.method == 'POST'){
@@ -367,7 +368,7 @@ var editQ = function(req,res){
     jixiang.getOne({_id:id},'question',function(err,doc){
       res.render('./admin/question/edit',{
          title : '修改问题'
-        ,user : req.session.admin
+        ,user : req.session.user
         ,cur : 'question'
         ,doc : doc
       });
@@ -447,7 +448,7 @@ var noreply = function(req,res){
 
       res.render('./admin/question/noreply',{
          title : '未回复的问题'
-        ,user : req.session.admin
+        ,user : req.session.user
         ,answers : answers
         ,cur : 'question'
         ,pagecat : cat
@@ -478,7 +479,7 @@ var reply = function(req,res){
         ,content : req.body.q_answer
         ,subcat : parseInt(req.body.q_cat,10)
         ,reply : true
-        ,replyuser : req.session.admin.username
+        ,replyuser : req.session.user.username
       }
     }
     if(!!req.body.add){

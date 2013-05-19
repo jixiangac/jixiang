@@ -1,20 +1,16 @@
-header
-  #head-nav.container.clearfix
-    h1#logo
-      a(href="/admin") #{title}
-    #description 管理后台
-  
-  nav
-    .nav-wrap.container.clearfix
-      if user
-        a 欢迎来到管理后台，
-          strong #{user.username}
-        ul.login
-          li.user
-            a(href="#") #{user.username}
-          li.logout
-            a(href="/admin/logout") 退出
-      else
-        ul.no-login
-          li
-            a 吉祥社区管理后台，厨房重地，闲杂人等留下买路钱！
+nav
+  if user
+    ul.login.fl-r
+      li.user
+        a(href="#") #{user.username}
+      li.logout
+        a(href="/logout") 退出
+    .nav-wrap
+      ul.nav-list
+        - var menus = [{text:'公告管理',href:'/admin/notice',cur:'notice'},{text:'人员管理',href:'/admin/people',cur:'people'},{text:'订餐管理',href:'/admin/meal',cur:'meal'},{text:'问医管理',href:'/admin/doctor',cur:'doctor'},{text:'服务管理',href:'/admin/service',cur:'service'},{text:'问题管理',href:'/admin/question',cur:'question'},{text:'权限管理',href:'/admin/limits',cur:'limits'}]
+          each menu in menus
+            - var active = '';
+            if menu.cur == cur
+              - active = 'cur'
+            li(class="#{active}")
+              a(href="#{menu.href}") #{menu.text} 

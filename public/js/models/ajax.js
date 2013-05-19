@@ -22,6 +22,7 @@ define(function(require,exports,module){
       }
       i++;
     }
+    //禁用表单按钮
     var btn = target.getElementsByTagName('button')[0];
     btn.disabled = true;
     //提交表单数据
@@ -32,11 +33,10 @@ define(function(require,exports,module){
       ,data : jixiang.serialize(target)
       ,callback : function(res){
         btn.disabled = false;
-        if(!res.success){
-           alert(res.msg);
-           return;
-        }
+        alert(res.msg);
+        if(!res.success)return;
         if(res.redirect)window.location.href = res.redirect;
+        if(res.reload)window.location.reload();
       }
     }
     jixiang.ajax(options);

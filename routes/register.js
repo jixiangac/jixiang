@@ -15,7 +15,7 @@ var index = function(req,res){
       });
   }else if(req.method == 'POST'){
     if(req.body['re-password'] != req.body['password']){
-      return res.json({flg:0,pwderror:1,msg:'密码不一致'});
+      return res.json({success:false,pwderror:1,msg:'密码不一致'});
     }
     //生成口令散列
     var md5 = crypto.createHash('md5');
@@ -35,14 +35,14 @@ var index = function(req,res){
         err = '用户名已经存在!';
       }
       if(err){
-        return res.json({flg:0,msg:err});
+        return res.json({success:false,msg:err});
       }
       jixiang.save(userdata,'users',function(err,doc){
         if(err){
-          return res.json({flg:0,msg:err});
+          return res.json({success:false,msg:err});
         }
         req.session.user = doc[0];
-        res.json({flg:1,msg:'注册成功！',redirect:'/'});
+        res.json({success:true,msg:'注册成功！',redirect:'/'});
       });
       
     });

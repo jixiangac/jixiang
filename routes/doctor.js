@@ -247,7 +247,7 @@ exports.admin = function(req,res){
 
        res.render('./admin/doctor/index',{
           title : '问诊预约'
-         ,user : req.session.admin
+         ,user : req.session.user
          ,doc : doc
          ,cur : 'doctor'
        });
@@ -309,7 +309,7 @@ exports.reMedicine = function(req,res){
        }
        res.render('./admin/doctor/medicine',{
           title : '药品托购'
-         ,user : req.session.admin
+         ,user : req.session.user
          ,cur : 'doctor'
          ,doc : doc
        });

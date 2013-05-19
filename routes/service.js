@@ -4,6 +4,27 @@
 var jixiang = require('../models/base');
 var Utils = require('../models/utils');
 
+
+exports.indexs = function(req,res){
+  if(req.method === 'GET'){
+
+    render();
+
+    function render(){
+      var renders = {
+        title : '服务'
+       ,user : req.session.user
+       ,cur : 'service'
+       ,pjax : false
+       ,jsflg : 'service'        
+      }
+      res.render('./service',renders);
+    }
+
+  }else if(req.method === 'POST'){
+
+  }
+}
 //首页
 exports.index = function(req,res){
   var cat = parseInt(req.query.cat,10) || 1;
@@ -195,7 +216,7 @@ exports.admin = function(req,res){
 
        res.render('./admin/service/index',{
           title : '家政服务'
-         ,user : req.session.admin
+         ,user : req.session.user
          ,doc : doc
          ,cur : 'service'
        });
