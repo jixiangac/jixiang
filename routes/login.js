@@ -4,7 +4,6 @@ var config = require('../config')
    ,utils = require('../models/utils')
    ,jixiang = require('../models/base');
 
-
 /**
  * 
  *   登入

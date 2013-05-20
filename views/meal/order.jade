@@ -1,61 +1,40 @@
 extends ../layouts/header
 block content
-  - if(!pjax){
-    |<div id="container" class="container clearfix">
-  - }   
-    if(!pjax)
-      //侧边栏导航
-      include ../layouts/aside
-    - if(!pjax) { 
-      | <article id="content">
-      |   <div class="wrap">
-    - }
-        if !pjax
-          section.tab.line.clearfix
-            ul#tab
-              li
-                h3.tab-title 我的订餐
-              li
-                a.pjax.cur(href="/meal/order/sub") 未配送
-              li
-                a.pjax(href="/meal/order/send") 已配送
-              li
-                a.pjax(href="/meal/order/done") 已完成
-        - if(!pjax){ 
-          | <div id="pjax-container">
-        -}
-          if !!orders.length
-            each order in orders
-              table.table.table-top.order-table
+  #container.container.clearfix  
+    include ../layouts/aside
+    article.mod-grey 
+      section.mod-grey-hd.mod-pd-top10.tab.clearfix
+        ul#tab
+          -var cur = {'sub':'','send':'','done':''};
+          - cur[orderCur] = 'cur';
+          li
+            h3.tab-title 我的订餐
+          li
+            a.pjax(href="/meal/order/sub",class=cur['sub']) 未配送
+          li
+            a.pjax(href="/meal/order/send",class=cur['send']) 已配送
+          li
+            a.pjax(href="/meal/order/done",class=cur['done']) 已完成
+       .mod-grey-bd.mod-grey-bd-pd20
+          if !!result.orders.length
+            table.order(style="width:710px;")
+              each order in result.orders
                 tbody
-                  -var total = 0
-                  each item in order.orderlist
+                  tr.space
+                    td(colspan="4")
+                  tr
+                    td(colspan="4") 提交时间：#{order.ordertime}
+                  each item,index in order.list
                     tr
                       td= item.name
                       td= item.price 
                         |&nbsp;元
                       td= item.num
                         |&nbsp;份
-                      -total+= parseInt(item.price,10)*parseInt(item.num,10)
-                caption #{order.subtime} 的 购买清单 
-                  span.total.fl-r 总价：!{total}&nbsp;元 
-                    if orderCur == 'sub'
-                      |状态：
-                      a.common-btn.grey-btn 未配送
-                    else if orderCur == 'send'
-                      |操作：
-                      a.common-btn.red-btn.orderdone(name="#{order._id}") 已收菜
-                    else
-                      |状态：
-                      a.common-btn.grey-btn 已完成
+                      if index === 0
+                        td.total(rowspan="#{order.list.length}") 总价：#{order.total}&nbsp;元
           else
-            table.table.table-top.order-table
+            table.order(style="width:710px;")
               caption.line 没有相关信息
-  - if(!pjax){
-    |      </div>
-    |    </div>
-    |  </article>
-    |</div>
-  - }
 //- block script
 //-   script(src="/js/meal.js")

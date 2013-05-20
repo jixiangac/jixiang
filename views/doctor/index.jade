@@ -51,14 +51,14 @@ block content
                 .form-item.form-actions
                   button(class="btn",type="submit") 提交预约
           else
-            table.order
+            table.order(style="width:710px;")
               tbody
                 tr
                   td(colspan="2") #{doc.time} #{doc.time_b}的预约申请
-                if !doc.reply
-                  span.fl-l(style="color:red")未答复
-                else
-                  span.fl-l 已回复
+                    if !doc.reply
+                      span.fl-r(style="color:red") 未答复
+                    else
+                      span.fl-r 已回复
                 tr
                   td.reply 概况
                   td

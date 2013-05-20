@@ -73,14 +73,26 @@ module.exports = function(app){
    //app.post('/meal/delete',meal.deleteOne);
    //提交订单，更改成提交状态
    //app.post('/meal/suborder',meal.suborder);
-   //历史订单 1:已提交的订单
-   app.get('/meal/order/sub',meal.subed);
-   //历史订单 2:已经配送的订单
-   app.get('/meal/order/send',meal.sended);
-   //历史订单 3：已经完成的订单
-   app.get('/meal/order/done',meal.done);
-   //确认收菜，交易完成
-   app.post('/meal/order/done',meal.doneconfirm);
+   
+   /**
+    *   我的订餐
+    *     + 订餐
+    *        +  考虑商家入住的形式
+    *        (比如沙县小吃，列举全部沙县小吃的类目)
+    *     ```
+    *       行为流程：  
+    *       商家类目发布 -->  用户订餐 -->  订餐配送         
+    *     ```
+    *    +  购物清单
+    *       +  生成订单，未提交
+    *       +  生成订单，提交，未配送
+    *       +  生成订单，已配送，等待确认
+    *       +  完成订单，配送确认 
+    */
+   app.get('/meal/order/sub',meal.subed);//已提交的订单
+   app.get('/meal/order/send',meal.sended);//已经配送的订单
+   app.get('/meal/order/done',meal.done);//已经完成的订单
+   app.post('/meal/order/done',meal.doneconfirm);//交易完成
 
 
    /**

@@ -27,3 +27,16 @@
 .order th{
   text-align: center;
 }
+
+.order tr.space{
+  height: 20px;
+  background: none;
+  border: 0;
+}
+.order tr.space td{
+  border: 0;
+}
+.order td.total {
+  vertical-align: middle;
+  text-align: center;
+}

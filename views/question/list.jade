@@ -1,17 +1,9 @@
 extends ../layouts/header
 block content
-  - if(!pjax){
-     | <div id="container" class="container clearfix">
-  - }
-    if !pjax
-      //侧边导航
-      include ../layouts/aside
-    - if(!pjax){
-        | <article id="content">
-        |   <div class="wrap">
-    - }
-      if !pjax
-        section.tab.line.clearfix
+  #container.container.clearfix  
+    include ../layouts/aside
+    article.mod-grey 
+      section.mod-grey-hd.mod-pd-top10.tab.clearfix
           ul#tab
             li
               h3.tab-title 我的问题
@@ -19,12 +11,10 @@ block content
               a.pjax.cur(href="/question/answer?cat=1") 未回复
             li
               a.pjax(href="/question/answer?cat=2") 已回复
-       - if(!pjax){
-          | <div id="pjax-container">
-       - }
+      .mod-grey-bd.mod-grey-bd-pd20
         if !!doc.length
           each q in doc
-            table.table.table-top.order-table.form-inline.medicine-form
+            table.order(style="width:710px;")
               caption 
                 if !q.reply
                   a(style="color:red") 该问题还未回复
@@ -40,13 +30,7 @@ block content
                     td.reply 回复
                     td #{q.content}       
         else
-          table.table.table-top.order-table
+          table.order(style="width:710px;")
               caption.line 您还没有不明白的问题
-  - if(!pjax){
-      |        </div>
-      |     </article>
-      |   </div>
-      | </div>
-  - }
-block script
-  script(src="/js/tab.js")
+//- block script
+//-   script(src="/js/tab.js")

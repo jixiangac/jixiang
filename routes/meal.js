@@ -88,8 +88,8 @@ exports.shop = function(req,res){
        ,total : +req.body.total
        ,ordertime : new Date()*1
        ,isDone : false
+       ,isSend : false
      }
-     console.log(order.list)
      jixiang.save(order,'orders',function(err,doc){
         if(err)return res.json({success:false,msg:'出现了一点小问题，订购没有成功！'});
         return res.json({success:true,msg:'订购成功！'});
@@ -189,26 +189,26 @@ exports.shop = function(req,res){
 //      });
 // }
 //增加新订单
-var newlist = function(req,res){
+// exports.newlist = function(req,res){
 
-   var order = {
-      uid : req.session.user._id
-     ,username : req.session.user.username
-     ,subtime : Date.now()
-     ,donetime : 0
-     ,donestatus : false
-     ,sendstatus : false
-     ,orderlist :req.body.list
-   };
+//    var order = {
+//       uid : req.session.user._id
+//      ,username : req.session.user.username
+//      ,subtime : Date.now()
+//      ,donetime : 0
+//      ,donestatus : false
+//      ,sendstatus : false
+//      ,orderlist :req.body.list
+//    };
 
-   jixiang.save(order,'orders',function(err,doc){
-     if(err){
-       return res.json({flg:0,msg:err});
-     }
-     return res.json({flg:1,msg:'加入成功！'});
-   }); 
+//    jixiang.save(order,'orders',function(err,doc){
+//      if(err){
+//        return res.json({flg:0,msg:err});
+//      }
+//      return res.json({flg:1,msg:'加入成功！'});
+//    }); 
 
-}
+// }
 //菜品的喜欢按钮
 var like = function(req,res){
   var condition = {};
@@ -228,114 +228,118 @@ var like = function(req,res){
   });
 }
 //历史订单 1:已提交的订单
-var subed = function(req,res){
-   var pjax = false;
-   if(!!req.query.pjax){
-     pjax = true;
-   }
-   var uid = parseInt(req.session.user._id,10);
-   var condition={};
-   condition.query={
-      uid : uid
-     ,sendstatus : false
-   };
-   condition.sort={
-     subtime:-1
-   };
-   jixiang.get(condition,'orders',function(err,orders){
-     if(err){
-       orders=[];
+exports.subed = function(req,res){
+   var pjax = !!req.query.pjax;
+   var result = {};
+   jixiang.get({
+     query : {
+        user : req.session.user.username
+       ,isDone : false
+       ,isSend : false
      }
-     if(!!orders.length){
-       orders.forEach(function(item){
-         item.subtime = utils.format_date(new Date(item.subtime),true);
-         item.orderlist = JSON.parse(item.orderlist);
+    ,sort : {
+      ordertime : -1
+    }
+   },'orders',function(err,doc){
+     if(err)doc=[];
+     if(doc.length){
+       doc.forEach(function(item){
+         item.ordertime = utils.format_date(new Date(item.ordertime),true);
+         // item.list = JSON.parse(item.list);
        });
      }
-     res.render('./meal/order',{
+
+     result.orders = doc;
+     render();
+
+   });
+   function render(){
+     var renders = {
        title :'等待配送的订单'
       ,user : req.session.user
-      ,orders : orders
+      ,result : result
       ,cur : 'meal'
       ,orderCur : 'sub'
       ,pjax : pjax
       ,jsflg : 'meal'
-     });
-   });
+     }
+     res.render('./meal/order',renders);
+   }
 }
 //历史订单 2:已经配送的订单
 var sended = function(req,res){
-   var pjax = false;
-   if(!!req.query.pjax){
-     pjax = true;
-   }
-   var uid = parseInt(req.session.user._id,10);
-   var condition={};
-   condition.query={
-      uid : uid
-     ,sendstatus : true
-     ,donestatus : false
-   };
-   condition.sort={
-     subtime:-1
-   };
-   jixiang.get(condition,'orders',function(err,orders){
-     if(err){
-       orders=[];
-     }
-     if(!!orders.length){
-       orders.forEach(function(item){
-         item.subtime = utils.format_date(new Date(item.subtime),true);
-         item.orderlist = JSON.parse(item.orderlist);
+   var pjax = !!req.query.pjax;
+   var result = {};
+
+   jixiang.get({
+    query : {
+      user : req.session.user.username
+     ,isSend : true
+     ,isDone : false
+    }
+    ,sort : {
+      ordertime : -1
+    }
+   },'orders',function(err,doc){
+     if(err)doc = [];
+
+     if(doc.length){
+       doc.forEach(function(item){
+         item.ordertime = utils.format_date(new Date(item.ordertime),true);
        });
      }
-     res.render('./meal/order',{
+     result.orders = doc;
+     render();
+   });
+
+   function render(){
+     var renders = {
        title :'已配送的订单'
       ,user : req.session.user
-      ,orders : orders
+      ,result : result
       ,cur : 'meal'
       ,orderCur : 'send'
       ,pjax : pjax
-      ,jsflg : 'meal'
-     });
-   });
+      ,jsflg : 'meal'  
+     }
+     res.render('./meal/order',renders);
+   }
 }
 //历史订单 3：已经完成的订单
 var done = function(req,res){
-   var pjax = false;
-   if(!!req.query.pjax){
-     pjax = true;
-   }
-   var uid = parseInt(req.session.user._id,10);
-   var condition={};
-   condition.query={
-      uid : uid
-     ,sendstatus : true
-     ,donestatus : true
-   };
-   condition.sort={
-     subtime:-1
-   };
-   jixiang.get(condition,'orders',function(err,orders){
-     if(err){
-       orders=[];
+   var pjax = !!req.query.pjax;
+   var result = {};
+
+   jixiang.get({
+     query : {
+       user : req.session.user.username
+      ,isDone : true
      }
-     if(!!orders.length){
-       orders.forEach(function(item){
-         item.subtime = utils.format_date(new Date(item.subtime),true);
-         item.orderlist = JSON.parse(item.orderlist);
+    ,sort : {
+      ordertime : -1
+    }
+   },'orders',function(err,doc){
+     if(err)doc = [];
+     if(doc.length){
+       doc.forEach(function(item){
+         item.ordertime = utils.format_date(new Date(item.ordertime),true);
        });
      }
-     res.render('./meal/order',{
+     result.orders = doc;
+     render();
+   });
+   function render(){
+     var renders = {
        title :'已完成的订单'
       ,user : req.session.user
-      ,orders : orders
+      ,result : result
       ,cur : 'meal'
       ,orderCur : 'done'
       ,pjax : pjax
-      ,jsflg : 'meal'
-     });
-   });
+      ,jsflg : 'meal' 
+     }
+     res.render('./meal/order',renders);
+   }
 }
 //确认收菜，交易完成
 var doneconfirm = function(req,res){
@@ -361,9 +365,8 @@ var doneconfirm = function(req,res){
 exports.index = index;
 // exports.detail = detail;
 // exports.category = category;
-exports.newlist = newlist;
 exports.like = like;
-exports.subed = subed;
+// exports.subed = subed;
 exports.sended = sended;
 exports.done = done;
 exports.doneconfirm = doneconfirm;

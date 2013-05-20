@@ -14,11 +14,13 @@ define(function(require,exports,module){
      jixiang.addHandler(jixiang.$('meal-detail-list'),'click',function(event){
        var e = event || window.event;
        var target = e.target || e.srcElement;
-       e.preventDefault();
+    
        while(target.tagName.toLowerCase() !== 'a'){
+          if(target.id === 'meal-detail-list')return;
           target = target.parentNode;
-          if(target.tagName.toLowerCase() === 'body')return;
        }
+
+       e.preventDefault();
 
        if( !jixiang.hasClass(target,'meal-selected') ){
           target.className += ' meal-selected';
@@ -51,15 +53,19 @@ define(function(require,exports,module){
        var total = 0;
        while(i < len){
          if( jixiang.hasClass(meals[i],'meal-selected') ){
-            var text = meals[i].getElementsByTagName('span')[0].innerHTML;
+            var name = meals[i].getElementsByTagName('span')[0].innerHTML;
             var num = meals[i].getElementsByTagName('i').length ? 
                           parseInt(meals[i].getElementsByTagName('i')[0].innerHTML,10) : 1;
             var price = meals[i].getElementsByTagName('em').length ?
                           parseInt(meals[i].getElementsByTagName('em')[0].innerHTML,10) : 0;
             total += price*num;
-            var order = [text,num,price];
+            var order = {
+              name : name
+             ,num : num
+             ,price : price
+            }
             orders.push(order);
-            box += '<tr><td>'+ text +'</td><td>'+ num +'</td><td>'+price*num+'&nbsp;元</td></tr>';
+            box += '<tr><td>'+ name +'</td><td>'+ num +'</td><td>'+price*num+'&nbsp;元</td></tr>';
          }
          i++;
        }
@@ -102,12 +108,13 @@ define(function(require,exports,module){
                       +'<table class="order">'
                          +'<thead><tr><th>名称</th><th>数量</th><th>单价</th></tr></thead>'
                          +'<tbody>';
+       console.log(order)
        var len = order.length;
        var i = 0;
        while( i < len){
          var o = order[i].list;
          for(var key in o){
-           box += '<tr><td>'+ o[key][0] +'</td><td>'+o[key][1]+'</td><td>'+o[key][2]+'&nbsp;元</td></tr>';
+           box += '<tr><td>'+ o[key].name +'</td><td>'+o[key].num+'</td><td>'+o[key].price+'&nbsp;元</td></tr>';
          }
          box += '<tr><td colspan="3">总价：'+order[i].total+'&nbsp;元</td></tr>'
          i++;
