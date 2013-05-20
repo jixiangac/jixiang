@@ -28,7 +28,8 @@ exports.indexs = function(req,res){
 //首页
 exports.index = function(req,res){
   var cat = parseInt(req.query.cat,10) || 1;
-  var pjax = !!req.query.pjax ? true : false;
+  var pjax = !!req.query.pjax;
+  
   if(req.method == 'GET'){
     var condition = {};
     //家政申请

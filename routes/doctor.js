@@ -32,7 +32,7 @@ exports.index = function(req,res){
             ,doc : doc
             ,pjax : pjax
             ,cat : cat
-            ,jsflg : 'doctor'
+            ,jsflg : 'service'
           })
         });
         return;
@@ -56,7 +56,7 @@ exports.index = function(req,res){
          ,cat : cat
          ,pjax : pjax
          ,med : doc
-         ,jsflg : 'doctor'
+         ,jsflg : 'service'
         })
       }) 
       return;

@@ -14,24 +14,23 @@ define(function(require,exports,module){
     var target = e.target || e.srcElement;
     e.preventDefault();
     
-    var question=q.value.replace(/\s+/g,'');
+    var question=qInput.value.replace(/\s+/g,'');
     //问题为空就阻止提交
     if(question.length===0){
        alert('写几个字吧？');
-       q.value='';
-       q.focus();
+       qInput.value='';
+       qInput.focus();
        return;
     }
     //提交的是上一个问题阻止掉
     if(question == hadQ ){
       alert('这个问题的答案就在下面哦！');
-      q.value='';
-      q.focus();
+      qInput.value='';
+      qInput.focus();
       return;
     }
     var _q = question;
     var cat = parseInt(this.name,10) || 0;
-    console.log(cat)
     //问题分类
     if(cat === 1){
       question = '#问医#'+ question;
@@ -102,7 +101,7 @@ define(function(require,exports,module){
          html+=list+'</ul></div>';
          answer.innerHTML = html;
        }
-      q.value='';
+      qInput.value='';
       btns.innerHTML = '1秒后可再提问';
       setTimeout(function(){
         btns.disabled = false;
@@ -112,7 +111,7 @@ define(function(require,exports,module){
     //错误发生后的回调
     var errorCallback = function(){
       answer.innerHTML = '这个问题让我好像崩溃了，要不你再问问其他的！';
-      q.value='';
+      qInput.value='';
       btns.innerHTML = '1秒后可再提问';
       setTimeout(function(){
         btns.disabled = false;
