@@ -183,6 +183,11 @@ module.exports = function(app){
   //修改菜品
   app.get(/^\/admin\/meal\/edit\/?(\d+)$/,meal.modifyMeal);
   app.post('/admin/meal/edit',meal.modifyMeal);
+  //商家入驻
+  app.get('/admin/meal/shop',meal.adminShop);
+  app.get('/admin/meal/shop',meal.adminShop);
+  app.get('/admin/meal/addshop',meal.addShop);
+  app.post('/admin/meal/addshop',meal.addShop);
   /*-----------
      问医管理
    -----------*/

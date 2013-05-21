@@ -221,3 +221,9 @@ section.tab ul li a.cur{
   background:#f5f5f5;
   border-bottom: 1px solid #f5f5f5;
 }
+/**
+ * 头部导航
+ */
+.q-nav{
+  text-align: center;
+}

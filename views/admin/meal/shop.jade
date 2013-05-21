@@ -7,22 +7,14 @@ block content
           li
             h3.tab-title 订餐管理
           li
-            a.cur 订单管理
+            a(href="/admin/meal") 订单管理
           li
-            a(href="/admin/meal/shop") 商家管理
-      section.mod-grey-hd
-        - var nav = [{name:'全部订单',cur:''},{name:'未发送的订单',cur:''},{name:'已配送的订单',cur:''},{name:'已完成的订单',cur:''}]
-        - nav[result.cur].cur = 'btn-inverse';
-        .q-nav
-          each m,index in nav
-            if index === 0
-              a.btn.mr20(href="/admin/meal",class="#{m.cur}") 全部订单
-            else
-              a.btn.mr20(href="/admin/meal?cat=#{index}",class="#{m.cur}")= m.name
+            a.cur 商家管理
+        a.fl-r.btn.mr10(href="/admin/meal/addshop") 添加新商家
       .mod-grey-bd.mod-grey-bd-pd20
         table.order(style="width:710px;")
-          if result.orders.length
-            each order in result.orders
+          if result.shoplist.length
+            each order in result.shoplist
               tbody
                 tr.space
                   td(colspan="4")

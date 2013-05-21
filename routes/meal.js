@@ -6,7 +6,7 @@ var jixiang = require('../models/base');
 var utils = require('../models/utils');
 
 //订餐首页
-var index = function(req,res){
+exports.index = function(req,res){
    var data = {};//要发送的数据
    if(req.method === 'GET'){
      var n = 1;
@@ -96,121 +96,9 @@ exports.shop = function(req,res){
      });
   }
 }
-//菜品详情
-// var detail = function(req,res){
-//     var condition = {};
-//     condition.query = {
-//       _id: parseInt(req.params[0], 10)
-//     };
-//     jixiang.getOne(condition,'meals',function(err, meal) {
-//        switch(meal.cat){
-//          case '1':
-//            meal.cat_name = '早餐';
-//            break;
-//          case '2':
-//            meal.cat_name = '午餐';
-//            break;
-//          case '3' :
-//            meal.cat_name ='下午茶';
-//            break;
-//          case '4' :
-//            meal.cat_name ='晚餐';
-//            break;
-//          default :
-//            meal.cat_name ='早餐';
-//        }
-//       jixiang.count({sendstatus:false,donestatus:false},'orders',function(err,subLen){
-//         jixiang.count({sendstatus:true,donestatus:false},'orders',function(err,sendLen){
-//           res.render('./meal/detail', {
-//             title: meal.name + '的详情',
-//             user: req.session.user,
-//             meals: meal,
-//             subLen : subLen,
-//             sendLen : sendLen,
-//             cur: 'meal',
-//             cat:'',
-//             pjax : false
-//           });
-//         })
-//       })
 
-//     });
-// }
-
-// //菜品分类
-// var category = function(req,res){
-//      var condition={};
-//      var cat_title;
-//      if(req.params[0]){
-//        condition.query={
-//          cat : req.params[0]
-//        };
-//      }else{
-//        condition.sort={
-//          like : -1
-//        };
-//        condition.limit=12;
-//      }
-//      switch(req.params[0]){
-//         case '1':
-//           cat_title="早餐";
-//           break;
-//         case '2':
-//           cat_title="午餐";
-//           break;
-//         case '3':
-//           cat_title="下午茶";
-//           break;
-//         case '4':
-//           cat_title="晚餐";
-//           break;
-//         default:
-//           cat_title="热门";
-//      }
-//      jixiang.get(condition,'meals',function(err,meals){
-//       if(err){
-//         meals=[];
-//       }
-//       jixiang.count({sendstatus:false,donestatus:false},'orders',function(err,subLen){
-//         jixiang.count({sendstatus:true,donestatus:false},'orders',function(err,sendLen){
-//          res.render('./meal/category',{
-//              title : '菜品分类'
-//             ,user : req.session.user
-//             ,cat : cat_title
-//             ,meals : meals
-//             ,subLen : subLen
-//             ,sendLen : sendLen
-//             ,cur : 'meal'
-//             ,pjax : false
-//          });
-//        });
-//       });
-
-//      });
-// }
-//增加新订单
-// exports.newlist = function(req,res){
-
-//    var order = {
-//       uid : req.session.user._id
-//      ,username : req.session.user.username
-//      ,subtime : Date.now()
-//      ,donetime : 0
-//      ,donestatus : false
-//      ,sendstatus : false
-//      ,orderlist :req.body.list
-//    };
-
-//    jixiang.save(order,'orders',function(err,doc){
-//      if(err){
-//        return res.json({flg:0,msg:err});
-//      }
-//      return res.json({flg:1,msg:'加入成功！'});
-//    }); 
-
-// }
 //菜品的喜欢按钮
-var like = function(req,res){
+exports.like = function(req,res){
   var condition = {};
   condition.query = {
     _id : parseInt(req.body.id,10)
@@ -267,7 +155,7 @@ exports.subed = function(req,res){
    }
 }
 //历史订单 2:已经配送的订单
-var sended = function(req,res){
+exports.sended = function(req,res){
    var pjax = !!req.query.pjax;
    var result = {};
 
@@ -306,7 +194,7 @@ var sended = function(req,res){
    }
 }
 //历史订单 3：已经完成的订单
-var done = function(req,res){
+exports.done = function(req,res){
    var pjax = !!req.query.pjax;
    var result = {};
 
@@ -342,7 +230,7 @@ var done = function(req,res){
    }
 }
 //确认收菜，交易完成
-var doneconfirm = function(req,res){
+exports.doneconfirm = function(req,res){
    var id = parseInt(req.body.mealid);
    var condition={};
    condition.query = {
@@ -361,49 +249,59 @@ var doneconfirm = function(req,res){
       return res.json({flg:1,msg:'交易完成！'});
    });
 }
-//对外接口
-exports.index = index;
-// exports.detail = detail;
-// exports.category = category;
-exports.like = like;
-// exports.subed = subed;
-exports.sended = sended;
-exports.done = done;
-exports.doneconfirm = doneconfirm;
 
 /*-------------
       admin
  -------------*/
 var fs = require('fs');
 //订单管理
-var admin = function(req,res){
-  var condition = {};
-  condition.query = {//未完成状态的订单
-     donestatus : false
-  };
-  condition.sort = {//按提交时间逆序
-    subtime : -1
+exports.admin = function(req,res){
+  var query = {};
+  var cat = parseInt(req.query.cat,10) || 0;
+  var result = {cur:cat};
+  if(cat){
+    switch(cat){
+      case 1 :
+        query.isSend = false;
+        break;
+      case 2 :
+        query.isSend = true;
+        break;
+      case 3 :
+        query.isDone = true;
+    }
   }
-  jixiang.get(condition,'orders',function(err,orders){
+  jixiang.get({
+    query : query
+   ,sort : {
+     ordertime : -1
+   }
+  },'orders',function(err,orders){
     if(err){
       orders=[];
     }
-    if(!!orders.length){
+    if(orders.length){
      orders.forEach(function(item){
-       item.subtime = utils.format_date(new Date(item.subtime),true);
-       item.orderlist = JSON.parse(item.orderlist);
+       item.ordertime = utils.format_date(new Date(item.ordertime),true);
+       // item.list = JSON.parse(item.orderlist);
      });
     }
-    res.render('./admin/meal/index',{
+    result.orders = orders;
+    render();
+  });
+  
+  function render(){
+    var renders = {
        title : '订餐管理-订单管理'
       ,user : req.session.user
-      ,orders : orders
+      ,result : result
       ,cur : 'meal'
-    });
-  });
+    }
+    res.render('./admin/meal/index',renders);
+  }
 }
 //订单删除
-var delOrderlist = function(req,res){
+exports.delOrderlist = function(req,res){
   var id = parseInt(req.body.id);
   jixiang.delById(id,'orders',function(err){
     if(err){
@@ -412,9 +310,8 @@ var delOrderlist = function(req,res){
     return res.json({flg:1,msg:'删除成功！'});
   });
 }
-
 //订单的发单
-var sendStatus = function(req,res){
+exports.sendStatus = function(req,res){
   var id = parseInt(req.body.id);
   var condition = {};
   condition.query={
@@ -433,7 +330,7 @@ var sendStatus = function(req,res){
   });
 }
 //菜品管理
-var mealManager = function(req,res){
+exports.mealManager = function(req,res){
   jixiang.count({},'meals',function(err,count){
     if(err){
       return res.json({flg:0,msg:err});
@@ -504,7 +401,7 @@ var mealManager = function(req,res){
 
 }
 //添加新菜品
-var addMeal = function(req,res){
+exports.addMeal = function(req,res){
   if(req.method == 'GET'){
     res.render('./admin/meal/add',{
        title : '订餐管理-添加新菜品'
@@ -541,7 +438,7 @@ var addMeal = function(req,res){
   }
 }
 //删除菜品
-var delMeal = function(req,res){
+exports.delMeal = function(req,res){
   jixiang.delById(parseInt(req.body.id,10),'meals',function(err){
     if(err){
       return res.json({flg:0,msg:err});       
@@ -550,7 +447,7 @@ var delMeal = function(req,res){
  });
 }
 //修改菜品
-var modifyMeal = function(req,res){
+exports.modifyMeal = function(req,res){
   if(req.method == 'GET'){
     var condition = {
       query :{
@@ -614,11 +511,45 @@ var modifyMeal = function(req,res){
      });    
    }
 }
-//对外接口
-exports.admin = admin;
-exports.delOrderlist = delOrderlist;
-exports.sendStatus = sendStatus;
-exports.mealManager = mealManager;
-exports.addMeal = addMeal;
-exports.delMeal = delMeal;
-exports.modifyMeal = modifyMeal;
+/**
+ * 订餐的商家管理
+ */
+exports.adminShop = function(req,res){
+  var result = {};
+  if(req.method === 'GET'){
+    result.shoplist = [];
+    render();
+
+    function render(){
+      var renders = {
+        title : config.name + '商家管理'
+       ,user : req.session.user
+       ,jsflg: 'admin'
+       ,result : result
+       ,cur : 'meal'
+      }
+      res.render('./admin/meal/shop',renders);
+    }
+
+  }else if(req.method === 'POST'){
+
+  }
+}
+exports.addShop = function(req,res){
+  var result = {};
+  if(req.method === 'GET'){
+     render();
+    function render(){
+      var renders = {
+        title : config.name + '添加商家'
+       ,user : req.session.user
+       ,jsflg: 'admin'
+       ,result : result
+       ,cur : 'meal'
+      }
+      res.render('./admin/meal/addshop',renders);
+    }
+  }else if(req.method === 'POST'){
+
+  }
+}

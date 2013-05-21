@@ -36,11 +36,12 @@ define(function(require){
        var e = event || windwo.event;
        var target = e.target || e.srcElement;
        while(target.tagName.toLowerCase() !== 'a'){
+          if(target.id === 'people-list')return;
           target = target.parentNode;
-          if(target.tagName.toLowerCase() === 'body')break;
        }
        if(target.getAttribute('role') !== 'del')return;
        e.preventDefault();
+       if(!confirm('确认删除吗？删除后不可恢复！'))return;
        var options = {
           url : target.getAttribute('href')
          ,type : 'get'
@@ -56,5 +57,9 @@ define(function(require){
        jixiang.ajax(options);
      });
   }
-
+  
+  /**
+   * 订餐管理
+   */
+  
 })
