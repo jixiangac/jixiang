@@ -5,26 +5,31 @@ block content
     article.mod-grey 
       section.mod-grey-hd.mod-pd-top10.tab.clearfix
         ul#tab
+          - var cur = {1:'',2:''};
+          - cur[result.cur] = 'cur';
           li
             h3.tab-title 问诊预约
           li
-            a.pjax.cur(href="/doctor/ask?cat=1") 未回复
+            a.pjax(href="/doctor/ask?cat=1",class=cur[1]) 未回复
           li
-            a.pjax(href="/doctor/ask?cat=2") 已回复
+            a.pjax(href="/doctor/ask?cat=2",class=cur[2]) 已回复
       .mod-grey-bd.mod-grey-bd-pd20
-       if doc.length
-          each app in doc
-            table.order(style="width:710px;")
-              caption #{app.time} #{app.timeB}的预约申请
-                if !app.reply
-                  span.fl-l(style="color:red")未答复
-                else
-                  span.fl-l 已回复
+        table.order(style="width:710px;")
+          if result.doc.length
+            each app in result.doc
               tbody
+                tr.space
+                  td(colspan="2")
+                tr
+                  td(colspan="2") 预约时间：#{app.time} #{app.time_b}
+                    if !app.reply
+                      span.fl-r(style="color:red") 未答复
+                    else
+                      span.fl-r 已回复  
                 tr
                   td.reply 概况
                   td
-                    if !!app.doctor.length
+                    if app.doctor.length
                       a 预约医师：#{app.doctor}
                       br
                     a 病情简述：
@@ -43,8 +48,5 @@ block content
                           a(style="color:#888") 【预约不成功】#{app.replycontent}
                         else
                           a(style="color:#888") 【预约不成功】这个医师很懒，什么也没有说             
-        else
-          table.order(style="width:710px;")
-              caption.line 没有相关信息
-//- block script
-//-   script(src="/js/tab.js")
+          else
+            caption.line 没有相关信息

@@ -1,8 +1,4 @@
-/*--------------
-  -- 药品托购 --
- --------------*/
-(function(){
-if(!!jixiang.$('add-med')){
+
   //操作
     var add = jixiang.$('add-med')
        ,medTab = jixiang.$('med-table')
@@ -168,5 +164,5 @@ if(!!jixiang.$('add-med')){
       ajax('/doctor?cat=2','post',serializeData({list:JSON.stringify(medicines)}),result);       
     }
     Utils.addHandler(medSub.getElementsByTagName('a')[0],'click',subOrder);
- }
-})()
+
+

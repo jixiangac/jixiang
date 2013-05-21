@@ -16,7 +16,7 @@ block content
           li
             a.pjax(href="/meal/order/done",class=cur['done']) 已完成
        .mod-grey-bd.mod-grey-bd-pd20
-          if !!result.orders.length
+          if result.orders.length
             table.order(style="width:710px;")
               each order in result.orders
                 tbody

@@ -5,27 +5,32 @@ block content
     article.mod-grey 
       section.mod-grey-hd.mod-pd-top10.tab.clearfix
         ul#tab
+          - var cur = {1:'',2:''};
+          - cur[result.cur] = 'cur';
           li
             h3.tab-title 药品托购
           li
-            a.pjax.cur(href="/doctor/medicine?cat=1") 未回复
+            a(href="/doctor/medicine?cat=1",class=cur[1]) 未回复
           li
-            a.pjax(href="/doctor/medicine?cat=2") 已回复
+            a(href="/doctor/medicine?cat=2",class=cur[2]) 已回复
       .mod-grey-bd.mod-grey-bd-pd20
-        if !!doc.length
-          each med in doc
-            table#show-med.order(style="width:710px;")
-              if !med.reply
-                caption 
-                  a(style="color:red") 这是您在 #{med.time} 提交的托购药品的信息，目前还没有回音
-              else
-                caption #{med.time}  提交的托购药品信息
-              thead.tab-title
-                tr
-                  th.reply 药品名称
-                  th.reply 药品数量
-                  th 描述
+        table.order(style="width:710px;")
+          if result.doc.length
+            each med in result.doc
               tbody
+                tr.space
+                  td(colspan="3")
+                tr
+                  td(colspan="3")
+                    a 这是您在 #{med.time} 提交的药品购买的信息
+                    if !med.reply
+                      a.fl-r 未回复
+                    else
+                      a.fl-r 已回复
+                tr
+                  td 药品名称
+                  td 药品数量
+                  td 描述
                 each item in med.medlist
                   tr
                     td.med-name= item.name
@@ -37,8 +42,5 @@ block content
                     td.reply 回复
                     td(colspan="2")
                       a #{med.replycontent}       
-        else
-          table.order(style="width:710px;")
-              caption.line 没有相关信息
-//- block script
-//-   script(src="/js/tab.js")
+          else
+            caption.line 没有相关信息

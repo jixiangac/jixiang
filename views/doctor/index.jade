@@ -33,7 +33,7 @@ block content
                     -for(var i=month.getMonth()+1;i<=12;i++)
                       option(value="#{i}")!{i}月
                   select#yuDay(name="yuDay")
-                    -for(var i=month.getDate();i<=31;i++)
+                    -for(var i=1;i<=31;i++)
                       option(value="#{i}")!{i}日
                    select#yuTime(name="yuTime")
                      option(value="上午") 上午
@@ -77,44 +77,46 @@ block content
         if cat == 2
           //药品托购
           if !med
-            a#add-med.btn-reply 增加一条
+            div.mb10
+              a#add-med.btn 增加一条
             table#med-table.order(style="width:710px;")
-              tbody
+              thead
                 tr
                   td.reply 药品名称
                   td.reply 药品数量
                   td 描述
                   td.reply 操作
+              tbody
                 tr#no-med
                   td(colspan="4")
                     a 还没有托购信息，点击【增加一条】进行添加，全部添加完成后请点击【提交】
               tfoot
                 tr#med-sub.hide
                   td(colspan="4")
-                    a.btn 提交药品托购
+                    a.btn.btn-info(role="sub") 提交药品托购
                 tr#med-model.hide
-                  td.med-name 
-                    input.med-name.med-item(type="text")
-                  td.reply
+                  td 
+                    input.med-item(type="text")
+                  td
                     select.med-item(name="mednum")
                       -for(var i=1;i<=10;i++)
                         option(value="#{i}") #{i}
                   td 
-                    input.med-description.med-item(type="text")
+                    input.med-item(type="text")
                   td.reply.btn-control
-                     a.btn-reply.med-save 保存
-                     a.btn-reply.med-cancel 取消
+                     a.btn-reply(role="save") 保存
+                     a.btn-reply.ml10(role="cancel") 取消
           else
            if !med.reply
              a 这是您在 #{med.time} 提交的托购药品的信息，目前还没有回音
            else
              a 当你领取了药品后，管理员确认后，你才可以发起新的申请，这里是你上次的药品清单
-           table#show-med.table.table-top.order-table.form-inline.medicine-form
+           table#show-med.order(style="width:710px;")
               thead.tab-title
                 tr
-                  th.reply 药品名称
-                  th.reply 药品数量
-                  th 描述
+                  td.reply 药品名称
+                  td.reply 药品数量
+                  td 描述
               tbody
                 each item in med.medlist
                   tr
@@ -135,44 +137,3 @@ block content
                 input#q(type="text",name="q")
                 button#qsub.btn.btn-info.ml20(type="submit") 提交问题
           #answer.flow-mod 你好，我是问医小机器人，有什么问题就问我吧！
-block script
-  //- script
-  //-   //tab
-  //-   (function(){
-  //-     var tab = jixiang.$('tab');
-  //-     var handler = function(event){
-  //-       var pself = this;
-  //-       var e = event || window.event;
-  //-       defaultEvent(e);
-  //-       var self = e.target || e.srcElement;
-  //-       while(self.tagName.toLowerCase() !== 'a'){
-  //-         self = self.parentNode;
-  //-       }
-  //-       if(jixiang.hasClass(self,'tab-title'))return;
-  //-       if(jixiang.hasClass(self,'pjax')){
-  //-          pjax(self,self.getAttribute('href'),'pjax-container',function(){
-  //-              var script = document.createElement('script');
-  //-              var cat = self.getAttribute('href').replace('/doctor?cat=','')
-  //-              var doctor_js = jixiang.$('doctor-js');
-  //-              switch(parseInt(cat,10)){
-  //-                case 1 :
-  //-                  script.src = '/js/doctor.js';
-  //-                  break;
-  //-                case 2 :
-  //-                  script.src = '/js/medicine.js';
-  //-                  break;
-  //-                case 3 :
-  //-                  script.src = '/js/question.js';
-  //-                  break;
-  //-              }
-  //-              doctor_js.innerHTML='';
-  //-              doctor_js.appendChild(script);
-  //-           });
-  //-       }
-  //-       for(var i=0,alis=pself.getElementsByTagName('a'),len=alis.length;i<len;i++){
-  //-          alis[i].className = 'pjax';
-  //-       }
-  //-       self.className = 'cur';
-  //-     }
-  //-     Utils.addHandler(tab,'click',handler)
-  //-   })()

@@ -262,22 +262,33 @@ exports.review = function(req,res){
 exports.qlist = function(req,res){
    var pjax = !!req.query.pjax;
    var cat = parseInt(req.query.cat,10) || 1;
-   var condition = {};
-   condition.query = {
-      uid : req.session.user._id
-     ,reply : cat !== 1
-   }
-   jixiang.get(condition,'question',function(err,doc){
-     res.render('./question/list',{
-        title : '我的问题'
-       ,user : req.session.user
-       ,cur : 'question'
-       ,doc : doc
-       ,pjax : pjax
-       ,jsflg : 'question'
+   var result = {cur : cat}
+   if(req.method === 'GET'){
+     jixiang.get({
+       query : {
+          uid : req.session.user._id
+         ,reply : cat !== 1 
+       }
+     },'question',function(err,doc){
+        result.doc = doc;
+        render();
      });
 
-   })
+     function render(){
+       var renders = {
+          title : '我的问题'
+         ,user : req.session.user
+         ,cur : 'question'
+         ,result : result
+         ,pjax : pjax
+         ,jsflg : 'question' 
+       }
+       res.render('./question/list',renders);
+     }
+   }else if(req.method === 'POST'){
+
+   }
+
 }
 /*------------------
     　　admin

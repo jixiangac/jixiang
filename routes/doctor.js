@@ -2,7 +2,7 @@
  *  问医 Routes
  */
 var jixiang = require('../models/base');
-var Utils = require('../models/utils');
+var utils = require('../models/utils');
 //首页
 exports.index = function(req,res){
   var cat = parseInt(req.query.cat,10) || 1;
@@ -22,8 +22,8 @@ exports.index = function(req,res){
         jixiang.getOne(query,'doctors',function(err,doc){
           console.log(doc)
           if(!!doc){
-            doc.time = Utils.format_date(new Date(doc.time));
-            doc.agreereply = '约在 '+Utils.format_date(new Date(doc.agreetime),true) +' 就诊。';           
+            doc.time = utils.format_date(new Date(doc.time));
+            doc.agreereply = '约在 '+utils.format_date(new Date(doc.agreetime),true) +' 就诊。';           
           }
           res.render('./doctor/index',{
              title : '问医'
@@ -46,7 +46,7 @@ exports.index = function(req,res){
       }
       jixiang.getOne(condition,'doctors',function(err,doc){
         if(!!doc){
-          doc.time = Utils.format_date(new Date(doc.time),true);
+          doc.time = utils.format_date(new Date(doc.time),true);
           doc.medlist = JSON.parse(doc.medlist);
         }
         res.render('./doctor/index',{
@@ -98,9 +98,9 @@ exports.index = function(req,res){
 
     jixiang.save(item,'doctors',function(err,doc){
       if(err){
-        return res.json({flg:0,msg:err});
+        return res.json({success:false,msg:err});
       }
-      return res.json({flg:1,msg:'提交成功！'});
+      return res.json({success:true,reload:true,msg:'提交成功！'});
     });
 
   }
@@ -108,87 +108,101 @@ exports.index = function(req,res){
 }
 //我的问诊
 exports.ask = function(req,res){
-  var pjax = !!req.query.pjax ? true : false;
-  var cat = req.query.cat || 1;
-  var condition = {};
-  condition.query = {
-    cat : 1
-   ,uid : req.session.user._id
-   ,reply : (cat == 1) ? false : true
-  }
-  condition.sort = {
-    _id : -1
-  }
-  jixiang.get(condition,'doctors',function(err,doc){
+
+  var pjax = !!req.query.pjax;
+  var cat = +req.query.cat || 1;
+  var result = { cur:cat };
+
+  jixiang.get({
+    query : {
+      cat : 1
+     ,uid : req.session.user._id
+     ,reply : cat === 2
+    }
+   ,sort : {
+     _id : -1
+   }
+  },'doctors',function(err,doc){
     if(err){
       doc = [];
     }
-    // var items = [];
     if(!!doc.length){
-      //var now = new Date().getTime()-86400000;//延迟一天
       doc.forEach(function(item,index){
-        item.time = Utils.format_date(new Date(item.time));
+        item.time = utils.format_date(new Date(item.time));
         if(!item.disagree){
           var max = item.time;
           if(!!item.agreetime){
-            //max = item.agreetime > max ? item.agreetime : max;
-            item.agreetime = Utils.format_date(new Date(item.agreetime),true);
-            item.agreereply = '约在 '+Utils.format_date(new Date(item.agreetime),true) +' 就诊。';
+            item.agreetime = utils.format_date(new Date(item.agreetime),true);
+            item.agreereply = '约在 '+utils.format_date(new Date(item.agreetime),true) +' 就诊。';
           }
-          // if(max > now){ 
-          //   items.push(item);
-          // }
         }  
 
       });
     }
-    res.render('./doctor/ask',{
+
+    result.doc = doc;
+    render();
+  });
+  
+  function render(){
+    var renders = {
        title : '我的问诊'
       ,user : req.session.user
       ,cur : 'doctor'
       ,cat : '/ask'
-      ,doc : doc
+      ,result : result
       ,pjax : pjax
-      ,jsflg : 'doctor'
-    });
-  });
-
+      ,jsflg : 'doctor'      
+    }
+    res.render('./doctor/ask',renders);
+  }
 }
 //我的药品
 exports.medicine = function(req,res){
-  var pjax = !!req.query.pjax ? true : false;
-  var cat = req.query.cat || 1;
-  if(req.method == 'GET'){
-    var condition = {};
-    condition.query = {
-      cat : 2
-     ,uid : req.session.user._id
-     ,reply : (cat == 1) ? false : true
-    }
-    condition.sort = {
-      _id : -1
-    }
 
-    jixiang.get(condition,'doctors',function(err,doc){
+  var pjax = !!req.query.pjax;
+  var cat = +req.query.cat || 1;
+  var result = {cur : cat};
+
+  if(req.method === 'GET'){
+
+    jixiang.get({
+      query : {
+        cat : 2
+       ,uid : req.session.user._id
+       ,reply : cat === 2
+      }
+     ,sort : {
+       _id : -1
+     }
+    },'doctors',function(err,doc){
       if(err){
         doc =[];
       }
-      if(!!doc.length){
+      if(doc.length){
         doc.forEach(function(item){
-          item.time = Utils.format_date(new Date(item.time),true);
+          item.time = utils.format_date(new Date(item.time),true);
           item.medlist = JSON.parse(item.medlist);
         })
       }
-      res.render('./doctor/medicine',{
-         title : '我的药品'
-        ,user : req.session.user
-        ,cur : 'doctor'
-        ,cat : '/medicine'
-        ,doc : doc
-        ,pjax : pjax
-        ,jsflg : 'doctor'
-      });
+      result.doc = doc;
+      render();
     });
+
+   function render(){
+     var renders = {
+       title : '我的药品'
+      ,user : req.session.user
+      ,cur : 'doctor'
+      ,cat : '/medicine'
+      ,result : result
+      ,pjax : pjax
+      ,jsflg : 'doctor' 
+     }
+     res.render('./doctor/medicine',renders);
+   }
+
+  }else if(req.method === 'POST'){
 
   }
 }
@@ -237,9 +251,9 @@ exports.admin = function(req,res){
 
        if(!!doc.length){
          doc.forEach(function(item){
-           item.time = Utils.format_date(new Date(item.time));
+           item.time = utils.format_date(new Date(item.time));
            if(!!item.agreetime){
-              item.agreereply = '约在 '+Utils.format_date(new Date(item.agreetime),true) +' 就诊。';     
+              item.agreereply = '约在 '+utils.format_date(new Date(item.agreetime),true) +' 就诊。';     
            }
 
          });
@@ -303,7 +317,7 @@ exports.reMedicine = function(req,res){
        }
        if(!!doc.length){
          doc.forEach(function(item){
-           item.time = Utils.format_date(new Date(item.time),true);
+           item.time = utils.format_date(new Date(item.time),true);
            item.medlist = JSON.parse(item.medlist); 
          });
        }

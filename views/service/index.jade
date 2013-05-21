@@ -36,10 +36,10 @@ block content
                     select#yuMonth(name="yuMonth")
                       -var month =new Date();
                       -for(var i=month.getMonth()+1;i<=12;i++)
-                        option(value="#{i}")!{i}月
+                        option(value="#{i}")!{i} 月
                     select#yuDay(name="yuDay")
                       -for(var i=1;i<=31;i++)
-                        option(value="#{i}")!{i}日
+                        option(value="#{i}")!{i} 日
                      select#yuTime(name="yuTime")
                        option(value="上午") 上午
                        option(value="下午") 下午
@@ -59,15 +59,16 @@ block content
                     textarea.bootstrap(rows="5",cols="37",name="remark")
                     //- span 简单描述一下你的病情，让医生更好对诊
                   .form-item.form-actions
-                    button(class="btn",type="submit") 提交申请
+                    button(class="btn",type="submit",href="javascript:;") 提交申请
             else
-              table.table.table-top.order-table
-                caption #{doc.time} #{doc.timeB}的预约申请
-                  if !doc.reply
-                    span.fl-l(style="color:red")未答复
-                  else
-                    span.fl-l 已回复
+              table.order(style="width:710px;")
                 tbody
+                  tr
+                    td(colspan="2") #{doc.time} #{doc.timeB}的预约申请
+                      if !doc.reply
+                        span.fl-r(style="color:red")未答复
+                      else
+                        span.fl-r 已回复
                   tr
                     td.reply 概况
                     td

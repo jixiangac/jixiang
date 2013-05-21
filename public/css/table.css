@@ -17,7 +17,7 @@
   border-top: 1px solid #ccc;
   background: #fff;
 }
-.order tr:nth-child(2n){
+.order tr:nth-child(2n),.order thead tr{
   background: #f8f8f8;
 }
 .order td,.order th{
@@ -38,5 +38,13 @@
 }
 .order td.total {
   vertical-align: middle;
+  text-align: center;
+}
+.order tfoot td{
+  padding: 15px;
+  background: #f1f2f4;
+}
+
+.btn-control{
   text-align: center;
 }

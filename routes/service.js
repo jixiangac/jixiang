@@ -2,7 +2,7 @@
  * Service Routes
  */
 var jixiang = require('../models/base');
-var Utils = require('../models/utils');
+var utils = require('../models/utils');
 
 
 exports.indexs = function(req,res){
@@ -37,12 +37,12 @@ exports.index = function(req,res){
       var query = {
         uid : req.session.user._id
        ,time : {
-         '$gte' : new Date()*1 -86400000
+         '$gte' : new Date()*1 -86400000//提前一天
        }
       }
       jixiang.getOne(query,'service',function(err,doc){
         if(!!doc){
-          doc.time = Utils.format_date(new Date(doc.time));
+          doc.time = utils.format_date(new Date(doc.time));
         }
         res.render('./service/index',{
           title : '家政'
@@ -134,9 +134,9 @@ exports.index = function(req,res){
 
     jixiang.save(item,'service',function(err,doc){
       if(err){
-        return res.json({flg:0,msg:err});
+        return res.json({success:false,msg:err});
       }
-      return res.json({flg:1,msg:'提交成功！'});
+      return res.json({success:true,reload:true,msg:'提交成功！'});
     });
 
 
@@ -146,50 +146,51 @@ exports.index = function(req,res){
 //我的家政申请
 exports.service = function(req,res){
   var cat = parseInt(req.query.cat,10) || 1;
-  var pjax = !!req.query.pjax ? true : false;
+  var pjax = !!req.query.pjax;
+  var result = { cur : cat}
 
   if(req.method == 'GET'){
-    var condition = {};
-    condition.query = {
-      uid : req.session.user._id
-     ,reply : (cat==1)?false:true
-    };
-    condition.sort = {
-      _id : -1
-    }
-    jixiang.get(condition,'service',function(err,doc){
+
+    jixiang.get({
+      query : {
+        uid : req.session.user._id
+       ,reply : cat === 2 
+      }
+     ,sort : {
+       _id : -1
+     }
+    },'service',function(err,doc){
       if(err){
         doc = [];
       }
-      var items = [];
-      if(!!doc.length){
 
-        //var now = new Date().getTime()-86400000;//延迟一天
+      if(doc.length){
         doc.forEach(function(item,index){
-          item.time = Utils.format_date(new Date(item.time));
+          item.time = utils.format_date(new Date(item.time));
           if(!item.reply){
-            //var max = item.time;
             if(!!item.agreetime){
-             // max = item.agreetime > max ? item.agreetime : max;
-              item.agreetime = Utils.format_date(new Date(item.agreetime),true);
+              item.agreetime = utils.format_date(new Date(item.agreetime),true);
             }
-            // if(max > now){ 
-            //   items.push(item);
-            // }
           }  
         });
 
       }
-      res.render('./service/ask',{
+      result.doc = doc;
+      render();
+    });
+
+    function render(){
+      var renders = {
          title : '我的家政'
         ,user : req.session.user
         ,cur : 'service'
         ,cat : '/ask'
-        ,doc : doc
+        ,result : result
         ,pjax : pjax
         ,jsflg : 'service'
-      });
-    });
+      }
+      res.render('./service/ask',renders);
+    }
   }else if(req.method == 'POST'){
 
   }
@@ -211,7 +212,7 @@ exports.admin = function(req,res){
        }
        if(!!doc.length){
          doc.forEach(function(item){
-           item.time = Utils.format_date(new Date(item.time));
+           item.time = utils.format_date(new Date(item.time));
          });
        }
 

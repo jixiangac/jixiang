@@ -5,22 +5,27 @@ block content
     article.mod-grey 
       section.mod-grey-hd.mod-pd-top10.tab.clearfix
           ul#tab
+            - var cur = {1:'',2:''};
+            - cur[result.cur] = 'cur';
             li
               h3.tab-title 我的问题
             li
-              a.pjax.cur(href="/question/answer?cat=1") 未回复
+              a(href="/question/answer?cat=1",class=cur[1]) 未回复
             li
-              a.pjax(href="/question/answer?cat=2") 已回复
+              a(href="/question/answer?cat=2",class=cur[2]) 已回复
       .mod-grey-bd.mod-grey-bd-pd20
-        if !!doc.length
-          each q in doc
-            table.order(style="width:710px;")
-              caption 
-                if !q.reply
-                  a(style="color:red") 该问题还未回复
-                else
-                  | 问题已经被#{q.replyuser}回复了
+        table.order(style="width:710px;")
+          if result.doc.length
+            each q in result.doc
               tbody
+                tr.space
+                  td(colspan="2")
+                tr
+                  td(colspan="2")
+                    if !q.reply
+                      a(style="color:red") 该问题还未回复
+                    else
+                      | 问题已经被#{q.replyuser}回复了  
                 tr
                   td.reply 问题：
                   td= q.title
@@ -29,8 +34,5 @@ block content
                   tr
                     td.reply 回复
                     td #{q.content}       
-        else
-          table.order(style="width:710px;")
-              caption.line 您还没有不明白的问题
-//- block script
-//-   script(src="/js/tab.js")
+          else
+            caption.line 您还没有不明白的问题

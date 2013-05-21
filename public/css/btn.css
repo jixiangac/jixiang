@@ -1053,6 +1053,11 @@ select:focus:required:invalid:focus {
   -moz-box-shadow: 0;
   box-shadow: 0;
 }
+select{
+  background-color: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  /*width: 220px;*/
+}
 /*= Button & Input
  ----------------------*/
  /*按钮*/

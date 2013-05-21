@@ -47,7 +47,13 @@ define(function(require,exports,module){
   exports.hasClass = jixiang.hasClass;
   exports.getByClass = jixiang.getByClass;
 
-  //侦听事件
+  /**
+   * 
+   * 侦听事件 & 移除事件
+   * 
+   * @type {Object}
+   * 
+   */
   var Utils = {
     addHandler : function(obj,type,handler){
       if(obj.addEventListener){
@@ -71,7 +77,11 @@ define(function(require,exports,module){
   exports.addHandler = Utils.addHandler;
   exports.removeHandler = Utils.removeHandler;
   
-  //表单序列化
+  /**
+   * 数据序列化
+   * @param  {[type]} form [description]
+   * @return {[type]}      [description]
+   */
   function serialize(form){
     var parts = []
      ,field = null
@@ -124,7 +134,6 @@ define(function(require,exports,module){
      return parts.join('&');
   }
   exports.serialize = serialize;
-  //序列化
   function serializeData(data){
     var res = [];
     for(var key in data){
@@ -134,15 +143,24 @@ define(function(require,exports,module){
     return res.join('&');
   }
   exports.serializeData = serializeData;
-  //判断填写是否为空
+  /**
+   * 判断是否会空对象
+   * @param  {[type]}  obj [description]
+   * @return {Boolean}     [description]
+   */
   function isEmpty(obj){
     return !!obj.value.replace(/\s+/,'').length === 0;
   }
-  //去掉两边的空
+  exports.isEmpty = isEmpty;
+  /**
+   * 去掉两边的空
+   * @param  {[type]} str [description]
+   * @return {[type]}     [description]
+   */
   function trim(str){
     return str.replace(/\s+/g,'');
   }
-  exports.isEmpty = isEmpty;
+  
   exports.trim = trim;
   /*--------------
       Ajax封装
