@@ -13,26 +13,20 @@ block content
         a.fl-r.btn.mr10(href="/admin/meal/addshop") 添加新商家
       .mod-grey-bd.mod-grey-bd-pd20
         table.order(style="width:710px;")
+          tr
+            td 商家编号
+            td 商家名称
+            td 入驻时间
+            td 操作
           if result.shoplist.length
-            each order in result.shoplist
-              tbody
-                tr.space
-                  td(colspan="4")
-                tr
-                  td(colspan="4") 提交时间：#{order.ordertime} 提交者：#{order.user}
-                    if !order.isSend
-                      a.fl-r(href="/admin/order/send/#{order._id}") 配送该订单
-                    else
-                      a.fl-r 已配送
-                each item,index in order.list
-                  tr
-                    td= item.name
-                    td= item.price 
-                      |&nbsp;元
-                    td= item.num
-                      |&nbsp;份
-                    if index === 0
-                      td.total(rowspan="#{order.list.length}") 总价：#{order.total}&nbsp;元
+            each shop in result.shoplist
+              tr
+                td= shop._id
+                td= shop.name
+                td= shop.jointime
+                td.td-center
+                  a.btn-reply.mr10(href="/admin/meal/editshop?id=#{shop._id}") 修改
+                  a.btn-reply 删除
           else
-            p 没有信息
-            
+            tr
+              td(colspan="4") 暂时没有商家

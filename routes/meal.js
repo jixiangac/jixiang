@@ -531,8 +531,16 @@ exports.adminShop = function (req, res) {
   var result = {};
 
   if (req.method === 'GET') {
-    result.shoplist = [];
-    render();
+    jixiang.get({
+      query : {}
+    }, 'meals', function (err, doc) {
+      if (err) {
+        console.log(err);
+      }
+      result.shoplist = doc;
+      console.log(doc);
+      render();
+    });
   } else if (req.method === 'POST') {
 
   }
@@ -570,6 +578,7 @@ exports.addShop = function (req, res) {
       name : req.body.shop_name
     , pic : _pic
     , joindate : new Date() * 1
+    , list : []
     };
 
     //存图片
@@ -607,10 +616,10 @@ exports.editShop = function (req, res) {
   var result = {};
 
   if (req.method === 'GET') {
-    if(!id){
-      return;
+    if (!id) {
+      return res.redirect('404');
     }
-    jixiang.get({
+    jixiang.getOne({
       query : {
         _id : id
       }
@@ -618,9 +627,32 @@ exports.editShop = function (req, res) {
       if (err) {
         console.log(err);
       }
-      console.log(doc)
+      result.shop = doc;
+      render();
     });
   } else if (req.method === 'POST') {
-  
-    }
+
+    var newMeal = {
+        name : req.body.name
+      , price : req.body.price
+      , des : req.body.des
+      };
+
+    jixiang.update({
+      query : {
+        _id : req.body.id
+      }
+    , modify : {
+        '$push' : {
+          list : newMeal
+        }
+      }
+    }, 'meals', function (err) {
+      if (err) {
+        return res.json({success : false, msg : '操作失败！'});
+      }
+      return res.json({success : true, msg: '增加成功！'});
+    });
+    
+  }
 };

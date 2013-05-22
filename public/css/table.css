@@ -22,7 +22,7 @@
 }
 .order td,.order th{
   border: 1px solid #ddd;
-  padding: 6px 13px;
+  padding: 6px 18px;
 }
 .order th{
   text-align: center;
@@ -45,6 +45,6 @@
   background: #f1f2f4;
 }
 
-.btn-control{
+.btn-control, .td-center{
   text-align: center;
 }

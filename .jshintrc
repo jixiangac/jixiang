@@ -4,6 +4,7 @@
         "seajs",
         "console"
   ],
+  "devel": true,
   "node" : true,
   "es5": true,
   "bitwise": true,
@@ -11,6 +12,7 @@
   "eqeqeq": true,
   "forin": false,
   "immed": true,
+  "laxbreak": true,
   "latedef": true,
   "laxcomma": true,
   "newcap": true,
@@ -26,5 +28,6 @@
   "white": true,
   "indent": 2,
   "expr": true,
-  "onevar": false
+  "onevar": false,
+  "browser": true
 }
