@@ -60,10 +60,10 @@ define(function(require,exports,module){
                           parseInt(meals[i].getElementsByTagName('em')[0].innerHTML,10) : 0;
             total += price*num;
             var order = {
-              name : name
-             ,num : num
-             ,price : price
-            }
+                name : name
+              , num : num
+              , price : price
+            } 
             orders.push(order);
             box += '<tr><td>'+ name +'</td><td>'+ num +'</td><td>'+price*num+'&nbsp;元</td></tr>';
          }

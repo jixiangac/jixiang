@@ -1,0 +1,30 @@
+{
+ "predef": [
+        "define",
+        "seajs",
+        "console"
+  ],
+  "node" : true,
+  "es5": true,
+  "bitwise": true,
+  "curly": true,
+  "eqeqeq": true,
+  "forin": false,
+  "immed": true,
+  "latedef": true,
+  "laxcomma": true,
+  "newcap": true,
+  "noarg": true,
+  "noempty": true,
+  "nonew": true,
+  "plusplus": false,
+  "undef": true,
+  "strict": false,
+  "trailing": false,
+  "globalstrict": true,
+  "nonstandard": true,
+  "white": true,
+  "indent": 2,
+  "expr": true,
+  "onevar": false
+}

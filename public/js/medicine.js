@@ -1,10 +1,11 @@
 
   //操作
     var add = jixiang.$('add-med')
-       ,medTab = jixiang.$('med-table')
-       ,medBody = medTab.getElementsByTagName('tbody')[0]
-       ,medModel = jixiang.$('med-model').innerHTML
-       ,medSub = jixiang.$('med-sub');
+      , medTab = jixiang.$('med-table')
+      , medBody = medTab.getElementsByTagName('tbody')[0]
+      , medModel = jixiang.$('med-model').innerHTML
+      , medSub = jixiang.$('med-sub');
+      
     //读取本地数据
     var storage = window.localStorage;
     var medicines = [];
@@ -144,7 +145,7 @@
         medsave.innerHTML = createTr(newMed);
         Utils.addHandler(jixiang.getByClass('med-delete',medsave)[0],'click',deleteTr);//绑定删除事件
         Utils.addHandler(jixiang.getByClass('med-modify',medsave)[0],'click',modifyTr);//绑定修改事件
-      })
+      });
       if(!!jixiang.$('no-med')){
         var nomed =jixiang.$('no-med');
         nomed.parentNode.removeChild(nomed);

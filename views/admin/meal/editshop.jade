@@ -1,0 +1,49 @@
+extends ../layouts/header
+block content
+   #container
+    article.mod-grey.clearfix
+      section.mod-grey-hd.mod-pd-top10.tab.clearfix
+        ul#tab
+          li
+            h3.tab-title 添加新商家
+          li
+            a(href="/admin/meal/shop") 商家管理
+      section.mod-grey-bd.mod-grey-bd-pd20
+        div.mb20
+          form.form-inline(action="/admin/meal/addshop",method="post",enctype="multipart/form-data")
+            fieldset
+              .form-item
+                label.mr10 商家名称
+                input(type="text",name="shop_name")
+              .form-item
+                label.mr10 商家LOGO
+                input(type="file",name="shop_pic")
+              .form-item
+                label
+                button.btn(type="submit") 增加
+        div.mb10
+          a#add-med.btn 增加一个菜
+        table#med-table.order(style="width:710px;")
+          thead
+            tr
+              td.reply 菜名
+              td.reply 价格
+              td 描述
+              td.reply 操作
+          tbody
+            tr#no-med
+              td(colspan="4",style="text-align:center;")
+                a 还没有菜单信息，点击【增加一个菜】进行添加
+          tfoot
+            tr#shop-model.hide
+              td 
+                input.med-item(type="text")
+              td
+                select.med-item(name="mednum")
+                  -for(var i=1;i<=10;i++)
+                    option(value="#{i}") #{i}
+              td 
+                input.med-item(type="text")
+              td.reply.btn-control
+                 a.btn-reply(role="save") 保存
+                 a.btn-reply.ml10(role="cancel") 取消

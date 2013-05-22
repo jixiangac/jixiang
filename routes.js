@@ -3,13 +3,13 @@
  */
 
 var meal = require('./routes/meal')
-   ,question = require('./routes/question')
-   ,notice = require('./routes/notice')
-   ,login = require('./routes/login')
-   ,register = require('./routes/register')
-   ,user = require('./routes/user')
-   ,doctor = require('./routes/doctor')
-   ,service = require('./routes/service')
+  , question = require('./routes/question')
+  , notice = require('./routes/notice')
+  , login = require('./routes/login')
+  , register = require('./routes/register')
+  , user = require('./routes/user')
+  , doctor = require('./routes/doctor')
+  , service = require('./routes/service')
    
 module.exports = function(app){
  /************************
@@ -18,20 +18,20 @@ module.exports = function(app){
   /*--------
       首页
    --------*/
-  app.get('/',function(req,res){
+  app.get('/', function (req,res) {
     if(!req.session.user){
       return res.redirect('/login');
     }
       res.render('index',
         {
-          title :'吉祥社区'
-         ,user : req.session.user
-         ,cur : 'index'
-         ,pjax : false
-         ,jsflg : 'index'
+          title :'吉祥社区',
+          user : req.session.user,
+          cur : 'index',
+          pjax : false,
+          jsflg : 'index'
         });
   });
-  app.get('/people/:username',notice.index);
+  app.get('/people/:username', notice.index);
 
   /**
    *
@@ -39,16 +39,16 @@ module.exports = function(app){
    *
    * 
    */
-  app.get('/login',login.index);
-  app.post('/login',login.index);
+  app.get('/login', login.index);
+  app.post('/login', login.index);
 
-  app.post('/reg',login.reg);
+  app.post('/reg', login.reg);
   
-  app.get('/forgot',login.forgot);
-  app.post('/forgot',login.forgot);
+  app.get('/forgot', login.forgot);
+  app.post('/forgot', login.forgot);
   
-  app.get('/setpass',login.setpass);
-  app.post('/setpass',login.setpass);
+  app.get('/setpass', login.setpass);
+  app.post('/setpass', login.setpass);
 
   /*-------------
        订餐
@@ -56,8 +56,8 @@ module.exports = function(app){
    //订餐首页
    app.get('/meal',meal.index);
 
-   app.get('/meal/shop',meal.shop)
-   app.post('/meal/shop',meal.shop)
+   app.get('/meal/shop',meal.shop);
+   app.post('/meal/shop',meal.shop);
 
    //菜品的详情页
    // app.get(/^\/meal\/detail\/?(\d+)$/,meal.detail);
@@ -89,10 +89,10 @@ module.exports = function(app){
     *       +  生成订单，已配送，等待确认
     *       +  完成订单，配送确认 
     */
-   app.get('/meal/order/sub',meal.subed);//已提交的订单
-   app.get('/meal/order/send',meal.sended);//已经配送的订单
-   app.get('/meal/order/done',meal.done);//已经完成的订单
-   app.post('/meal/order/done',meal.doneconfirm);//交易完成
+   app.get('/meal/order/sub', meal.subed);//已提交的订单
+   app.get('/meal/order/send', meal.sended);//已经配送的订单
+   app.get('/meal/order/done', meal.done);//已经完成的订单
+   app.post('/meal/order/done', meal.doneconfirm);//交易完成
 
 
    /**
@@ -100,32 +100,32 @@ module.exports = function(app){
     *  包括（线上问诊、问诊预约、药品购买、家政服务）
     * 
     */
-   app.get('/services',service.indexs);
+   app.get('/services', service.indexs);
    /*--------
       问医
      --------*/
-   app.get('/doctor',doctor.index);
-   app.post('/doctor',doctor.index);
-   app.get('/doctor/ask',doctor.ask);
-   app.get('/doctor/medicine',doctor.medicine);
+  app.get('/doctor', doctor.index);
+  app.post('/doctor', doctor.index);
+  app.get('/doctor/ask', doctor.ask);
+  app.get('/doctor/medicine', doctor.medicine);
    // app.get('/doctor/question',doctor.myQ);
    /*--------
       家政
     --------*/
-    app.get('/service',service.index);
-    app.post('/service',service.index);
-    app.get('/service/ask',service.service)
+  app.get('/service', service.index);
+  app.post('/service', service.index);
+  app.get('/service/ask', service.service);
    /*--------
     问题咨询
     --------*/
-   app.get('/question',question.index);
-   app.get('/question/answer',question.qlist);
-   app.post('/question',question.answer);
-   app.post('/question/review',question.review);
+  app.get('/question', question.index);
+  app.get('/question/answer', question.qlist);
+  app.post('/question', question.answer);
+  app.post('/question/review', question.review);
   /*-------
      退出
     -------*/
-  app.get('/logout',function(req,res){
+  app.get('/logout', function (req, res) {
     req.session.user = null;
     res.redirect('/login');
   });
@@ -146,24 +146,24 @@ module.exports = function(app){
      人员管理
    -----------*/
   //用户列表
-  app.get('/admin/people',user.index);
-  app.get('/admin/people/admin',user.admin);
+  app.get('/admin/people', user.index);
+  app.get('/admin/people/admin', user.admin);
   //用户编辑&删除
-  app.get('/admin/people/delete',user.delUser);
+  app.get('/admin/people/delete', user.delUser);
   //用户个人信息
-  app.get('/admin/people/info',user.person);
-  app.post('/admin/people/info',user.person);
+  app.get('/admin/people/info', user.person);
+  app.post('/admin/people/info', user.person);
   /*-----------
      发布公告
     ----------*/
   //获取公告
-  app.get('/admin/notice',notice.admin);
+  app.get('/admin/notice', notice.admin);
   //发布&&修改公告
-  app.post('/admin/notice',notice.admin);
+  app.post('/admin/notice', notice.admin);
   //历史公告页
-  app.get('/admin/notice/history',notice.history);
+  app.get('/admin/notice/history', notice.history);
   //把新公告放入历史公告中
-  app.post('/admin/notice/history',notice.history);
+  app.post('/admin/notice/history', notice.history);
   /*-----------
      订餐管理
     ----------*/
@@ -174,26 +174,34 @@ module.exports = function(app){
   //订单的已发单状态
   app.post('/admin/order/send',meal.sendStatus);
   //菜品管理
-  app.get(/^\/admin\/meal\/control\/?(\d*)$/,meal.mealManager);
-  //添加新菜品
-  app.get('/admin/meal/add',meal.addMeal);
-  app.post('/admin/meal/add',meal.addMeal);
-  //删除菜品
-  app.post('/admin/meal/delete',meal.delMeal);
-  //修改菜品
-  app.get(/^\/admin\/meal\/edit\/?(\d+)$/,meal.modifyMeal);
-  app.post('/admin/meal/edit',meal.modifyMeal);
-  //商家入驻
-  app.get('/admin/meal/shop',meal.adminShop);
-  app.get('/admin/meal/shop',meal.adminShop);
-  app.get('/admin/meal/addshop',meal.addShop);
-  app.post('/admin/meal/addshop',meal.addShop);
+  // app.get(/^\/admin\/meal\/control\/?(\d*)$/,meal.mealManager);
+  // //添加新菜品
+  // app.get('/admin/meal/add',meal.addMeal);
+  // app.post('/admin/meal/add',meal.addMeal);
+  // //删除菜品
+  // app.post('/admin/meal/delete',meal.delMeal);
+  // //修改菜品
+  // app.get(/^\/admin\/meal\/edit\/?(\d+)$/,meal.modifyMeal);
+  // app.post('/admin/meal/edit',meal.modifyMeal);
+ 
+  /**
+   * 商家入驻
+   * 商家列表
+   * 商家名称 + 商家LOGO成功 后 跳转到editshop添加菜单
+   */
+  app.get('/admin/meal/shop', meal.adminShop);
+  app.get('/admin/meal/shop', meal.adminShop);
+  app.get('/admin/meal/addshop', meal.addShop);
+  app.post('/admin/meal/addshop', meal.addShop);
+  app.get('/admin/meal/editshop', meal.editShop);
+  app.post('/admin/meal/editshop', meal.editShop);
+
   /*-----------
      问医管理
    -----------*/
    app.get('/admin/doctor',doctor.admin);
    app.post('/admin/doctor',doctor.admin);
-   app.get('/admin/doctor/medicine',doctor.reMedicine)
+   app.get('/admin/doctor/medicine',doctor.reMedicine);
    app.post('/admin/doctor/medicine',doctor.reMedicine);
   /*-----------
      问题管理
