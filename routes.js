@@ -18,19 +18,8 @@ module.exports = function(app){
   /*--------
       首页
    --------*/
-  app.get('/', function (req,res) {
-    if(!req.session.user){
-      return res.redirect('/login');
-    }
-      res.render('index',
-        {
-          title :'吉祥社区',
-          user : req.session.user,
-          cur : 'index',
-          pjax : false,
-          jsflg : 'index'
-        });
-  });
+  app.get('/',login.indexs);
+  app.post('/',login.indexs);
   app.get('/people/:username', notice.index);
 
   /**

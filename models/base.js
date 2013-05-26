@@ -103,7 +103,7 @@ jixiang.prototype.getOne = function(query,collection,callback){
   this.getCollection(collection,function(err,db){
     if(err)callback(err);
     else{
-      db.findOne(query,function(err,doc){
+      db.findOne(query, function(err,doc){
         if(doc)callback(err,doc);
         else callback(err,null);
       });

@@ -3,7 +3,99 @@ var config = require('../config')
    ,crypto = require('crypto')
    ,utils = require('../models/utils')
    ,jixiang = require('../models/base');
+/**
+ * 首页
+ * @return {[type]} [description]
+ */
+exports.indexs = function (req, res) {
+  function render() {
+    var renders = {
+        title :'吉祥社区'
+      , user : req.session.user
+      , result : result
+      , cur : 'index'
+      , pjax : false
+      , jsflg : 'index'
+      };
+    res.render('index', renders);
+  }
 
+  if(!req.session.user){
+    return res.redirect('/login');
+  }
+  var result = {};
+  if (req.method === 'GET') {
+    var n = 5;
+    //取公告
+    jixiang.getOne({
+      status : true
+    }, 'notice', function (err, doc) {
+      result.notice = doc;
+      --n || render();
+    });
+    //取订餐信息
+    jixiang.get({
+      query : {
+        user : req.session.user.username
+      , isDone : false
+      }
+    }, 'orders', function (err, doc) {
+      if (err) {
+        doc = [];
+      }
+      result.sends = [];
+      result.subs = [];
+      if (doc.length) {
+        doc.forEach(function (item,index) {
+          item.ordertime = utils.format.call(new Date(item.ordertime), 'yyyy-MM-dd hh:mm:ss');
+          if (item.isSend) {
+            result.sends.push(item);
+          } else {
+            result.subs.push(item);
+          }
+
+        });
+      }
+      --n || render();
+    });
+    //取问诊信息
+    jixiang.getOne({
+      uid : req.session.user._id
+    , cat : 1 
+    , '$or' : [
+        {time : {'$gte': new Date() * 1 - 86400000}}
+       ,{agreetime : {'$gte': new Date() * 1 - 86400000}}
+      ]
+    }, 'doctors', function (err, doc) {
+      result.doctor = doc;
+      --n || render();
+    });
+    //取药品信息
+    jixiang.getOne({
+      uid : req.session.user._id
+    , cat : 2
+    , done : false
+    , reply : true
+    }, 'doctors', function (err, doc) {
+      result.med = false;
+      if (doc) {
+        result.med = true;
+      }
+      --n || render();
+    });
+    //取家政信息
+    jixiang.getOne({
+      uid : req.session.user._id
+    , reply : true
+    , done : false  
+    }, 'service', function (err, doc) {
+       result.service = !!doc;
+       --n || render();
+    });
+  } else if (req.method === 'POST') {
+
+  }
+}
 /**
  * 
  *   登入
@@ -11,7 +103,7 @@ var config = require('../config')
  *   成功返回'/'
  * 
  */
-exports.index = function(req,res){
+exports.index = function (req, res) {
   if(req.method == 'GET'){
     res.render('login',
       {
@@ -33,7 +125,7 @@ exports.index = function(req,res){
       var condition = {};
       condition.query = {
         _id : user._id
-      }
+      };
       condition.modify={
         '$set' : {
           'logindate' : Date.now()
@@ -44,7 +136,7 @@ exports.index = function(req,res){
       });
       req.session.user = user;
       var redirect = (user_cat === 1) ? '/admin' : '/';
-      res.json({success:true,msg:'登入成功!',redirect: redirect});
+      res.json({success: true, msg:'登入成功!', redirect: redirect});
     });
   }
 }

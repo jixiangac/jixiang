@@ -66,9 +66,9 @@ block content
                   tr
                     td(colspan="2") #{result.doc.time} #{result.doc.timeB}的预约申请
                       if !result.doc.reply
-                        span.fl-r(style="color:red")未答复
+                        span.fl-r(style="color:red") 未答复
                       else
-                        span.fl-r 已回复
+                        a.btn-reply.fl-r 【服务结束后请点击这里】 
                   tr
                     td.reply 概况
                     td

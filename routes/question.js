@@ -294,7 +294,7 @@ exports.qlist = function(req,res){
     　　admin
 -------------------*/
 
-var admin = function(req,res){
+var admin = function (req, res) {
   var condition = {};
   var cat;
   switch(parseInt(req.query.cat,10)){

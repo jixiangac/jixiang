@@ -58,7 +58,7 @@ block content
                     if !doc.reply
                       span.fl-r(style="color:red") 未答复
                     else
-                      span.fl-r 已回复
+                      a.btn-reply.fl-r 【服务结束后请点击这里】
                 tr
                   td.reply 概况
                   td
@@ -80,7 +80,7 @@ block content
                           a(style="color:#888") 【预约不成功】#{doc.replycontent}
                         else
                           a(style="color:#888") 【预约不成功】这个医师很懒，什么也没有说 
-        if cat == 2
+        if cat === 2
           //药品托购
           if !med
             div.mb10
@@ -88,10 +88,10 @@ block content
             table#med-table.order(style="width:710px;")
               thead
                 tr
-                  td.reply 药品名称
-                  td.reply 药品数量
+                  td.span60 药品名称
+                  td.span60 药品数量
                   td 描述
-                  td.reply 操作
+                  td.span60 操作
               tbody
                 tr#no-med
                   td(colspan="4")
@@ -120,9 +120,9 @@ block content
            table#show-med.order(style="width:710px;")
               thead.tab-title
                 tr
-                  td.reply 药品名称
-                  td.reply 药品数量
-                  td 描述
+                  td.span60 药品名称
+                  td.span60 药品数量
+                  td.span60 描述
               tbody
                 each item in med.medlist
                   tr

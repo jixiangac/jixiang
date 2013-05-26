@@ -28,13 +28,13 @@ block content
                     else
                       a.fl-r 已回复
                 tr
-                  td 药品名称
+                  td.span60 药品名称
                   td 药品数量
                   td 描述
                 each item in med.medlist
                   tr
-                    td.med-name= item.name
-                    td.reply= item.num
+                    td= item.name
+                    td= item.num
                     td= item.description
               if !!med.reply
                 tfoot

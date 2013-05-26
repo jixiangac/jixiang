@@ -7,4 +7,34 @@ block content
       .wrap
         if(user)
           h1 欢迎您，#{user.username}
-    
+      if result.notice 
+        section.mod-grey.mb20
+          .mod-grey-hd 公告
+          .mod-grey-bd.mod-grey-bd-pd20
+            p= result.notice.content
+      if result.subs.length
+        //未配送的
+        section.mod-grey.mb20
+          .mod-grey-hd
+            a.btn-reply(href="/meal/order/sub") 你有#{result.subs.length}条未配送的订单
+      if result.sends.length
+        //正在配送的
+        section.mod-grey.mb20
+          .mod-grey-hd
+            a.btn-reply(href="/meal/order/sub") 你有#{result.subs.length}条正在配送的订单
+      if result.doctor && result.doctor.reply
+        //问诊预约
+        section.mod-grey.mb20
+          .mod-grey-hd
+            a.btn-reply(href="/doctor?cat=1") 你的问诊有了回复
+      if result.med
+        //药品回复
+        section.mod-grey.mb20
+          .mod-grey-hd
+            a.btn-reply(href="/doctor?cat=2") 你的药品有了回复
+      if result.service
+        //家政服务
+        section.mod-grey.mb20
+          .mod-grey-hd
+            a.btn-reply(href="/service?cat=1") 你的家政服务申请有了回复
+
