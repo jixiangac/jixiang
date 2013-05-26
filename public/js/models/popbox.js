@@ -31,16 +31,18 @@ define(function(require,exports,module){
   exports.overlay = overlay;
   
   //弹出层
-  function init(main){
+  function init(main, target){
     var self = this;
-    this.render(main);
+    this.render(main, target);
   }
-  init.prototype.render = function(main){
+  init.prototype.render = function(main,target){
     new overlay(null,0.5);
     this.el = document.createElement('div');
     this.el.className = 'popbox';
     this.el.innerHTML = main;
-    document.body.appendChild(this.el);
+    var target = target || document.body;
+    console.log(target)
+    target.appendChild(this.el);
   }
   exports.init = init;
   

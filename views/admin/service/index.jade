@@ -8,17 +8,20 @@ block content
             h3.tab-title 服务管理
           li
             a.cur 家政预约
-      .mod-grey-bd.mod-grey-bd-pd20
-        if !!doc.length
-          each item in doc
-            table.order.order-w980
-              caption 【#{item.username}】的家政服务申请
-                if !item.reply
-                  a.reply.btn-reply 删除
-                  a.reply.btn-reply.doreply 点击答复
-                else
-                  span.fl-l 已回复
+      #med-admin.mod-grey-bd.mod-grey-bd-pd20
+        table.order.order-w980
+          if result.doc.length
+            each item in result.doc
               tbody
+                tr.space
+                  td(colspan="2")
+                tr
+                  td(colspan="2")【#{item.username}】的家政服务申请
+                    if !item.reply
+                      a.btn-reply.fl-r(role="delete") 删除
+                      a.btn-reply.fl-r.mr20(role="show-reply") 点击答复
+                    else
+                      span.fl-l 已回复
                 tr
                   td.reply 时间
                   td #{item.time} #{item.timeB}
@@ -35,15 +38,13 @@ block content
                     td
                       a #{item.replycontent}
 
-              if !item.reply
-                tfoot.hide
-                  tr
+                if !item.reply
+                  tr.hide
                     td(colspan='2')
-                      form.form.form-inline(action="/admin/service",method="post")
-                        input(type="hidden",value="#{item._id}",name="askid")             
-                        input(type="text",name="reply")
-                        button.btn(type="submit") 回复 
-        else
-          table.table.table-top.order-table
+                      form.form.form-inline(action="/admin/service?id=#{item._id}",method="post")             
+                        input(type="text",name="replycontent")
+                        a.btn.ml20(role="sub",type="submit") 回复
+                        a.btn.ml20(role="cancel") 取消
+          else
             caption.line 目前还没有人预约  
             

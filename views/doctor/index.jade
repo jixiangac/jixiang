@@ -62,18 +62,24 @@ block content
                 tr
                   td.reply 概况
                   td
-                    if !!doc.doctor.length
+                    if doc.doctor
                       a 预约医师：#{doc.doctor}
                       br
                     a 病情简述：#{doc.paitent}
-                  if doc.reply
-                    tr
-                      td.reply 回复
-                      td
+                if !!doc.reply
+                  tr
+                    td.reply 回复
+                    td
+                      if !doc.disagree
                         a(style="color:green") #{doc.agreereply}
                         if !!doc.replycontent
-                          br
-                          a 备注：#{doc.replycontent} 
+                          br 
+                          a 备注：#{doc.replycontent}
+                      else
+                        if !!doc.replycontent
+                          a(style="color:#888") 【预约不成功】#{doc.replycontent}
+                        else
+                          a(style="color:#888") 【预约不成功】这个医师很懒，什么也没有说 
         if cat == 2
           //药品托购
           if !med

@@ -44,7 +44,9 @@
   padding: 15px;
   background: #f1f2f4;
 }
-
+.order td.reply, .order td.cat {
+  width: 40px;
+}
 .btn-control, .td-center{
   text-align: center;
 }

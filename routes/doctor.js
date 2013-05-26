@@ -160,50 +160,47 @@ exports.ask = function(req,res){
 //我的药品
 exports.medicine = function(req,res){
 
+  function render(){
+   var renders = {
+       title : '我的药品'
+     , user : req.session.user
+     , cur : 'doctor'
+     , cat : '/medicine'
+     , result : result
+     , pjax : pjax
+     , jsflg : 'doctor' 
+     };
+   res.render('./doctor/medicine', renders);
+  }
+
   var pjax = !!req.query.pjax;
-  var cat = +req.query.cat || 1;
+  var cat = + req.query.cat || 1;
   var result = {cur : cat};
 
-  if(req.method === 'GET'){
-
+  if (req.method === 'GET') {
     jixiang.get({
       query : {
-        cat : 2
-       ,uid : req.session.user._id
-       ,reply : cat === 2
+         cat : 2
+       , uid : req.session.user._id
+       , reply : cat === 2
+       }
+     , sort : {
+        _id : -1
       }
-     ,sort : {
-       _id : -1
-     }
-    },'doctors',function(err,doc){
-      if(err){
+    }, 'doctors', function (err,doc) {
+      if (err) {
         doc =[];
       }
-      if(doc.length){
-        doc.forEach(function(item){
-          item.time = utils.format_date(new Date(item.time),true);
+      if (doc.length) {
+        doc.forEach(function (item) {
+          item.time = utils.format_date(new Date(item.time), true);
           item.medlist = JSON.parse(item.medlist);
-        })
+        });
       }
       result.doc = doc;
       render();
     });
-
-   function render(){
-     var renders = {
-       title : '我的药品'
-      ,user : req.session.user
-      ,cur : 'doctor'
-      ,cat : '/medicine'
-      ,result : result
-      ,pjax : pjax
-      ,jsflg : 'doctor' 
-     }
-     res.render('./doctor/medicine',renders);
-   }
-
-  }else if(req.method === 'POST'){
-
+  } else if (req.method === 'POST') {
   }
 }
 //我的问题
@@ -235,40 +232,43 @@ exports.medicine = function(req,res){
 /*----------------
       admin
   ----------------*/
-exports.admin = function(req,res){
-  if(req.method == 'GET'){
-    var condition={};
-    condition.query = {
-       cat : 1
-    };
-    condition.sort = {
-      _id : -1
-    };
-    jixiang.get(condition,'doctors',function(err,doc){
-       if(err){
+exports.admin = function (req, res) {
+  function render() {
+    var renders = {
+        title : '问诊预约'
+      , user : req.session.user
+      , result : result
+      , cur : 'doctor'  
+      };
+    res.render('./admin/doctor/index', renders);
+  }
+  var result = {};
+  if (req.method === 'GET') {
+    jixiang.get({
+      query : {
+        cat : 1
+        }
+    , sort : {
+        _id : -1
+      }
+    }, 'doctors', function (err,doc) {
+       if (err) {
          doc=[];
        }
 
-       if(!!doc.length){
-         doc.forEach(function(item){
+       if (doc.length) {
+         doc.forEach(function (item) {
            item.time = utils.format_date(new Date(item.time));
            if(!!item.agreetime){
-              item.agreereply = '约在 '+utils.format_date(new Date(item.agreetime),true) +' 就诊。';     
+              item.agreereply = '约在 ' + utils.format_date(new Date(item.agreetime), true) + ' 就诊。';     
            }
-
          });
        }
-
-       res.render('./admin/doctor/index',{
-          title : '问诊预约'
-         ,user : req.session.user
-         ,doc : doc
-         ,cur : 'doctor'
-       });
-
+       result.doc = doc;
+       render();
     });
-  }else if(req.method == 'POST'){
-    var id = parseInt(req.body.askid,10);
+  } else if (req.method ==='POST') {
+    var id = + req.query.id;
     var condition = {};
     condition.query = {
       _id : id
@@ -276,76 +276,81 @@ exports.admin = function(req,res){
     condition.modify = {
       '$set' : {
          'reply' : true
-        ,'replycontent':req.body.reply
+        ,'replycontent':req.body.replycontent
       }
     }
     var msg;
-    if(!req.body.disagree){
-      var reply = new Date().getFullYear()+'-'+req.body.yuMonth+'-'+req.body.yuDay+' '+req.body.yuHour+':00:00';
+    if (!req.query.disagree) {
+      var reply = new Date().getFullYear() + '-' + req.body.yuMonth + '-' + req.body.yuDay + ' ' + req.body.yuHour + ':00:00';
       condition.modify['$set'].agreetime = new Date(reply).getTime();
-      msg = '约在 '+reply+' 时间就诊。';
-      if(!!req.body.reply.length){
-        msg+='<br />备注：'+req.body.reply;
+      msg = '约在 ' + reply + ' 时间就诊。';
+      if (req.body.replycontent.length) {
+        msg += '<br />备注：' + req.body.replycontent;
       }
-    }else{
+    } else {
       condition.modify['$set'].disagree = true;
-      msg = '回绝了该预约';
+      msg = '【回绝了该预约】' + req.body.replycontent;
     }
 
-    jixiang.update(condition,'doctors',function(err){
+    jixiang.update(condition, 'doctors', function (err) {
       if(err){
-        return res.json({flg:0,msg:err})
+        return res.json({success: false, msg:err})
       }
-      return res.json({flg:1,msg:msg})
+      return res.json({success: true,msg: msg})
     });
   }
 }
 //管理托购申请
-exports.reMedicine = function(req,res){
+exports.reMedicine = function (req, res) {
+  function render () {
+    var renders = {
+        title : '药品托购'
+      , user : req.session.user
+      , cur : 'doctor'
+      , result : result
+      };
+    res.render('./admin/doctor/medicine', renders);
+  }
+  var result = {};
   if(req.method == 'GET'){
-     var condition = {};
-     condition.query = {
-       cat : 2
-      ,done : false
-     }
-     condition.sort = {
-       _id : -1
-     }
-     jixiang.get(condition,'doctors',function(err,doc){
-       if(err){
+     jixiang.get({
+       query : {
+         cat : 2
+       , done : false 
+       }
+     , sort : {
+         _id : -1
+       }
+     }, 'doctors', function (err, doc) {
+       if (err) {
          doc = [];
        }
-       if(!!doc.length){
+       if (doc.length) {
          doc.forEach(function(item){
            item.time = utils.format_date(new Date(item.time),true);
            item.medlist = JSON.parse(item.medlist); 
          });
        }
-       res.render('./admin/doctor/medicine',{
-          title : '药品托购'
-         ,user : req.session.user
-         ,cur : 'doctor'
-         ,doc : doc
-       });
+       result.doc = doc;
+       render();
      });
   }else if(req.method == 'POST'){
-     var id = parseInt(req.body.askid,10);
 
-     if(!!req.body.done){
+     if(!!req.query.done){
        var condition = {};
        condition.query = {
-         _id : id
+         _id : + req.query.id
        }
        condition.modify = {
          '$set' : {
             done : true
          }
        }
-       jixiang.update(condition,'doctors',function(err){
+       jixiang.update(condition, 'doctors', function (err) {
          if(err){
-           return res.json({flg:0,msg:err});
+           return res.json({success: false,msg: err});
           }
-          return res.json({flg:1,msg:'【完成】'});    
+          return res.json({success: true,msg: '【完成】'});    
        });
        return;
      }
@@ -353,20 +358,20 @@ exports.reMedicine = function(req,res){
 
      var condition = {};
      condition.query = {
-       cat :2
-      ,_id : id
+        cat :2
+      , _id : + req.query.id
      };
      condition.modify = {
        '$set' : {
           'reply' : true
-         ,'replycontent':req.body.reply
+         ,'replycontent': req.body.reply
        }
      }
-     jixiang.update(condition,'doctors',function(err){
-       if(err){
-         return res.json({flg:0,msg:err});
+     jixiang.update(condition, 'doctors', function (err) {
+       if (err) {
+         return res.json({success: false, msg: err});
        }
-       return res.json({flg:1,docCat:2,msg:req.body.reply});
+       return res.json({success: true,docCat:2, msg: req.body.reply});
      });
 
   }

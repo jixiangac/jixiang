@@ -407,12 +407,11 @@ var editQ = function(req,res){
     });
   }
 }
-var noreply = function(req,res){
+var noreply = function (req,res) {
   if(req.method == 'GET'){
-
     var condition = {};
     var cat;
-    switch(parseInt(req.query.cat,10)){
+    switch(parseInt(req.query.cat, 10)){
       case 1 :
         cat = 1;
         break;

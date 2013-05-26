@@ -26,9 +26,9 @@ block content
               a.btn.mr20(href="#") 常见问题
               a.btn.mr20(href="/service?cat=2",class=q1) 养老政策 
         section.mod-grey-bd.mod-grey-bd-pd20
-          if cat == 1
+          if cat === 1
             //家政服务
-            if !doc
+            if !result.doc
               form#wen-form(class="form form-inline",method="post",action="/service")
                 fieldset
                   .form-item
@@ -64,24 +64,24 @@ block content
               table.order(style="width:710px;")
                 tbody
                   tr
-                    td(colspan="2") #{doc.time} #{doc.timeB}的预约申请
-                      if !doc.reply
+                    td(colspan="2") #{result.doc.time} #{result.doc.timeB}的预约申请
+                      if !result.doc.reply
                         span.fl-r(style="color:red")未答复
                       else
                         span.fl-r 已回复
                   tr
                     td.reply 概况
                     td
-                      a 分类：#{doc.service_cat}
+                      a 分类：#{result.doc.service_cat}
                       br
-                      a 备注：#{doc.remark}
-                    if doc.reply
+                      a 备注：#{result.doc.remark}
+                    if result.doc.reply
                       tr
                         td.reply 回复
                         td
-                          if !!doc.replycontent
-                            a 备注：#{doc.replycontent}
-          if cat == 2
+                          if !!result.doc.replycontent
+                            a #{result.doc.replycontent}
+          if cat === 2
             if !detail
               //养老政策
               table.order(style="width:710px;")
@@ -104,7 +104,7 @@ block content
                  tr
                   td
                     p= doc.content
-          if cat == 3
+          if cat === 3
             //政策
             form#question(class="form form-inline",method="post",action="/question",name="2")
                 .form-item
@@ -112,8 +112,3 @@ block content
                   input#q(type="text",name="q")
                   button#qsub.btn.btn-info.ml20 提交问题
             #answer.flow-mod 你好，我是养老小机器人，有什么问题就问我吧！
-//- block script
-//-   script(src="/js/service.js")
-//-   script(src="/js/doctor.js")
-//-   if cat == 3
-//-     #service-js

@@ -6,7 +6,8 @@ block content
         h3.business-title 请点击你想要选购的
           a.fl-r(href="/meal") 返回上一级
       section.mod-grey-bd.container
-        h3.business-title
+        h3.business-title(style="text-align:center;font-size:18px;") 
+          b 欢迎来到 『#{result.shop.name}』餐厅
         #business-list
           #meal-detail-list
             a.business-item.mod-grey.meal-selected
@@ -14,11 +15,13 @@ block content
                 span 小馄饨
                 em.fl-r 6元
               i.num 1
-            -for(var i=0;i<10;i++)
-              a.business-item.mod-grey
-                .mod-grey-hd
-                  span 小馄饨
-                  em.fl-r 5元
+            if result.shop.list.length
+              each item in result.shop.list
+                a.business-item.mod-grey
+                  .mod-grey-hd
+                    span= item.name
+                    em.fl-r= item.price 
+                      | &nbsp;元
         .sub-action.ml30
           button#meal-sub(class="btn btn-info") 就这样吧
         

@@ -21,15 +21,16 @@ block content
                 - selected = true
               option(value=item.cat,selected=selected)= item.text
           input.fl-r(type="text")
-        if !!answers.length
-          each answer in answers
-            table.order.order-w980
-              thead.tab-title
-                tr
-                  th.cat 分类
-                  th 内容
-                  th.cat 操作
+        table.order.order-w980
+          if answers.length
+            each answer in answers
               tbody
+                tr.space
+                  td(colspan="3")
+                tr
+                  td.cat 分类
+                  td 内容
+                  td.cat 操作
                 tr.cur
                   td.cat
                     a #{answer.subcat}
@@ -49,6 +50,5 @@ block content
                   td.cat
                     a.btn-reply.delete.sub(href="/admin/question/delete/#{answer._id}") 删除
 
-        else
-          table.table.table-top.order-table
-              caption.line 没有这个系列的问题
+          else
+            caption.line 没有这个系列的问题

@@ -92,7 +92,7 @@ module.exports = function(app){
    app.get('/meal/order/sub', meal.subed);//已提交的订单
    app.get('/meal/order/send', meal.sended);//已经配送的订单
    app.get('/meal/order/done', meal.done);//已经完成的订单
-   app.post('/meal/order/done', meal.doneconfirm);//交易完成
+   app.post('/meal/order/done', meal.done);//交易完成
 
 
    /**
@@ -108,6 +108,7 @@ module.exports = function(app){
   app.post('/doctor', doctor.index);
   app.get('/doctor/ask', doctor.ask);
   app.get('/doctor/medicine', doctor.medicine);
+  app.post('/doctor/medicine', doctor.medicine);
    // app.get('/doctor/question',doctor.myQ);
    /*--------
       家政
@@ -169,10 +170,11 @@ module.exports = function(app){
     ----------*/
   //订单管理
   app.get('/admin/meal',meal.admin);
+  app.post('/admin/meal',meal.admin);
   //订单删除
-  app.post('/admin/order/delete',meal.delOrderlist);
+  // app.post('/admin/order/delete',meal.delOrderlist);
   //订单的已发单状态
-  app.post('/admin/order/send',meal.sendStatus);
+  // app.post('/admin/order/send',meal.sendStatus);
   //菜品管理
   // app.get(/^\/admin\/meal\/control\/?(\d*)$/,meal.mealManager);
   // //添加新菜品

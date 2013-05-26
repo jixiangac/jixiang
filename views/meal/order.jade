@@ -15,7 +15,7 @@ block content
             a.pjax(href="/meal/order/send",class=cur['send']) 已配送
           li
             a.pjax(href="/meal/order/done",class=cur['done']) 已完成
-       .mod-grey-bd.mod-grey-bd-pd20
+       #order-info.mod-grey-bd.mod-grey-bd-pd20
           if result.orders.length
             table.order(style="width:710px;")
               each order in result.orders
@@ -24,6 +24,8 @@ block content
                     td(colspan="4")
                   tr
                     td(colspan="4") 提交时间：#{order.ordertime}
+                      if order.isSend && !order.isDone
+                        a.fl-r.btn-reply(href="/meal/order/done?id=#{order._id}") 我已收到
                   each item,index in order.list
                     tr
                       td= item.name

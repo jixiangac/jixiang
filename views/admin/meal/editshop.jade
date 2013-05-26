@@ -23,9 +23,19 @@ block content
               td 描述
               td.reply 操作
           tbody
-            tr#no-meal
-              td(colspan="4",style="text-align:center;")
-                a 还没有菜单信息，点击【增加一个菜】进行添加
+            if result.shop.list.length
+              each shop in result.shop.list
+                tr
+                  td(name="name").meal-item= shop.name
+                  td(name="price").meal-item= shop.price
+                  td(name="des").meal-item= shop.des
+                  td.reply.btn-control
+                     a.btn-reply(role="modify") 修改
+                     a.btn-reply.ml10(role="delete") 删除
+            else       
+              tr#no-meal
+                td(colspan="4",style="text-align:center;")
+                  a 还没有菜单信息，点击【增加一个菜】进行添加
           tfoot
             tr#meal-model.hide
               td 

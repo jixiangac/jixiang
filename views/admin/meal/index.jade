@@ -1,7 +1,7 @@
 extends ../layouts/header
 block content
   #container.container.clearfix
-    article#notice.mod-grey  
+    article#meal.mod-grey  
       section.mod-grey-hd.mod-pd-top10.tab.clearfix
         ul#tab
           li
@@ -20,7 +20,7 @@ block content
             else
               a.btn.mr20(href="/admin/meal?cat=#{index}",class="#{m.cur}")= m.name
       .mod-grey-bd.mod-grey-bd-pd20
-        table.order(style="width:710px;")
+        table#order-admin.order(style="width:710px;")
           if result.orders.length
             each order in result.orders
               tbody
@@ -29,7 +29,9 @@ block content
                 tr
                   td(colspan="4") 提交时间：#{order.ordertime} 提交者：#{order.user}
                     if !order.isSend
-                      a.fl-r(href="/admin/order/send/#{order._id}") 配送该订单
+                      a.fl-r(href="/admin/meal?id=#{order._id}&send=1", role="send") 配送该订单
+                    else if order.isDone
+                      a.fl-r 已完成
                     else
                       a.fl-r 已配送
                 each item,index in order.list

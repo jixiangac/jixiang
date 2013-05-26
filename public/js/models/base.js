@@ -70,7 +70,7 @@ define(function(require,exports,module){
      }else if(obj.detachEvent){
         obj.detachEvent('on'+type,handler);
      }else{
-       obj['on'+type]=null;
+       obj['on'+type] = null;
      }
    }
   }
@@ -168,14 +168,13 @@ define(function(require,exports,module){
   function ajax(options) {
      
       var options = {
-        url : options.url || '/'
-       ,async : !options.async
-       ,type : options.type || 'post'
-       ,data : options.data || null
-       ,callback : options.callback || null
-       ,errorCallback : options.errorCallback || null
-      }
-
+          url : options.url || '/'
+        , async : !options.async
+        , type : options.type || 'post'
+        , data : options.data || null
+        , callback : options.callback || null
+        , errorCallback : options.errorCallback || null
+        };
       var xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function() {
         if(xhr.readyState == 4) {

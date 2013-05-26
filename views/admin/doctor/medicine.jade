@@ -10,17 +10,20 @@ block content
             a(href="/admin/doctor") 问诊预约
           li
             a.cur 药品托购
-      .mod-grey-bd.mod-grey-bd-pd20
-        if !!doc.length
-          each med in doc
-            table.order.order-w980
-              caption 【#{med.username}】的药品托购委托
-                if !med.reply
-                  a.reply.btn-reply 删除
-                  a.reply.btn-reply.doreply 点击答复
-                else
-                  span.fl-l 已回复
+      #med-admin.mod-grey-bd.mod-grey-bd-pd20
+        table.order.order-w980
+          if result.doc.length
+            each med in result.doc 
               tbody
+                tr.space
+                  td(colspan="3")
+                tr
+                  td(colspan="3")【#{med.username}】的药品托购委托
+                    if !med.reply
+                      a.btn-reply.fl-r(role="delete") 删除
+                      a.btn-reply.fl-r.mr20(role="show-reply") 点击答复
+                    else
+                      span.fl-l 已回复
                 tr
                   td.reply 药品名称
                   td.reply 药品数量
@@ -30,18 +33,19 @@ block content
                     td.med-name= item.name
                     td.reply= item.num
                     td= item.description
-              if !med.reply
-                tfoot.hide
-                  tr
+                if !med.reply
+                  tr.hide
                     td(colspan='3')
-                      form.form.form-inline(action="/admin/doctor/medicine",method="post")
-                        input(type="hidden",value="#{med._id}",name="askid")              
-                        input(type="text",name="reply")
-                        button.btn(type="submit") 回复
-              else
-                tfoot
+                      form.form.form-inline(action="/admin/doctor/medicine?id=#{med._id}",method="post")      
+                        input(type="text",name="replycontent")
+                        a.btn.ml10(role="sub",type="submit") 回复
+                        a.btn.ml10(role="cancel") 取消
+                else
                   tr
                     td.reply 回复
                     td(colspan="2") #{med.replycontent}
-                      a.btn-reply.fl-r.donereply(name="#{med._id}") 【已经发放了该药品请点击这里】   
-            
+                      a.btn-reply.fl-r(role="med-done",href="/admin/doctor/medicine?id=#{med._id}&done=1") 【已经发放了该药品请点击这里】
+          
+          else
+            tr
+              td(colspan="2") 没有购买信息

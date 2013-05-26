@@ -16,6 +16,7 @@ block content
           tr
             td 商家编号
             td 商家名称
+            td 商家描述
             td 入驻时间
             td 操作
           if result.shoplist.length
@@ -23,7 +24,8 @@ block content
               tr
                 td= shop._id
                 td= shop.name
-                td= shop.jointime
+                td= shop.des
+                td= shop.joindate
                 td.td-center
                   a.btn-reply.mr10(href="/admin/meal/editshop?id=#{shop._id}") 修改
                   a.btn-reply 删除

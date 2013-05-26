@@ -2,36 +2,21 @@ extends ../layouts/header
 block content
   #container
     script
-      var order = !{data.order}
+      var order = !{result.order}
     article.container
       section.mod-grey-hd
         img.center(src="/images/meal.jpg",alt="人生在世，吃喝二字")
       section.mod-grey-bd.container
         h3.business-title 请选择商家进入订餐
         #business-list
-          -for(var i=0;i<10;i++)
-            a.business-item.mod-grey(href="/meal/shop?id=xx")
-              .mod-grey-hd
-                span 沙县小吃
-              .mod-grey-bd
-                p xxx
-              .mod-grey-ft
-                p 出错
-          //- if meals.length
-          //- ul
-          //-  each meal,i in meals
-          //-   li
-          //-     .meal-info
-          //-       a.meal-title= meal.name
-          //-        -var flag=false
-          //-         each item in meal.like
-          //-           if item == user._id
-          //-             -flag=true
-          //-             -break
-          //-       if flag
-          //-         a.like-red &nbsp;
-          //-       else
-          //-         a.like-gray(href="/meal/like/#{meal._id}",title="喜欢")&nbsp;
-          //-       span #{meal.like.length}
-          //-     a(href="/meal/detail/#{meal._id}")
-          //-       img(src="/images/meal/#{meal.pic}",alt="#{meal.name}")
+          if result.shop.length
+            each shop in result.shop
+              a.business-item.mod-grey(href="/meal/shop?id=#{shop._id}")
+                .mod-grey-hd
+                  span= shop.name
+                .mod-grey-bd
+                  img(src="/images/shop/#{shop.pic}",width="200",height="150")
+                .mod-grey-ft
+                  p= shop.des
+          else
+            a 还没有商家入驻哦

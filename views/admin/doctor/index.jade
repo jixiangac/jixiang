@@ -1,7 +1,7 @@
 extends ../layouts/header
 block content
   #container.container.clearfix
-    article#notice-history.mod-grey  
+    article.mod-grey  
       section.mod-grey-hd.mod-pd-top10.tab.clearfix
         ul#tab
           li
@@ -10,17 +10,20 @@ block content
             a.cur 问诊预约
           li
             a(href="/admin/doctor/medicine") 药品托购
-      .mod-grey-bd.mod-grey-bd-pd20
-        if !!doc.length
-          each item in doc
-            table.order.order-w980
-              caption 【#{item.username}】的就诊预约
-                if !item.reply
-                  a.reply.btn-reply 删除
-                  a.reply.btn-reply.doreply 点击答复
-                else
-                  span.fl-l 已回复
+      #med-admin.mod-grey-bd.mod-grey-bd-pd20
+        table.order.order-w980
+          if result.doc.length
+            each item in result.doc
               tbody
+                tr.space
+                  td(colspan="2")
+                tr
+                  td(colspan="2") 【#{item.username}】的就诊预约
+                    if !item.reply
+                      a.btn-reply.fl-r(role="delete") 删除
+                      a.btn-reply.fl-r.mr20(role="show-reply") 点击答复
+                    else
+                      span.fl-l 已回复
                 tr
                   td.reply 时间
                   td #{item.time} #{item.timeB}
@@ -44,16 +47,14 @@ block content
                           a 备注：#{item.replycontent}
                       else
                         if !!item.replycontent
-                          p(style="color:#888") 【预约没有成功】#{item.replycontent}
+                          a(style="color:#888") 【回绝了该预约】#{item.replycontent}
                         else
-                          p(style="color:#888") 【预约没有成功】这个医师很懒，什么也没有说
+                          a(style="color:#888") 【回绝了预约】你什么都没留下
 
-              if !item.reply
-                tfoot.hide
-                  tr
+                if !item.reply
+                  tr.hide
                     td(colspan='2')
-                      form.form.form-inline(action="/admin/doctor",method="post")
-                        input(type="hidden",value="#{item._id}",name="askid")
+                      form.form.form-inline(action="/admin/doctor?id=#{item._id}",method="post")
                         |可约在
                         select#yuMonth(name="yuMonth")
                           - var month = new Date(item.time).getMonth()+1
@@ -74,10 +75,13 @@ block content
                             if i<10
                               -i='0'+i
                             option(value="#{i}") #{i} : 00
-                        button.btn(type="submit") 可约               
-                        input(type="text",name="reply")
-                        a.btn.disagree 拒绝
-        else
-          table.table.table-top.order-table
+                        
+                        br
+                        label(style="width:auto") 备注
+                        input(type="text",name="replycontent",placeholder="补充说明..")
+                        a.btn.ml10(role="sub",type="submit") 可约
+                        a.btn.ml10(role="cancel") 取消
+                        a.btn.btn-danger.fl-r(role="deny",data-url="/admin/doctor?id=#{item._id}&disagree=1") 拒绝
+          else
             caption.line 目前还没有人预约   
             

@@ -13,17 +13,27 @@ exports.index = function (req, res) {
       title : config.name + '订餐'
     , user : req.session.user
     , cur : 'meal'
-    , data : data
+    , result : result
     , pjax : false
     , jsflg : 'meal'          
     };
     res.render('./meal/index', renders);
   }
 
-  var data = {};//要发送的数据
+  var result = {};//要发送的数据
 
   if (req.method === 'GET') {
-    var n = 1;
+    var n = 2;
+    //获取商家列表
+    jixiang.get({
+      limit : 10
+    }, 'meals', function (err, doc) {
+        if (err) {
+          doc = [];
+        }
+        result.shop = doc;
+        --n || render();
+      });
     //查看当前用户是否有订单
     jixiang.get({
       query : {
@@ -34,7 +44,7 @@ exports.index = function (req, res) {
       if (err) {
         doc = []; 
       }
-      data.order = JSON.stringify(doc);
+      result.order = JSON.stringify(doc);
       --n || render();
     });
   } else if (req.method === 'POST') {
@@ -50,13 +60,27 @@ exports.shop = function (req, res) {
       title : config.name + '订餐'
     , user : req.session.user
     , cur : 'meal'
+    , result : result
     , pjax : false
     , jsflg : 'meal'
     };
     res.render('./meal/shop', renders);
   }
+  var id = + req.query.id || 0;
+  var result = {};
   if (req.method === 'GET') {
-    render();
+    if (!id) {
+      return res.redirect('404');
+    }
+    jixiang.getOne({
+      _id : id
+    }, 'meals', function (err, doc) {
+      if (err) {
+        doc = [];
+      }
+      result.shop = doc;
+      render();
+    });
   } else if (req.method === 'POST') {
 
     var order = {
@@ -172,13 +196,11 @@ exports.sended = function (req, res) {
     if (err) {
       doc = [];
     }
-
     if (doc.length) {
       doc.forEach(function (item) {
         item.ordertime = utils.format_date(new Date(item.ordertime), true);
       });
     }
-
     result.orders = doc;
     render();
   });
@@ -201,29 +223,44 @@ exports.done = function (req, res) {
 
   var pjax = !!req.query.pjax;
   var result = {};
-
-  jixiang.get({
-    query : {
-      user : req.session.user.username
-    , isDone : true
-    }
-  , sort : {
-      ordertime : -1
-    }
-  }, 'orders', function (err, doc) {
-    if (err) {
-      doc = [];
-    }
-    if (doc.length) {
-      doc.forEach(function (item) {
-        item.ordertime = utils.format_date(new Date(item.ordertime), true);
-      });
-    }
-
-    result.orders = doc;
-    render();
-  });
-
+  if (req.method === 'GET') {
+    jixiang.get({
+      query : {
+        user : req.session.user.username
+      , isDone : true
+      }
+    , sort : {
+        ordertime : -1
+      }
+    }, 'orders', function (err, doc) {
+      if (err) {
+        doc = [];
+      }
+      if (doc.length) {
+        doc.forEach(function (item) {
+          item.ordertime = utils.format_date(new Date(item.ordertime), true);
+        });
+      }
+      result.orders = doc;
+      render();
+    });
+  } else if (req.method === 'POST') {
+    jixiang.update({
+      query : {
+        _id : + req.query.id
+      }
+    , modify : {
+        '$set' : {
+          isDone : true
+        }
+      }
+    }, 'orders', function (err) {
+       if (err) {
+          return res.json({success: false, msg: err});
+       }
+       return res.json({success: true, msg: '记录成功！'});
+    });
+  }
 };
 //确认收菜，交易完成
 // exports.doneconfirm = function(req,res){
@@ -274,6 +311,7 @@ exports.admin = function (req, res) {
       break;
     case 2 :
       query.isSend = true;
+      query.isDone = false;
       break;
     case 3 :
       query.isDone = true;
@@ -281,25 +319,48 @@ exports.admin = function (req, res) {
     }
   }
 
-  jixiang.get({
-    query : query
-  , sort : {
-      ordertime : -1
-    }
-  }, 'orders', function (err, orders) {
-    if (err) {
-      orders = [];
-    }
-    if (orders.length) {
-      orders.forEach(function (item) {
-        item.ordertime = utils.format_date(new Date(item.ordertime), true);
-      });
-    }
+  if (req.method === 'GET') {
+    jixiang.get({
+      query : query
+    , sort : {
+        ordertime : -1
+      }
+    }, 'orders', function (err, orders) {
+      if (err) {
+        orders = [];
+      }
+      if (orders.length) {
+        orders.forEach(function (item) {
+          item.ordertime = utils.format_date(new Date(item.ordertime), true);
+        });
+      }
 
-    result.orders = orders;
-    render();
+      result.orders = orders;
+      render();
 
-  });
+    });
+  } else if (req.method === 'POST') {
+    if (!!req.query.send) {
+      jixiang.update({
+        query : {
+          _id : + req.query.id
+        }
+      , modify : {
+          '$set' : {
+            isSend : true
+          }
+        }
+      }, 'orders', function (err) {
+          if (err) {
+            return res.json({success : false, msg : err});
+          }
+          return res.json({success : true, msg : '已记录！'});
+        });
+    }
+    
+  }
+
+
 };
 //订单删除
 // exports.delOrderlist = function(req,res){
@@ -536,13 +597,19 @@ exports.adminShop = function (req, res) {
     }, 'meals', function (err, doc) {
       if (err) {
         console.log(err);
+        doc = [];
+      }
+      if (doc.length) {
+        doc.forEach(function (item) {
+          item.joindate = utils.format.call(new Date(item.joindate), 'yyyy-MM-dd hh:mm:ss');
+        }); 
       }
       result.shoplist = doc;
       console.log(doc);
       render();
     });
   } else if (req.method === 'POST') {
-
+    
   }
 
 };
@@ -576,6 +643,7 @@ exports.addShop = function (req, res) {
 
     var shop = {
       name : req.body.shop_name
+    , des : req.body.shop_des
     , pic : _pic
     , joindate : new Date() * 1
     , list : []
@@ -631,22 +699,32 @@ exports.editShop = function (req, res) {
       render();
     });
   } else if (req.method === 'POST') {
-
+    var datas = JSON.parse(req.body.data);
     var newMeal = {
-        name : req.body.name
-      , price : req.body.price
-      , des : req.body.des
+        name : datas.new_meal.name
+      , price : datas.new_meal.price
+      , des : datas.new_meal.des
       };
-
+    var query = {_id : id};
+    var modify = {};
+    //删除数据
+    if (!!req.query.delete) {
+      modify['$pull'] = {
+        list : newMeal
+      };
+    } else if (!!req.query.modify) {//修改数据
+      query['list.name'] = datas['old_meal'].name;
+      modify['$set'] = {
+        'list.$' : newMeal
+      };
+    } else {//新增数据
+      modify['$addToSet'] = {
+        list : newMeal
+      };
+    }
     jixiang.update({
-      query : {
-        _id : req.body.id
-      }
-    , modify : {
-        '$push' : {
-          list : newMeal
-        }
-      }
+      query : query
+    , modify : modify
     }, 'meals', function (err) {
       if (err) {
         return res.json({success : false, msg : '操作失败！'});
